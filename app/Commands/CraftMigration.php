@@ -4,21 +4,21 @@ namespace App\Commands;
 
 use LaravelZero\Framework\Commands\Command;
 
-class MakeFactory extends Command
+class CraftMigration extends Command
 {
     /**
      * The signature of the command.
      *
      * @var string
      */
-    protected $signature = 'craft:factory';
+    protected $signature = 'craft:migration';
 
     /**
      * The description of the command.
      *
      * @var string
      */
-    protected $description = 'Crafts Factory';
+    protected $description = 'Crafts Migration <name>';
 
     /**
      * Execute the console command.
@@ -27,6 +27,6 @@ class MakeFactory extends Command
      */
     public function handle()
     {
-        $this->info('craft:factory handler');
+        $this->info('craft:migration handler');
     }
 }

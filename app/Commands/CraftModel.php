@@ -4,7 +4,7 @@ namespace App\Commands;
 
 use LaravelZero\Framework\Commands\Command;
 
-class MakeModel extends Command
+class CraftModel extends Command
 {
     /**
      * The signature of the command.
@@ -18,7 +18,7 @@ class MakeModel extends Command
      *
      * @var string
      */
-    protected $description = 'Crafts model';
+    protected $description = 'Crafts model <name>';
 
     /**
      * Execute the console command.

@@ -2,24 +2,23 @@
 
 namespace App\Commands;
 
-use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
-class MakeScaffold extends Command
+class CraftController extends Command
 {
     /**
      * The signature of the command.
      *
      * @var string
      */
-    protected $signature = 'craft:all';
+    protected $signature = 'craft:controller';
 
     /**
      * The description of the command.
      *
      * @var string
      */
-    protected $description = 'Crafts all assets';
+    protected $description ='craft:controller <name>';
 
     /**
      * Execute the console command.
@@ -28,6 +27,6 @@ class MakeScaffold extends Command
      */
     public function handle()
     {
-        $this->info('craft:all handler');
+        $this->info('craft:controller handler');
     }
 }

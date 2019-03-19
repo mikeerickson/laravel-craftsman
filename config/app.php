@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -26,7 +25,7 @@ return [
     |
     */
 
-    'version' => app('git.version'),
+    'version' => '... pull this from package.json | composer.json ...',
 
     /*
     |--------------------------------------------------------------------------
@@ -55,5 +54,4 @@ return [
     'providers' => [
         App\Providers\AppServiceProvider::class,
     ],
-
 ];
