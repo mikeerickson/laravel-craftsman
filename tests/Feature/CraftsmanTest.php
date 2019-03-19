@@ -4,14 +4,16 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 
-class InspiringCommandTest extends TestCase
+class CraftsmanTest extends TestCase
 {
     /**
      * A basic test example.
      *
      * @return void
      */
-    public function testInspiringCommand()
+
+    /** @test */
+    public function should_execute_artisan_command()
     {
         $this->artisan('inspiring')
              ->expectsOutput('Simplicity is the ultimate sophistication.')

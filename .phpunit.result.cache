@@ -1,0 +1,1 @@
+C:37:"PHPUnit\Runner\DefaultTestResultCache":295:{a:2:{s:7:"defects";a:1:{s:7:"Warning";i:6;}s:5:"times";a:4:{s:56:"Tests\Feature\InspiringCommandTest::testInspiringCommand";d:0.082;s:49:"Tests\Feature\CraftsmanTest::testInspiringCommand";d:0.307;s:7:"Warning";d:0.013;s:59:"Tests\Feature\CraftsmanTest::should_execute_artisan_command";d:0.24;}}}

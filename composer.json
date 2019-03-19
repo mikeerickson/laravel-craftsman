@@ -1,18 +1,24 @@
 {
-    "name": "laravel-zero/laravel-zero",
-    "description": "The Laravel Zero Framework.",
-    "keywords": ["framework", "laravel", "laravel zero", "console", "cli"],
-    "homepage": "https://laravel-zero.com",
+    "name": "laravel-craftsman",
+    "description": "Laravel Craftsman",
+    "keywords": [
+        "framework",
+        "laravel",
+        "laravel zero",
+        "console",
+        "cli"
+    ],
+    "homepage": "https://laravel-craftsman.com",
     "type": "project",
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/laravel-zero/laravel-zero/issues",
-        "source": "https://github.com/laravel-zero/laravel-zero"
+        "issues": "https://github.com/mikeerickson/laravel-craftsman/issues",
+        "source": "https://github.com/mikeerickson/laravel-craftsman"
     },
     "authors": [
         {
-            "name": "Nuno Maduro",
-            "email": "enunomaduro@gmail.com"
+            "name": "Mike Erickson",
+            "email": "codedungeon@gmail.com"
         }
     ],
     "require": {
@@ -20,8 +26,9 @@
         "laravel-zero/framework": "5.8.*"
     },
     "require-dev": {
+        "codedungeon/phpunit-result-printer": "^0.26.1",
         "mockery/mockery": "^1.0",
-        "phpunit/phpunit": "^7.5"
+        "phpunit/phpunit": "^8"
     },
     "autoload": {
         "psr-4": {
@@ -45,5 +52,7 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "bin": ["laravel-craftsman"]
+    "bin": [
+        "laravel-craftsman"
+    ]
 }
