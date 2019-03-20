@@ -1,8 +1,12 @@
 /vendor
+/logs
+*.log
 /.idea
 /.vscode
 /.vagrant
 /database/database.sqlite
+/coverage
 .env
 /node_modules
 *.taskpaper
+*.cache

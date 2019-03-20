@@ -7,8 +7,11 @@
         "test": "tests"
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "pre-commit": "echo \" ==> Supply pre-commit message\" || true"
+        "test": "vendor/bin/phpunit",
+        "test:feature": "vendor/bin/phpunit --testsuite Feature",
+        "test:unit": "vendor/bin/phpunit --testsuite Unit",
+        "test:coverage": "vendor/bin/phpunit --coverage-html=coverage",
+        "pre-commit": "vendor/bin/phpunit -c phpunit.ci.xml"
     },
     "repository": {
         "type": "git",
