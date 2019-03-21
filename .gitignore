@@ -11,3 +11,4 @@
 *.taskpaper
 *.cache
 .phpunit.result.cache
+/database/migrations

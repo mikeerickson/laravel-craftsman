@@ -27,7 +27,7 @@ class CraftFactoryTest extends TestCase
         $model = "App/Models/Test";
         $model_path = "App\\Models\\Test";
 
-        $this->artisan("craft:factory TestFactory --model {$model} --table tests")
+        $this->artisan("craft:factory TestFactory --model {$model}")
             ->assertExitCode(0);
 
         $factoryPath = $this->fs->factory_path();

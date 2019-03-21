@@ -77,12 +77,15 @@ class CraftsmanFileSystem
 
         $src = config('craftsman.templates.' . $type);
         $dest = $this->path_join($path, $filename . ".php");
-
+        $tablename = "";
+        if (isset($data["tablename"])) {
+            $tablename = strtolower($data["tablename"]);
+        }
         $vars = [
             "name" => $filename,
             "model" => class_basename($data["model"]),
             "model_path" => str_replace("/", "\\", $data["model"]),
-            "tablename" => strtolower($data["tablename"])
+            "tablename" => $tablename
         ];
 
         $template = file_get_contents($src);
