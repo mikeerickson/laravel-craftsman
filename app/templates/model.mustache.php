@@ -1,12 +1,12 @@
 <?php
 
-{{namespace}}
+namespace {{namespace}};
 
 use Illuminate\Database\Eloquent\Model;
 
 class {{model}} extends Model {
 
-    $table = {{tablename}}
+    protected $tablename = "{{tablename}}";
 
-    $guarded = [];
+    protected $guarded = [];
 }

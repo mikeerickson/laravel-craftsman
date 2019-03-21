@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Str;
 use Mustache_Engine;
 
 class CraftsmanFileSystem
@@ -76,7 +77,12 @@ class CraftsmanFileSystem
         }
 
         $src = config('craftsman.templates.' . $type);
-        $dest = $this->path_join($path, $filename . ".php");
+        if (Str::contains($filename, "App")) {
+            $dest = $this->path_join($filename . ".php");
+        } else {
+            $dest = $this->path_join($path, $filename . ".php");
+        }
+
         $tablename = "";
         if (isset($data["tablename"])) {
             $tablename = strtolower($data["tablename"]);
@@ -87,6 +93,10 @@ class CraftsmanFileSystem
             "model_path" => str_replace("/", "\\", $data["model"]),
             "tablename" => $tablename
         ];
+
+        if (isset($data["namespace"])) {
+            $vars["namespace"] = $data["namespace"];
+        }
 
         $template = file_get_contents($src);
 
