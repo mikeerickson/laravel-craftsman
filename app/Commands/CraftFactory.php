@@ -34,6 +34,7 @@ class CraftFactory extends Command
      */
     public function handle()
     {
+        $tablename = "";
         $factoryName = $this->argument('name');
         $model = $this->option('model');
         if (strlen($model) === 0) {

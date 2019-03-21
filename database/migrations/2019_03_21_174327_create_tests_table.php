@@ -3,9 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use {{model_path}};
+use App\Models\Test;
 
-class Create{{model}}sTable extends Migration
+class CreateTestsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class Create{{model}}sTable extends Migration
      */
     public function up()
     {
-        Schema::create('{{tablename}}', function (Blueprint $table) {
+        Schema::create('tests', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
         });
@@ -27,6 +27,6 @@ class Create{{model}}sTable extends Migration
     */
     public function down()
     {
-        Schema::dropIfExists('{{tablename}}');
+        Schema::dropIfExists('tests');
     }
 }

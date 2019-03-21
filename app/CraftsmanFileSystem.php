@@ -81,7 +81,8 @@ class CraftsmanFileSystem
         $vars = [
             "name" => $filename,
             "model" => class_basename($data["model"]),
-            "model_path" => str_replace("/", "\\", $data["model"])
+            "model_path" => str_replace("/", "\\", $data["model"]),
+            "tablename" => strtolower($data["tablename"])
         ];
 
         $template = file_get_contents($src);
