@@ -18,9 +18,9 @@ class CraftAll extends Command
      *
      * @var string
      */
-    protected $description ='craft:all
+    protected $description = 'craft:all
                      name             The name of the resource (required)
-                     --modelpath      Alternate path to models (default: ./app)
+                     --model-path     Alternate path to models (default: ./app)
                      --no-controller  Do not create controller
                      --no-factory     Do not create factory
                      --no-migration   Do not create migration

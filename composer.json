@@ -26,6 +26,7 @@
         "illuminate/database": "5.8.*",
         "illuminate/log": "5.8.*",
         "laravel-zero/framework": "5.8.*",
+        "mustache/mustache": "^2.12",
         "nunomaduro/laravel-console-menu": "^2.1"
     },
     "require-dev": {
@@ -39,7 +40,7 @@
             "App\\": "app/"
         },
         "files": [
-            "src/helpers.php"
+            "app/helpers.php"
         ]
     },
     "autoload-dev": {

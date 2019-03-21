@@ -8,10 +8,12 @@
     },
     "scripts": {
         "test": "vendor/bin/phpunit",
+        "test:ci": "vendor/bin/phpunit -c phpunit.ci.xml",
         "test:feature": "vendor/bin/phpunit --testsuite Feature",
         "test:unit": "vendor/bin/phpunit --testsuite Unit",
         "test:coverage": "vendor/bin/phpunit --coverage-html=coverage",
-        "pre-commit": "vendor/bin/phpunit -c phpunit.ci.xml"
+        "test:watch": "vendor/bin/phpunit-watcher watch --filter CraftsmanFileSystemTest",
+        "pre-commit": "npm run test:ci"
     },
     "repository": {
         "type": "git",

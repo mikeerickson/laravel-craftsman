@@ -10,3 +10,4 @@
 /node_modules
 *.taskpaper
 *.cache
+.phpunit.result.cache

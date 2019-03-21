@@ -2,18 +2,22 @@
 
 ## Description
 
-** Project Description **
+Laravel Craftsman provides a suite of scaffolding command using a project agnostic CLI
 
-### Usage
+## Usage
+
+```bash
+> laravel-craftsman ...
+```
 
 ** Describe module functions **
 
-### License
+## License
 
 Copyright &copy; 2019 Mike Erickson
 Released under the MIT license
 
-### Credits
+## Credits
 
 laravel-craftsman written by Mike Erickson
 
@@ -21,4 +25,4 @@ E-Mail: [codedungeon@gmail.com](mailto:codedungeon@gmail.com)
 
 Twitter: [@codedungeon](http://twitter.com/codedungeon)
 
-Webiste: [codedungeon.io](http://codedungeon.io)
+Website: [codedungeon.io](http://codedungeon.io)
