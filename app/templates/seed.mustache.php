@@ -3,7 +3,7 @@
 use {{model_path}};
 use Illuminate\Database\Seeder;
 
-class {{tablename}}TableSeeder extends Seeder
+class {{model}}sTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

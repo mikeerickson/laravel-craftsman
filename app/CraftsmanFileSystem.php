@@ -57,6 +57,9 @@ class CraftsmanFileSystem
     public function createFile($type = null, $filename = null, $data = [])
     {
         switch ($type) {
+            case 'class':
+                $path = $this->class_path();
+                break;
             case 'controller':
                 $path = $this->controller_path();
                 break;
@@ -123,6 +126,11 @@ class CraftsmanFileSystem
         }
 
         return $result;
+    }
+
+    public function class_path()
+    {
+        return config('craftsman.paths.class');
     }
 
     public function controller_path()

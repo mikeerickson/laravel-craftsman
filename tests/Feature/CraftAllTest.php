@@ -15,8 +15,8 @@ class CraftAllTest extends TestCase
     /** @test */
     public function should_execute_craft_all_command()
     {
-        $this->artisan('craft:all')
-             ->expectsOutput('craft:all handler')
-             ->assertExitCode(0);
+        $this->artisan('craft:all Author --model App/Models/Author --table authors --rows 44')
+            ->assertExitCode(0);
+        $this->markTestIncomplete("WIP");
     }
 }

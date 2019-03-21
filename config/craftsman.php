@@ -13,6 +13,7 @@ return [
      */
 
     'paths' => [
+        'class' => 'app',
         'controllers' => 'app/Http/Controllers',
         'factories' => 'database/factories',
         'migrations' => 'database/migrations',
@@ -33,6 +34,7 @@ return [
      */
 
     'templates' => [
+        'class' => 'app/templates/class.mustache.php',
         'controller' => 'app/templates/controller.mustache.php',
         'factory' => 'app/templates/factory.mustache.php',
         'migration' => 'app/templates/migration.mustache.php',

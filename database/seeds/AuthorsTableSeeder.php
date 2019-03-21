@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Test;
+use App\Models\Author;
 use Illuminate\Database\Seeder;
 
-class TestsTableSeeder extends Seeder
+class AuthorsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,6 +12,6 @@ class TestsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(Test::class,25)->create();
+        factory(Author::class,44)->create();
     }
 }

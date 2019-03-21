@@ -15,7 +15,7 @@ class CraftSeedTest extends TestCase
     /** @test */
     public function should_execute_craft_seed_command()
     {
-        $this->artisan('craft:seed TestsTableSeeder --model App/Models/Post --rows 25')
+        $this->artisan('craft:seed TestsTableSeeder --model App/Models/Test --rows 25')
             ->assertExitCode(0);
     }
 }

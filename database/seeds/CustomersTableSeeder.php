@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Test;
+use App\Models\Customer;
 use Illuminate\Database\Seeder;
 
-class TestsTableSeeder extends Seeder
+class CustomersTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,6 +12,6 @@ class TestsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(Test::class,25)->create();
+        factory(Customer::class,55)->create();
     }
 }
