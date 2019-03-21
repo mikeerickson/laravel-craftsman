@@ -12,7 +12,7 @@
         "test:feature": "vendor/bin/phpunit --testsuite Feature",
         "test:unit": "vendor/bin/phpunit --testsuite Unit",
         "test:coverage": "vendor/bin/phpunit --coverage-html=coverage",
-        "test:watch": "vendor/bin/phpunit-watcher watch --filter CraftsmanFileSystemTest",
+        "test:watch": "vendor/bin/phpunit-watcher watch --filter CraftFactoryTest",
         "pre-commit": "npm run test:ci"
     },
     "repository": {
@@ -20,11 +20,13 @@
         "url": "git+https://github.com/mikeerickson/laravel-craftsman.git"
     },
     "keywords": [
-        "laravel",
-        "craftsman",
-        "scaffold",
         "artisan",
-        "cli"
+        "cli",
+        "craftsman",
+        "generate",
+        "generator",
+        "laravel",
+        "scaffold"
     ],
     "author": "Mike Erickson <codedungeon@gmail.com> (https://github.com/mikeerickson)",
     "license": "MIT",
