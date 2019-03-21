@@ -1,9 +1,9 @@
 <?php
 
-use {{model_path}};
+use App\Models\Post;
 use Illuminate\Database\Seeder;
 
-class {{tablename}}TableSeeder extends Seeder
+class TableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,6 +12,6 @@ class {{tablename}}TableSeeder extends Seeder
      */
     public function run()
     {
-        factory({{model}}::class,{{num_rows}})->create();
+        factory(Post::class,25)->create();
     }
 }

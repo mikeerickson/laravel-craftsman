@@ -98,6 +98,11 @@ class CraftsmanFileSystem
             $vars["namespace"] = $data["namespace"];
         }
 
+        // this variable is only used in seed
+        if (isset($data["num_rows"])) {
+            $vars["num_rows"] = (int)$data["num_rows"] ?: 1;
+        }
+
         $template = file_get_contents($src);
 
         $mustache = new Mustache_Engine;
