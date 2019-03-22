@@ -116,12 +116,12 @@ class CraftsmanFileSystem
             file_put_contents($dest, $template_data);
             $result = [
                 "status" => "success",
-                "message" => "{$dest} Created Successfully",
+                "message" => "✓ {$dest} Created Successfully",
             ];
         } catch (\Exception $e) {
             $result = [
                 "status" => "error",
-                "message" => $e->getMessage()
+                "message" => "✖ " . $e->getMessage()
             ];
         }
 

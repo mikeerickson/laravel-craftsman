@@ -51,26 +51,28 @@ class CraftAll extends Command
         $tablename = $this->option('table');
         $rows = $this->option('rows');
 
+        $this->info("\n");
+
         Artisan::call("craft:controller {$name}Controller --model {$model}");
-        $this->info("✓ {$name}Controller Created Successfully");
+        $this->info("✔︎ app/Http/Controllers/{$name}Controller Created Successfully");
 
         Artisan::call("craft:factory {$name}Factory --model {$model}");
-        $this->info("✓ {$name}Factory Created Successfully");
+        $this->info("✔︎ database/factories/{$name}Factory Created Successfully");
 
         Artisan::call("craft:migration create_{$tablename}_table --model {$model} --table {$tablename}");
-        $this->info("✓ create_{$tablename}_table Migration Created Successfully");
+        $this->info("✔︎ database/migrations/create_{$tablename}_table Created Successfully");
 
         Artisan::call("craft:model {$model} --table {$tablename}");
-        $this->info("✓ {$model} Model Created Successfully");
+        $this->info("✔︎ {$model} Created Successfully");
 
         Artisan::call("craft:seed {$name}sTableSeeder --model {$model} --rows {$rows}");
-        $this->info("✓ {$name}TableSeeder Created Successfully");
+        $this->info("✔︎ database/seeds/{$name}TableSeeder Created Successfully");
 
-        $this->warn("\nNOTES: The following tasks need to be completed manually:");
-        $this->warn("       - Complete {$name} factory configuration");
-        $this->warn("       - Complete {$name} migrations");
-        $this->warn("       - Update 'DatabaseSeed.php' to call {$name}TableSeeder");
+        $this->warn("\nNOTES: The following tasks need to be completed manually:\n");
+        $this->warn("       ⚈  Complete {$name} factory configuration");
+        $this->warn("       ⚈  Complete {$name} migrations");
+        $this->warn("       ⚈  Update 'database/seeds/DatabaseSeed.php' to call {$name}sTableSeeder");
 
-        $this->info("\nAsset crafting completed successfully", "Success");
+        $this->info("\nAsset Crafting Completed Successfully", "Success");
     }
 }
