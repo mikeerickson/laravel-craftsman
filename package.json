@@ -12,7 +12,7 @@
         "test:feature": "vendor/bin/phpunit --testsuite Feature",
         "test:unit": "vendor/bin/phpunit --testsuite Unit",
         "test:coverage": "vendor/bin/phpunit --coverage-html=coverage",
-        "test:watch": "vendor/bin/phpunit-watcher watch --filter CraftAllTest",
+        "test:watch": "vendor/bin/phpunit-watcher watch",
         "pre-commit": "npm run test:ci"
     },
     "repository": {

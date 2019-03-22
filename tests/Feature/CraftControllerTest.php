@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class CraftControllerTest extends TestCase
 {
-
     protected $fs;
 
     function setUp(): void
@@ -15,11 +14,6 @@ class CraftControllerTest extends TestCase
         parent::setUp();
         $this->fs = new CraftsmanFileSystem();
     }
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
 
     /** @test */
     public function should_execute_craft_controller_command()
@@ -42,6 +36,5 @@ class CraftControllerTest extends TestCase
         $this->assertStringContainsString("class {$model_name}", $data);
         $this->assertStringContainsString("return {$model_name}::all();", $data);
         $this->assertStringContainsString("use {$model_path};", $data);
-
     }
 }
