@@ -13,3 +13,6 @@
 .phpunit.result.cache
 /database/migrations
 box.json
+app/Http/Controllers
+app/Models
+database/
