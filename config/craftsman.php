@@ -35,6 +35,8 @@ return [
 
     'templates' => [
         'class' => 'app/templates/class.mustache.php',
+        'api-controller' => 'app/templates/api-controller.mustache.php',
+        'empty-controller' => 'app/templates/empty-controller.mustache.php',
         'controller' => 'app/templates/controller.mustache.php',
         'factory' => 'app/templates/factory.mustache.php',
         'migration' => 'app/templates/migration.mustache.php',

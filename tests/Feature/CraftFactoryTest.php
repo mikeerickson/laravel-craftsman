@@ -13,6 +13,7 @@ class CraftFactoryTest extends TestCase
     {
         parent::setUp();
         $this->fs = new CraftsmanFileSystem();
+        $this->withoutExceptionHandling();
     }
 
     /** @test */

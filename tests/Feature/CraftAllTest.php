@@ -6,6 +6,12 @@ use Tests\TestCase;
 
 class CraftAllTest extends TestCase
 {
+    function setUp(): void
+    {
+        parent::setUp();
+        $this->withoutExceptionHandling();
+    }
+
     /** @test */
     public function should_execute_craft_all_command()
     {

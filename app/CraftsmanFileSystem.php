@@ -21,6 +21,8 @@ class CraftsmanFileSystem
             case 'class':
                 $path = $this->class_path();
                 break;
+            case 'api-controller':
+            case 'empty-controller':
             case 'controller':
                 $path = $this->controller_path();
                 break;
@@ -50,7 +52,10 @@ class CraftsmanFileSystem
         $tablename = "";
         if (isset($data["tablename"])) {
             $tablename = strtolower($data["tablename"]);
+        } else {
+            $tablename = Str::plural(strtolower(class_basename($data["model"])));
         }
+
         $vars = [
             "name" => $filename,
             "model" => class_basename($data["model"]),

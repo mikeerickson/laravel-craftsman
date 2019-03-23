@@ -16,3 +16,4 @@ box.json
 app/Http/Controllers
 app/Models
 database/
+NOTES.md

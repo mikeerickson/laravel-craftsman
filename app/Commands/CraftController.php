@@ -9,12 +9,13 @@ class CraftController extends Command
 {
 
     protected $fs;
+
     /**
      * The signature of the command.
      *
      * @var string
      */
-    protected $signature = 'craft:controller {name} {--m|model=}';
+    protected $signature = 'craft:controller {name} {--m|model=} {--a|api}';
     /**
      * The description of the command.
      *
@@ -38,15 +39,22 @@ class CraftController extends Command
     {
         $controllerName = $this->argument('name');
         $model = $this->option('model');
-        if (strlen($model) === 0) {
-            $this->error("Must supply model name");
+
+        $data = [
+            "model" => $model,
+            "name" => $controllerName,
+        ];
+        $api = $this->option('api');
+        if ($api) {
+            $result = $this->fs->createFile('api-controller', $controllerName, $data);
         } else {
-            $data = [
-                "model" => $model,
-                "name" => $controllerName,
-            ];
-            $result = $this->fs->createFile('controller', $controllerName, $data);
-            $this->info($result["message"]);
+            if (strlen($model) === 0) {
+                $result = $this->fs->createFile('empty-controller', $controllerName, $data);
+            } else {
+                $result = $this->fs->createFile('controller', $controllerName, $data);
+            }
         }
+
+        $this->info($result["message"]);
     }
 }

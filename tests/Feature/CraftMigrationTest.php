@@ -7,6 +7,12 @@ use Tests\TestCase;
 
 class CraftMigrationTest extends TestCase
 {
+    function setUp(): void
+    {
+        parent::setUp();
+        $this->withoutExceptionHandling();
+    }
+
     /** @test */
     public function should_execute_default_craft_migration_command()
     {
