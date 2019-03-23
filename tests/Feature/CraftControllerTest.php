@@ -16,7 +16,14 @@ class CraftControllerTest extends TestCase
         $this->withoutExceptionHandling();
     }
 
-    /** @test  */
+    function tearDown(): void
+    {
+        parent::tearDown();
+
+        // TODO: Add directory cleaning routine
+    }
+
+    /** @test */
     public function should_create_empty_controller()
     {
         $this->artisan("craft:controller EmptyController")
@@ -53,7 +60,7 @@ class CraftControllerTest extends TestCase
         $this->assertStringContainsString("create", $data);
     }
 
-    /** @test  */
+    /** @test */
     public function should_create_api_controller()
     {
         $model = "App/Models/Contact";

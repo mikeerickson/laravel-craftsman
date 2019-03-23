@@ -16,14 +16,14 @@ class CraftMigration extends Command
      *
      * @var string
      */
-    protected $signature = 'craft:migration {name} {--t|table=} {--m|model=}';
+    protected $signature = 'craft:migration {name : Migration name (timestamp applied at creation)} {--t|table= : Desired tablename} {--m|model= : Path to migration model} {--f|fields= : List of fields (optional)} {--d|down : Include down method in migration}';
 
     /**
      * The description of the command.
      *
      * @var string
      */
-    protected $description = 'Crafts Migration <name>';
+    protected $description = 'Crafts Migration <name> [options]';
 
     public function __construct()
     {
@@ -44,11 +44,14 @@ class CraftMigration extends Command
 
         $migrationName = $this->argument('name');
         $model = $this->option('model');
+        $down = $this->option('down');
 
         if (strlen($model) === 0) {
             $this->error("Must supply model name");
         } else {
             $tablename = $this->option('table');
+            $fields = $this->option('fields');
+
             if (strlen($tablename) === 0) {
                 $parts = explode("/", $model);
                 $tablename = Str::plural(array_pop($parts));
@@ -56,11 +59,12 @@ class CraftMigration extends Command
             $data = [
                 "model" => $model,
                 "name" => $migrationName,
-                "tablename" => $tablename
+                "tablename" => $tablename,
+                "fields" => $fields,
+                "down" => $down,
             ];
 
-
-            $migrationFilename = $dt . "_" . $migrationName;
+            $migrationFilename = $dt."_".$migrationName;
             $result = $this->fs->createFile('migration', $migrationFilename, $data);
             $this->info($result["message"]);
         }

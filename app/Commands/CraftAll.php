@@ -16,7 +16,7 @@ class CraftAll extends Command
      *
      * @var string
      */
-    protected $signature = 'craft:all {name} {--m|model=} {--t|table=} {--r|rows=}';
+    protected $signature = 'craft:all {name : Base Entity used by rest of commands} {--m|model= : Associated model} {--t|table= : Associated tablename} {--r|rows= : Number of rows created by migration command}';
 
     /**
      * The description of the command.

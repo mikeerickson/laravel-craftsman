@@ -12,7 +12,7 @@ class CraftClass extends Command
      *
      * @var string
      */
-    protected $signature = 'craft:class {name} {--c|constructor=}';
+    protected $signature = 'craft:class {name : Class name} {--c|constructor= : Include constructor method}';
     /**
      * The description of the command.
      *
@@ -35,6 +35,7 @@ class CraftClass extends Command
     public function handle()
     {
         $className = $this->argument('name');
+
         $data = [
             "name" => $className,
         ];

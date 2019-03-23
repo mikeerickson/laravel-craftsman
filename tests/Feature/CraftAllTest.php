@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
+use Tests\CraftsmanTestCase;
 
-class CraftAllTest extends TestCase
+class CraftAllTest extends CraftsmanTestCase
 {
     function setUp(): void
     {

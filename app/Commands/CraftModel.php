@@ -15,7 +15,7 @@ class CraftModel extends Command
      *
      * @var string
      */
-    protected $signature = 'craft:model {name} {--t|table=}';
+    protected $signature = 'craft:model {name : Model name} {--t|table= : Tablename if different than model name}';
 
     /**
      * The description of the command.
@@ -51,7 +51,7 @@ class CraftModel extends Command
             "model" => $model,
             "name" => $modelName,
             "tablename" => $tablename,
-            "namespace" => $namespace
+            "namespace" => $namespace,
         ];
 
         $result = $this->fs->createFile('model', $modelName, $data);

@@ -17,9 +17,11 @@ class Create{{model}}sTable extends Migration
         Schema::create('{{tablename}}', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
+            {{{fields}}}
         });
     }
 
+    {{#down}}
     /**
     * Reverse the migrations.
     *
@@ -29,4 +31,5 @@ class Create{{model}}sTable extends Migration
     {
         Schema::dropIfExists('{{tablename}}');
     }
+    {{/down}}
 }

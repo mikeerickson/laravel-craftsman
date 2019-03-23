@@ -42,11 +42,11 @@ class CraftsmanFileSystem
                 $path = '';
         }
 
-        $src = config('craftsman.templates.' . $type);
+        $src = config('craftsman.templates.'.$type);
         if (Str::contains($filename, "App")) {
-            $dest = $this->path_join($filename . ".php");
+            $dest = $this->path_join($filename.".php");
         } else {
-            $dest = $this->path_join($path, $filename . ".php");
+            $dest = $this->path_join($path, $filename.".php");
         }
 
         $tablename = "";
@@ -56,11 +56,50 @@ class CraftsmanFileSystem
             $tablename = Str::plural(strtolower(class_basename($data["model"])));
         }
 
+        $fields = "";
+        if (isset($data["fields"])) {
+            $fields = strtolower($data["fields"]);
+        }
+
+        $fieldData = "";
+        if (strlen($fields) !== 0) {
+            $fieldList = preg_split("/,? ?,/", $fields);
+            foreach ($fieldList as $field) {
+                $parts = explode(":", trim($field));
+                if (sizeof($parts) >= 2) {
+                    $name = $parts[0];
+                    $fieldType = $parts[1];
+                } else {
+                    $fieldType = "string";
+                }
+
+                $fieldSize = "";
+                if (strpos($fieldType, "^") !== false) {
+                    [$fieldType, $fieldSize] = explode("^", $fieldType);
+                    $fieldSize = ",".$fieldSize;
+                }
+
+                $optional = "";
+                if (sizeof($parts) >= 3) {
+                    // remove first 2 items
+                    $parts = array_splice($parts, 2);
+                    foreach ($parts as $part) {
+                        $optional .= "->{$part}()";
+                    }
+                }
+
+                // $this->string('first_name',255)->nullable();
+                // $table->string('name');
+                $fieldData .= "\$this->{$fieldType}('{$name}'{$fieldSize}){$optional};".PHP_EOL;
+            }
+        }
+
         $vars = [
             "name" => $filename,
             "model" => class_basename($data["model"]),
             "model_path" => str_replace("/", "\\", $data["model"]),
-            "tablename" => $tablename
+            "tablename" => $tablename,
+            "fields" => $fieldData,
         ];
 
         if (isset($data["namespace"])) {
@@ -69,13 +108,16 @@ class CraftsmanFileSystem
 
         // this variable is only used in seed
         if (isset($data["num_rows"])) {
-            $vars["num_rows"] = (int)$data["num_rows"] ?: 1;
+            $vars["num_rows"] = (int) $data["num_rows"] ?: 1;
+        }
+
+        if (isset($data["down"])) {
+            $vars["down"] = $data["down"];
         }
 
         $template = $this->fs->get($src);
 
         $mustache = new Mustache_Engine();
-
         $template_data = $mustache->render($template, $vars);
 
         try {
@@ -88,7 +130,7 @@ class CraftsmanFileSystem
         } catch (\Exception $e) {
             $result = [
                 "status" => "error",
-                "message" => "✖ " . $e->getMessage()
+                "message" => "✖ ".$e->getMessage(),
             ];
         }
 
@@ -141,6 +183,7 @@ class CraftsmanFileSystem
     {
         return config('craftsman.paths.seeds');
     }
+
 
     public function createParentDirectory($filename)
     {

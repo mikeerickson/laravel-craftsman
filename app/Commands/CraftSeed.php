@@ -14,7 +14,7 @@ class CraftSeed extends Command
      *
      * @var string
      */
-    protected $signature = 'craft:seed {name} {--m|model=} {--r|rows=}';
+    protected $signature = 'craft:seed {name : Seed name} {--m|model= : Associated model} {--r|rows= : Alternate number of rows to user in factory call}';
 
     /**
      * The description of the command.
@@ -43,11 +43,11 @@ class CraftSeed extends Command
             if (strlen($model) === 0) {
                 $this->error("Must supply model name");
             } else {
-                $num_rows = (int)$this->option('rows') ?: 1;
+                $num_rows = (int) $this->option('rows') ?: 1;
                 $data = [
                     "model" => $model,
                     "name" => $seedName,
-                    "num_rows" => $num_rows
+                    "num_rows" => $num_rows,
                 ];
 
                 $result = $this->fs->createFile('seed', $seedName, $data);

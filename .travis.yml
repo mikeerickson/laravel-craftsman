@@ -20,7 +20,7 @@ install:
   - travis_retry composer update $COMPOSER_OPTS
 
 script:
-  - ./vendor/bin/phpunit -c phpunit.ci.xml --testsuite Unit --coverage-clover=coverage.xml
+  - ./vendor/bin/phpunit -c phpunit.ci.xml --testsuite Unit
 
 notifications:
   email:
