@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "40bb858ba836b60be6b9efe29a3aee42",
+    "content-hash": "da4f18fbd7eeef43371cbdc618e9201b",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -63,16 +63,16 @@
         },
         {
             "name": "codedungeon/php-messenger",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikeerickson/php-messenger.git",
-                "reference": "85928740fc18f1b57c138eb6c8d077c987b814f5"
+                "reference": "c82e120de6c58ebda93eeae20527e4fee8e09757"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikeerickson/php-messenger/zipball/85928740fc18f1b57c138eb6c8d077c987b814f5",
-                "reference": "85928740fc18f1b57c138eb6c8d077c987b814f5",
+                "url": "https://api.github.com/repos/mikeerickson/php-messenger/zipball/c82e120de6c58ebda93eeae20527e4fee8e09757",
+                "reference": "c82e120de6c58ebda93eeae20527e4fee8e09757",
                 "shasum": ""
             },
             "require-dev": {
@@ -108,7 +108,7 @@
                 }
             ],
             "description": "PHP library for creating console messages",
-            "time": "2019-03-25T00:15:08+00:00"
+            "time": "2019-03-25T03:27:10+00:00"
         },
         {
             "name": "doctrine/inflector",
