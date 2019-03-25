@@ -53,5 +53,6 @@ return [
 
     'providers' => [
         App\Providers\AppServiceProvider::class,
+        Codedungeon\PHPMessenger\MessengerServiceProvider::class,
     ],
 ];

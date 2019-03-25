@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use App\CraftsmanFileSystem;
+use Codedungeon\PHPMessenger\Facades\Messenger;
 use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
 
@@ -55,6 +56,14 @@ class CraftModel extends Command
         ];
 
         $result = $this->fs->createFile('model', $modelName, $data);
-        $this->info($result["message"]);
+
+        if (getenv("APP_ENV") === "testing") {
+            $this->info($result["message"]);
+        } else {
+            echo "\n";
+            $result["status"]
+                ? Messenger::success($result["message"], "SUCCESS")
+                : Messenger::error($result["message"], "ERROR");
+        }
     }
 }

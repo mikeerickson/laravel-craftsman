@@ -42,6 +42,8 @@ class CraftsmanFileSystem
                 $path = '';
         }
 
+        $namespace = "";
+
         $src = config('craftsman.templates.'.$type);
         if (Str::contains($filename, "App")) {
             $dest = $this->path_join($filename.".php");
@@ -50,10 +52,13 @@ class CraftsmanFileSystem
         }
 
         $tablename = "";
+
         if (isset($data["tablename"])) {
             $tablename = strtolower($data["tablename"]);
         } else {
-            $tablename = Str::plural(strtolower(class_basename($data["model"])));
+            if (isset($data["model"])) {
+                $tablename = Str::plural(strtolower(class_basename($data["model"])));
+            }
         }
 
         $fields = "";
@@ -94,16 +99,31 @@ class CraftsmanFileSystem
             }
         }
 
+        $model = "";
+        $model_path = "";
+
+        if (isset($data["model"])) {
+            $model = class_basename($data["model"]);
+            $model_path = $data["model"];
+        } else {
+            $model = class_basename($data["name"]);
+            $namespace = str_replace("/", "\\", $data["name"]);
+        }
+
         $vars = [
             "name" => $filename,
-            "model" => class_basename($data["model"]),
-            "model_path" => str_replace("/", "\\", $data["model"]),
+            "model" => $model,
+            "model_path" => $model_path,
             "tablename" => $tablename,
             "fields" => $fieldData,
         ];
 
         if (isset($data["namespace"])) {
             $vars["namespace"] = $data["namespace"];
+        } else {
+            if (strlen($namespace) > 0) {
+                $vars["namespace"] = $namespace;
+            }
         }
 
         // this variable is only used in seed
@@ -115,9 +135,18 @@ class CraftsmanFileSystem
             $vars["down"] = $data["down"];
         }
 
+//        $vars["model_path"] = str_replace("/", "\\", $vars["model_path"]);
+
         $template = $this->fs->get($src);
 
         $mustache = new Mustache_Engine();
+
+        $vars["model_path"] = str_replace("/", "\\", $vars["model_path"]);
+
+//        if ($vars["name"] === $vars["namespace"]) {
+//            $vars["namespace"] = "App";
+//        }
+
         $template_data = $mustache->render($template, $vars);
 
         try {
@@ -125,12 +154,12 @@ class CraftsmanFileSystem
             $this->fs->put($dest, $template_data);
             $result = [
                 "status" => "success",
-                "message" => "✔︎ {$dest} Created Successfully",
+                "message" => "{$dest} Created Successfully",
             ];
         } catch (\Exception $e) {
             $result = [
                 "status" => "error",
-                "message" => "✖ ".$e->getMessage(),
+                "message" => $e->getMessage(),
             ];
         }
 
@@ -183,7 +212,6 @@ class CraftsmanFileSystem
     {
         return config('craftsman.paths.seeds');
     }
-
 
     public function createParentDirectory($filename)
     {

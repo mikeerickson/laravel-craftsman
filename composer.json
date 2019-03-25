@@ -23,6 +23,7 @@
     ],
     "require": {
         "php": "^7.1.3",
+        "codedungeon/php-messenger": "1.0.2",
         "illuminate/database": "5.8.*",
         "illuminate/log": "5.8.*",
         "laravel-zero/framework": "5.8.*",

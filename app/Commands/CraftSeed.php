@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use App\CraftsmanFileSystem;
+use Codedungeon\PHPMessenger\Facades\Messenger;
 use Exception;
 use LaravelZero\Framework\Commands\Command;
 
@@ -51,10 +52,17 @@ class CraftSeed extends Command
                 ];
 
                 $result = $this->fs->createFile('seed', $seedName, $data);
-                $this->info($result["message"]);
+
+                if (getenv("APP_ENV") === "testing") {
+                    $this->info($result["message"]);
+                } else {
+                    echo "\n";
+                    Messenger::success($result["message"], "SUCCESS");
+                }
             }
         } catch (Exception $e) {
-            $this->error($e->getMessage());
+            echo "\n";
+            Messenger::error($e->getMessage(), "ERROR");
         }
 
     }

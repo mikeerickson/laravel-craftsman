@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use App\CraftsmanFileSystem;
 use Carbon\Carbon;
+use Codedungeon\PHPMessenger\Facades\Messenger;
 use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
 
@@ -66,7 +67,15 @@ class CraftMigration extends Command
 
             $migrationFilename = $dt."_".$migrationName;
             $result = $this->fs->createFile('migration', $migrationFilename, $data);
-            $this->info($result["message"]);
+
+            if (getenv("APP_ENV") === "testing") {
+                $this->info($result["message"]);
+            } else {
+                echo "\n";
+                $result["status"]
+                    ? Messenger::success($result["message"], "SUCCESS")
+                    : Messenger::error($result["message"], "ERROR");
+            }
         }
     }
 }

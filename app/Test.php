@@ -1,8 +1,8 @@
 <?php
 
-namespace {{namespace}};
+namespace Test;
 
-class {{model}}
+class Test
 {
     function __construct() {}
 }
