@@ -3,7 +3,6 @@
 namespace App\Commands;
 
 use App\CraftsmanFileSystem;
-use Codedungeon\PHPMessenger\Facades\Messenger;
 use Exception;
 use LaravelZero\Framework\Commands\Command;
 
@@ -57,12 +56,12 @@ class CraftSeed extends Command
                     $this->info($result["message"]);
                 } else {
                     echo "\n";
-                    Messenger::success($result["message"], "SUCCESS");
+                    $this->info($result["message"]);
                 }
             }
         } catch (Exception $e) {
             echo "\n";
-            Messenger::error($e->getMessage(), "ERROR");
+            $this->error($e->getMessage());
         }
 
     }

@@ -3,7 +3,6 @@
 namespace App\Commands;
 
 use App\CraftsmanFileSystem;
-use Codedungeon\PHPMessenger\Facades\Messenger;
 use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
 
@@ -62,8 +61,8 @@ class CraftModel extends Command
         } else {
             echo "\n";
             $result["status"]
-                ? Messenger::success($result["message"], "SUCCESS")
-                : Messenger::error($result["message"], "ERROR");
+                ? $this->info($result["message"])
+                : $this->error($result["message"]);
         }
     }
 }

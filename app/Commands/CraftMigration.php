@@ -4,7 +4,6 @@ namespace App\Commands;
 
 use App\CraftsmanFileSystem;
 use Carbon\Carbon;
-use Codedungeon\PHPMessenger\Facades\Messenger;
 use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
 
@@ -73,8 +72,8 @@ class CraftMigration extends Command
             } else {
                 echo "\n";
                 $result["status"]
-                    ? Messenger::success($result["message"], "SUCCESS")
-                    : Messenger::error($result["message"], "ERROR");
+                    ? $this->info($result["message"])
+                    : $this->error($result["message"]);
             }
         }
     }
