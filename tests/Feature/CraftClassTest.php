@@ -34,15 +34,15 @@ class CraftClassTest extends TestCase
     /** @test */
     public function should_create_class_with_namespace()
     {
-        $class = "App/Utilities/Test";
+        $class = "App/Test/SampleClass";
 
         $this->artisan("craft:class {$class}")
             ->assertExitCode(0);
 
-        $filename = $this->fs->path_join("app/Utilities", "Test.php");
+        $filename = $this->fs->path_join("app/Test", "SampleClass.php");
         $this->assertFileExists($filename);
 
         $data = file_get_contents($filename);
-//        $this->assertStringContainsString("use {$model_path};", $data);
+        $this->assertStringContainsString("class SampleClass", $data);
     }
 }

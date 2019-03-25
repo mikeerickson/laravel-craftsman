@@ -18,3 +18,4 @@ app/Http/Utilities
 app/Models
 database/
 NOTES.md
+tasks/
