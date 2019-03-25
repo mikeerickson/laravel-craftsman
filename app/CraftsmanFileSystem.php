@@ -107,7 +107,8 @@ class CraftsmanFileSystem
             $model_path = $data["model"];
         } else {
             $model = class_basename($data["name"]);
-            $namespace = str_replace("/", "\\", $data["name"]);
+            $namespace = str_replace("/", "\\", str_replace("/".$model, "", $data["name"]));
+
         }
 
         $vars = [
@@ -126,11 +127,18 @@ class CraftsmanFileSystem
             }
         }
 
+        if (isset($data["namespace"])) {
+            if ($vars["model"] === $vars["namespace"]) {
+                $vars["namespace"] = "App";
+            }
+        }
+
         // this variable is only used in seed
         if (isset($data["num_rows"])) {
             $vars["num_rows"] = (int) $data["num_rows"] ?: 1;
         }
 
+        // this variable is only used in migration
         if (isset($data["down"])) {
             $vars["down"] = $data["down"];
         }

@@ -1,5 +1,6 @@
 {
     "name": "laravel-craftsman",
+    "version": "1.0.0",
     "description": "Laravel Craftsman",
     "keywords": [
         "framework",
@@ -55,6 +56,9 @@
         "optimize-autoloader": true
     },
     "scripts": {
+        "test:ci": "vendor/bin/phpunit -c phpunit.ci.xml",
+        "test:feature": "vendor/bin/phpunit --testsuite Feature --colors=always",
+        "test:unit": "vendor/bin/phpunit --testsuite Unit --colors=always",
         "post-create-project-cmd": [
             "@php application app:rename"
         ]

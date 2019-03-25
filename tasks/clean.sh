@@ -3,9 +3,18 @@
 source "./tasks/messenger.sh"
 
 rm -rf app/Http
+success " ✔︎ app/Http removed"
+rm -rf app/Models
+success " ✔︎ app/Models removed"
 rm -rf app/Test
+success " ✔︎ app/Test removed"
 rm -rf database/factories
+success " ✔︎ database/factories removed"
 rm -rf database/migrations
-rm -rf database/seed
+success " ✔︎ database/migrations removed"
+rm -rf database/seeds
+success " ✔︎ database/seeds removed"
 
-success "Directories Cleaned" " SUCCESS "
+
+printf "\n"
+success "Directories Cleaned Successfully" " SUCCESS "
