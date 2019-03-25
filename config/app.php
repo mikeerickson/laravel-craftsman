@@ -1,5 +1,7 @@
 <?php
 
+$version = "1.0.0";
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -25,7 +27,7 @@ return [
     |
     */
 
-    'version' => '... pull this from package.json | composer.json ...',
+    'version' => $version.PHP_EOL."Crafted with love by Codedungeon",
 
     /*
     |--------------------------------------------------------------------------
