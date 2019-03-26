@@ -1,5 +1,7 @@
 <?php
 
+use App\Commands\TestTemplates;
+
 return [
 
     /*
@@ -60,6 +62,9 @@ return [
         Illuminate\Console\Scheduling\ScheduleRunCommand::class,
         Illuminate\Console\Scheduling\ScheduleFinishCommand::class,
         Illuminate\Foundation\Console\VendorPublishCommand::class,
+
+        // this is only enabled during development
+        TestTemplates::class,
     ],
 
     /*
@@ -74,7 +79,7 @@ return [
     */
 
     'remove' => [
-        
+
     ],
 
 ];
