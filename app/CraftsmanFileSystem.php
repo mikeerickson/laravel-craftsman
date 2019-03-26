@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Codedungeon\PHPMessenger\Facades\Messenger;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use Mustache_Engine;
@@ -43,8 +44,17 @@ class CraftsmanFileSystem
         }
 
         $namespace = "";
+        $src = $this->getUserConfig("./config.php", $type);
+        
+        if (!file_exists($src)) {
+            $src = config("craftsman.templates.{$type}");
+        }
 
-        $src = config('craftsman.templates.'.$type);
+        if (!file_exists($src)) {
+            printf("\n");
+            Messenger::error("'./{$src}' template does not exists", " ERROR ");
+            exit(1);
+        }
         if (Str::contains($filename, "App")) {
             $dest = $this->path_join($filename.".php");
         } else {
@@ -226,5 +236,19 @@ class CraftsmanFileSystem
         if (!is_dir(dirname($filename))) {
             mkdir(dirname($filename), 0777, true);
         }
+    }
+
+    public function getUserConfig($userConfigFilename = "./config.php", $type = "")
+    {
+        if (file_exists($userConfigFilename)) {
+            $config = include($userConfigFilename);
+            if (isset($config["templates"])) {
+                if (isset($config["templates"][$type])) {
+                    return $config["templates"][$type];
+                }
+            }
+        }
+
+        return ""; // we didnt find the entry, return null string
     }
 }

@@ -11,7 +11,7 @@
     "test:ci": "vendor/bin/phpunit -c phpunit.ci.xml",
     "test:feature": "vendor/bin/phpunit --testsuite Feature",
     "test:unit": "vendor/bin/phpunit --testsuite Unit",
-    "test:watch": "vendor/bin/phpunit-watcher watch --filter should_create_api_controller",
+    "test:watch": "vendor/bin/phpunit-watcher watch --filter VerifyTemplatesTest",
     "pre-commit": "npm run test:ci"
   },
   "repository": {
