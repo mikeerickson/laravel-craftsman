@@ -13,7 +13,10 @@ class CraftClass extends Command
      *
      * @var string
      */
-    protected $signature = 'craft:class {name : Class name} {--c|constructor= : Include constructor method}';
+    protected $signature = 'craft:class 
+                                {name : Class name} 
+                                {--c|constructor= : Include constructor method}
+                            ';
     /**
      * The description of the command.
      *

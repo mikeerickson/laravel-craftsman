@@ -15,7 +15,10 @@ class CraftModel extends Command
      *
      * @var string
      */
-    protected $signature = 'craft:model {name : Model name} {--t|table= : Tablename if different than model name}';
+    protected $signature = 'craft:model 
+                                {name : Model name} 
+                                {--t|table= : Tablename if different than model name}
+                            ';
 
     /**
      * The description of the command.

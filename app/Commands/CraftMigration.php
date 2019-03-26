@@ -16,7 +16,13 @@ class CraftMigration extends Command
      *
      * @var string
      */
-    protected $signature = 'craft:migration {name : Migration name (timestamp applied at creation)} {--t|table= : Desired tablename} {--m|model= : Path to migration model} {--f|fields= : List of fields (optional)} {--d|down : Include down method in migration}';
+    protected $signature = 'craft:migration 
+                                {name : Migration name (timestamp applied at creation)} 
+                                {--t|table= : Desired tablename} 
+                                {--m|model= : Path to migration model} 
+                                {--f|fields= : List of fields (optional)} 
+                                {--d|down : Include down method in migration}
+                            ';
 
     /**
      * The description of the command.

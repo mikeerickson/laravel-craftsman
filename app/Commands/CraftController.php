@@ -15,7 +15,11 @@ class CraftController extends Command
      *
      * @var string
      */
-    protected $signature = 'craft:controller {name : Controller Name} {--m|model= : Associated model} {--a|api : create API controller (skips create and update methods)}';
+    protected $signature = 'craft:controller {name : Controller Name} 
+                                {--m|model= : Associated model} 
+                                {--l|validation : Scaffold validation} 
+                                {--a|api : create API controller (skips create and update methods)}
+                           ';
     /**
      * The description of the command.
      *

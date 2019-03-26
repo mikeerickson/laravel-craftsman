@@ -12,7 +12,10 @@ class CraftFactory extends Command
      *
      * @var string
      */
-    protected $signature = 'craft:factory {name : Factory Name} {--m|model= : Associated model}';
+    protected $signature = 'craft:factory 
+                                {name : Factory Name} 
+                                {--m|model= : Associated model}
+                            ';
     /**
      * The description of the command.
      *

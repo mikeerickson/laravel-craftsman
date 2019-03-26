@@ -14,7 +14,11 @@ class CraftSeed extends Command
      *
      * @var string
      */
-    protected $signature = 'craft:seed {name : Seed name} {--m|model= : Associated model} {--r|rows= : Alternate number of rows to user in factory call}';
+    protected $signature = 'craft:seed 
+                                {name : Seed name} 
+                                {--m|model= : Associated model} 
+                                {--r|rows= : Alternate number of rows to user in factory call}
+                            ';
 
     /**
      * The description of the command.

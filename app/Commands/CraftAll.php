@@ -17,7 +17,11 @@ class CraftAll extends Command
      *
      * @var string
      */
-    protected $signature = 'craft:all {name : Base Entity used by rest of commands} {--m|model= : Associated model} {--t|table= : Associated tablename} {--r|rows= : Number of rows created by migration command} 
+    protected $signature = 'craft:all 
+                                {name : Base Entity used by rest of commands} 
+                                {--m|model= : Associated model} {--t|table= : Associated tablename} 
+                                {--r|rows= : Number of rows created by migration command} 
+                                
                                 {--c|no-controller : Skip crafting controller}
                                 {--f|no-factory : Skip crafting factory}
                                 {--g|no-migration : Skip crafting migration}
