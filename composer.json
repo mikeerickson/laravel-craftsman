@@ -28,7 +28,8 @@
         "illuminate/log": "5.8.*",
         "laravel-zero/framework": "5.8.*",
         "mustache/mustache": "^2.12",
-        "nunomaduro/laravel-console-menu": "^2.1"
+        "nunomaduro/laravel-console-menu": "^2.1",
+        "padraic/phar-updater": "^1.0.6"
     },
     "require-dev": {
         "codedungeon/phpunit-result-printer": "^0.26.1",

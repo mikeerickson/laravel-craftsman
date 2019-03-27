@@ -2,13 +2,13 @@
 
 source ./tasks/messenger.sh
 
-APP_PATH="~/laravel-craftsman"
-
-if [[ -d "$APP_PATH" ]]; then
+if [[ -d "~/laravel-craftsman" ]]; then
     mkdir ~/laravel-craftsman
 fi
 cp -r builds/ ~/laravel-craftsman/
 mv ~/laravel-craftsman/laravel-craftsman ~/laravel-craftsman/craftsman
 
+printf "\n"
+printf "==> deploying to: ~/laravel-craftsman\n"
 printf "\n"
 success "Deployed Successfully" " SUCCESS "

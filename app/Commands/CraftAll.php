@@ -19,7 +19,8 @@ class CraftAll extends Command
      */
     protected $signature = 'craft:all 
                                 {name : Base Entity used by rest of commands} 
-                                {--m|model= : Associated model} {--t|table= : Associated tablename} 
+                                {--m|model= : Associated model} 
+                                {--t|table= : Associated tablename} 
                                 {--r|rows= : Number of rows created by migration command} 
                                 
                                 {--c|no-controller : Skip crafting controller}
@@ -34,7 +35,12 @@ class CraftAll extends Command
      *
      * @var string
      */
-    protected $description = 'craft:all
+    protected $description = 'Craft All Assets
+                     <name>               Base Asset Name
+                     --model, -m          Model Name
+                     --table, -t          Tablename
+                     --rows, -r           Number of rows for migration (passed to factory
+                     
                      --no-controller, -c  Do not create controller
                      --no-factory, -f     Do not create factory
                      --no-migration, -g   Do not create migration
@@ -93,7 +99,7 @@ class CraftAll extends Command
         }
 
         if (!$noModel) {
-            Artisan::call("craft:model {$model} --table {$tablename}");
+            Artisan::call("craft:model {$model} --tablename {$tablename}");
             $this->info("✔︎ {$model} Created Successfully");
         } else {
             Messenger::info("Model crafting skipped", "INFO");

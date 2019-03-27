@@ -22,7 +22,10 @@ class CraftClass extends Command
      *
      * @var string
      */
-    protected $description = 'Crafts Class <name> [options]';
+    protected $description = 'Craft Class
+                     <name>               Class Name
+                     --constructor, -c    Include constructor method
+            ';
 
     public function __construct()
     {

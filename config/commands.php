@@ -1,5 +1,6 @@
 <?php
 
+
 return [
 
     /*
@@ -62,7 +63,7 @@ return [
         Illuminate\Foundation\Console\VendorPublishCommand::class,
 
         // this is only enabled during development
-//        CraftDeveloper::class,
+        App\Commands\CraftDeveloper::class,
     ],
 
     /*

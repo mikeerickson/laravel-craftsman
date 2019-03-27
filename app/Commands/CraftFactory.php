@@ -21,7 +21,10 @@ class CraftFactory extends Command
      *
      * @var string
      */
-    protected $description = 'Crafts Factory <name>';
+    protected $description = 'Craft Factory
+                     <name>               Factory Name
+                     --model, -m          Use <model> when creating controller
+            ';
 
     public function __construct()
     {

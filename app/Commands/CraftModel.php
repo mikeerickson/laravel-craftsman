@@ -17,7 +17,7 @@ class CraftModel extends Command
      */
     protected $signature = 'craft:model 
                                 {name : Model name} 
-                                {--t|table= : Tablename if different than model name}
+                                {--t|tablename= : Tablename if different than model name}
                             ';
 
     /**
@@ -25,7 +25,10 @@ class CraftModel extends Command
      *
      * @var string
      */
-    protected $description = 'Crafts model <name>';
+    protected $description = 'Craft Model
+                     <name>               Model Name (eg App\Models\Post)
+                     --tablename, -t      Desired tablename
+            ';
 
     public function __construct()
     {
@@ -46,7 +49,7 @@ class CraftModel extends Command
         $model = array_pop($parts);
         $namespace = count($parts) > 0 ? implode($parts, "\\") : "App";
 
-        $tablename = $this->option("table");
+        $tablename = $this->option("tablename");
         if (strlen($tablename) === 0) {
             $tablename = Str::plural(strtolower($model));
         }

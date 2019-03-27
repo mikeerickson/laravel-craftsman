@@ -17,7 +17,7 @@ class CraftSeed extends Command
     protected $signature = 'craft:seed 
                                 {name : Seed name} 
                                 {--m|model= : Associated model} 
-                                {--r|rows= : Alternate number of rows to user in factory call}
+                                {--r|rows= : Alternate number of rows to use in factory call}
                             ';
 
     /**
@@ -25,7 +25,11 @@ class CraftSeed extends Command
      *
      * @var string
      */
-    protected $description = 'Crafts seed <name>';
+    protected $description = 'Craft Seed
+                     <name>               Seed Name
+                     --model, -m          Path to model
+                     --rows, -r           Number of rows to use in factory call (Optional)
+            ';
 
     public function __construct()
     {

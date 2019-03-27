@@ -25,7 +25,13 @@ class CraftController extends Command
      *
      * @var string
      */
-    protected $description = 'craft:controller <name>';
+    protected $description = 'Craft Controller
+                     <name>               Controller Name
+                     --model, -m          Use <model> when creating controller
+                     --validation, -l     Create validation blocks
+                     --api, -a            Create API controller (skips create and update methods)
+                     --empty, -e          Create empty controller
+            ';
 
     public function __construct()
     {
