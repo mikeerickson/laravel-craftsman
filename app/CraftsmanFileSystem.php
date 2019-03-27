@@ -6,6 +6,7 @@ use Codedungeon\PHPMessenger\Facades\Messenger;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use Mustache_Engine;
+use Phar;
 
 class CraftsmanFileSystem
 {
@@ -14,6 +15,15 @@ class CraftsmanFileSystem
     public function __construct()
     {
         $this->fs = new Filesystem();
+    }
+
+    private function getPharPath()
+    {
+        $path = Phar::running(false);
+        if (strlen($path) > 0) {
+            $path = dirname($path).DIRECTORY_SEPARATOR;
+        }
+        return $path;
     }
 
     public function createFile($type = null, $filename = null, $data = [])
@@ -45,10 +55,12 @@ class CraftsmanFileSystem
 
         $namespace = "";
         $src = $this->getUserConfig("./config.php", $type);
-        
+
         if (!file_exists($src)) {
             $src = config("craftsman.templates.{$type}");
         }
+
+        $src = $this->getPharPath().$src;
 
         if (!file_exists($src)) {
             printf("\n");

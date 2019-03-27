@@ -4,7 +4,6 @@
 # https://askubuntu.com/questions/558280/changing-colour-of-text-and-background-of-terminal
 # https://www.google.com/search?q=bash+colors+background+yellow
 
-
 test_messenger() {
     echo "\n"
 
@@ -50,7 +49,7 @@ test_messenger() {
 }
 
 success() {
-    if [ -z "$2" ]; then
+    if [[ -z "$2" ]]; then
         printf "\e[32m$1\e[39;49;00m\n";
     else
         printf "\e[30;42;11;87m$2\e[39;49;00m\e[32m $1\e[39;49;00m\n";
@@ -58,7 +57,7 @@ success() {
 }
 
 error() {
-    if [ -z "$2" ]; then
+    if [[ -z "$2" ]]; then
         printf "\e[31m$1\e[39;49;00m\n";
     else
         printf "\e[30;41;11;87m$2\e[39;49;00m\e[31m $1\e[39;49;00m\n";
@@ -66,7 +65,7 @@ error() {
 }
 
 info() {
-    if [ -z "$2" ]; then
+    if [[ -z "$2" ]]; then
         printf "\e[34;11m$1\e[39;49;00m\n";
     else
         printf "\e[30;44;11;87m$2\e[39;49;00m\e[34m $1\e[39;49;00m\n";
@@ -74,7 +73,7 @@ info() {
 }
 
 warning() {
-    if [ -z "$2" ]; then
+    if [[ -z "$2" ]]; then
         printf "\e[33m$1\e[39;49;00m\n";
     else
         printf "\e[30;43;11;87m$2\e[39;49;00m\e[33m $1\e[39;49;00m\n";
@@ -82,7 +81,7 @@ warning() {
 }
 
 warn() {
-    if [ -z "$2" ]; then
+    if [[ -z "$2" ]]; then
         printf "\e[33m$1\e[39;49;00m\n";
     else
         printf "\e[30;43;11;87m$2\e[39;49;00m\e[33m $1\e[39;49;00m\n";
@@ -90,7 +89,7 @@ warn() {
 }
 
 important() {
-    if [ -z "$2" ]; then
+    if [[ -z "$2" ]]; then
         printf "\e[33m$1\e[39;49;00m\n";
     else
         printf "\e[30;43;11;87m$2\e[39;49;00m\e[33m $1\e[39;49;00m\n";
@@ -98,7 +97,7 @@ important() {
 }
 
 log() {
-    if [ -z "$2" ]; then
+    if [[ -z "$2" ]]; then
         printf "$1\n";
     else
         printf "\e[30;107;11;87m$2\e[39;49;00m $1\n";
@@ -106,7 +105,7 @@ log() {
 }
 
 status() {
-    if [ -z "$2" ]; then
+    if [[ -z "$2" ]]; then
         printf "\e[35m$1\e[39;49;00m\n";
     else
         printf "\e[30;45;11;87m$2\e[39;49;00m\e[35m $1\e[39;49;00m\n";
@@ -115,7 +114,7 @@ status() {
 
 note() {
     # note: { fg: '38m', bg: '48m' },
-    if [ -z "$2" ]; then
+    if [[ -z "$2" ]]; then
         printf "$1\n";
     else
         printf "\e[30;107;11;87m$2\e[39;49;00m $1\n";
@@ -123,7 +122,7 @@ note() {
 }
 
 notice() {
-    if [ -z "$2" ]; then
+    if [[ -z "$2" ]]; then
         printf "\e[34m$1\e[39;49;00m\n";
     else
         printf "\e[30;44;11;87m$2\e[39;49;00m\e[34m $1\e[39;49;00m\n";

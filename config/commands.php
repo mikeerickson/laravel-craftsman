@@ -1,7 +1,5 @@
 <?php
 
-use App\Commands\TestTemplates;
-
 return [
 
     /*
@@ -64,7 +62,7 @@ return [
         Illuminate\Foundation\Console\VendorPublishCommand::class,
 
         // this is only enabled during development
-        TestTemplates::class,
+//        CraftDeveloper::class,
     ],
 
     /*
