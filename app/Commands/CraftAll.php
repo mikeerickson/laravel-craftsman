@@ -20,7 +20,7 @@ class CraftAll extends Command
     protected $signature = 'craft:all 
                                 {name : Base Entity used by rest of commands} 
                                 {--m|model= : Associated model} 
-                                {--t|table= : Associated tablename} 
+                                {--t|tablename= : Associated tablename} 
                                 {--r|rows= : Number of rows created by migration command} 
                                 
                                 {--c|no-controller : Skip crafting controller}
@@ -38,7 +38,7 @@ class CraftAll extends Command
     protected $description = 'Craft All Assets
                      <name>               Base Asset Name
                      --model, -m          Model Name
-                     --table, -t          Tablename
+                     --tablename, -t      Tablename
                      --rows, -r           Number of rows for migration (passed to factory
                      
                      --no-controller, -c  Do not create controller
@@ -65,7 +65,7 @@ class CraftAll extends Command
         $name = $this->argument('name');
 
         $model = $this->option('model');
-        $tablename = $this->option('table');
+        $tablename = $this->option('tablename');
         $rows = $this->option('rows');
 
         // grab any options to skip assets
