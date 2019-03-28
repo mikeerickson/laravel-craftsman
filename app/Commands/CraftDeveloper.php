@@ -4,10 +4,11 @@ namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
-use Phar;
 
 class CraftDeveloper extends Command
 {
+    protected $hidden = false;
+
     /**
      * The signature of the command.
      *
@@ -29,14 +30,16 @@ class CraftDeveloper extends Command
      */
     public function handle()
     {
-        $path = Phar::running(false);
-        if (strlen($path) > 0) {
-            $path = dirname($path).DIRECTORY_SEPARATOR;
-        }
+        var_dump("cwd: ".getcwd());
+
+//        $path = Phar::running(false);
+//        if (strlen($path) > 0) {
+//            $path = dirname($path).DIRECTORY_SEPARATOR;
+//        }
 
         $templates = config('craftsman.templates');
         foreach ($templates as $template) {
-            $template = $path.$template;
+            $template = getcwd().DIRECTORY_SEPARATOR.$template;
             echo($template.' templates exists: '.file_exists($template).PHP_EOL);
         }
     }

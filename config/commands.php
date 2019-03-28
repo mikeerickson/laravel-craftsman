@@ -63,7 +63,8 @@ return [
         Illuminate\Foundation\Console\VendorPublishCommand::class,
 
         // this is only enabled during development
-        App\Commands\CraftDeveloper::class,
+//        App\Commands\CraftDeveloper::class, // this is handled in command class `$hidden` property
+    
     ],
 
     /*

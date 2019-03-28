@@ -2,6 +2,9 @@
 
 source ./tasks/messenger.sh
 
+BUILD=$(./tasks/bumpBuild.js)
+info "Build number bumped to $BUILD ..." " INFO "
+
 php laravel-craftsman app:build
 rm -rf builds/templates
 cp -r templates builds/templates

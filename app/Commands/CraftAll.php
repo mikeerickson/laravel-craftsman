@@ -136,7 +136,7 @@ class CraftAll extends Command
         if ($skipAll) {
             Messenger::warning("You skipped all assets, nothing created", "WARNING");
         } else {
-            Messenger::success("Asset Crafting Completed Successfully", " SUCCESS ");
+            Messenger::success("Asset Crafting Completed Successfully", "SUCCESS");
         }
     }
 }

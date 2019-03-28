@@ -18,5 +18,4 @@ app/Http/Utilities
 app/Models
 database/
 NOTES.md
-builds/
 app/Test/
