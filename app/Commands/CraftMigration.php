@@ -18,7 +18,7 @@ class CraftMigration extends Command
      */
     protected $signature = 'craft:migration 
                                 {name : Migration name (timestamp applied at creation)} 
-                                {--t|table= : Desired tablename} 
+                                {--t|tablename= : Desired tablename} 
                                 {--m|model= : Path to migration model} 
                                 {--f|fields= : List of fields (optional)} 
                                 {--d|down : Include down method in migration}
@@ -62,7 +62,7 @@ class CraftMigration extends Command
         if (strlen($model) === 0) {
             $this->error("Must supply model name");
         } else {
-            $tablename = $this->option('table');
+            $tablename = $this->option('tablename');
             $fields = $this->option('fields');
 
             if (strlen($tablename) === 0) {
@@ -85,7 +85,7 @@ class CraftMigration extends Command
             } else {
                 echo "\n";
                 $result["status"]
-                    ? $this->info($result["message"])
+                    ? $this->info("✔︎ ".$result["message"])
                     : $this->error($result["message"]);
             }
         }

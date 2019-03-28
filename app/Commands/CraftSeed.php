@@ -64,7 +64,7 @@ class CraftSeed extends Command
                     $this->info($result["message"]);
                 } else {
                     echo "\n";
-                    $this->info($result["message"]);
+                    $this->info("✔︎ ".$result["message"]);
                 }
             }
         } catch (Exception $e) {

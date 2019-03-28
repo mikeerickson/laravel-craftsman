@@ -75,60 +75,61 @@ class CraftAll extends Command
         $noModel = $this->option('no-model');
         $noSeed = $this->option('no-seed');
 
+
         $this->info("\n");
 
         if (!$noController) {
             Artisan::call("craft:controller {$name}Controller --model {$model}");
-            $this->info("✔︎ app/Http/Controllers/{$name}Controller Created Successfully");
+            Messenger::success("✔︎ app/Http/Controllers/{$name}Controller Created Successfully");
         } else {
-            Messenger::info("Controller crafting skipped", "INFO");
+            Messenger::info("▶︎ Controller crafting skipped\n");
         }
 
         if (!$noFactory) {
             Artisan::call("craft:factory {$name}Factory --model {$model}");
-            $this->info("✔︎ database/factories/{$name}Factory Created Successfully");
+            Messenger::success("✔︎ database/factories/{$name}Factory Created Successfully");
         } else {
-            Messenger::info("Factory crafting skipped", "INFO");
+            Messenger::info("▶︎ Factory crafting skipped\n");
         }
 
         if (!$noMigration) {
-            Artisan::call("craft:migration create_{$tablename}_table --model {$model} --table {$tablename}");
-            $this->info("✔︎ database/migrations/create_{$tablename}_table Created Successfully");
+            Artisan::call("craft:migration create_{$tablename}_table --model {$model} --tablename {$tablename}");
+            Messenger::success("✔︎ database/migrations/create_{$tablename}_table Migration Created Successfully");
         } else {
-            Messenger::info("Migration crafting skipped", "INFO");
+            Messenger::info("▶︎ Migration crafting skipped\n");
         }
 
         if (!$noModel) {
             Artisan::call("craft:model {$model} --tablename {$tablename}");
-            $this->info("✔︎ {$model} Created Successfully");
+            Messenger::success("✔︎ {$model} Model Created Successfully");
         } else {
-            Messenger::info("Model crafting skipped", "INFO");
+            Messenger::info("▶︎ Model crafting skipped\n");
         }
 
         if (!$noSeed) {
             Artisan::call("craft:seed {$name}sTableSeeder --model {$model} --rows {$rows}");
-            $this->info("✔︎ database/seeds/{$name}TableSeeder Created Successfully");
+            Messenger::success("✔︎ database/seeds/{$name}TableSeeder Created Successfully");
         } else {
-            Messenger::info("Seed crafting skipped", "INFO");
+            Messenger::info("▶︎ Seed crafting skipped\n");
         }
 
         $skipAll = false;
         if ($noController && $noFactory && $noMigration && $noModel && $noSeed) {
             $skipAll = true;
         } else {
-            $this->warn("\nNOTES: The following tasks need to be completed manually:\n");
+            Messenger::warning("\nNOTES: The following tasks need to be completed manually:\n");
         }
 
         if (!$noFactory) {
-            $this->warn("       ⚈  Complete {$name} factory configuration");
+            Messenger::warning("       ⚈  Complete {$name} factory configuration");
         }
 
         if (!$noMigration) {
-            $this->warn("       ⚈  Complete {$name} migrations");
+            Messenger::warning("       ⚈  Complete {$name} migrations");
         }
 
         if (!$noSeed) {
-            $this->warn("       ⚈  Update 'database/seeds/DatabaseSeed.php' to call {$name}sTableSeeder");
+            Messenger::warning("       ⚈  Update 'database/seeds/DatabaseSeed.php' to call {$name}sTableSeeder");
         }
 
         Messenger::success("\n================================================================================\n");

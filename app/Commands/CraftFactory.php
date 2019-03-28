@@ -58,7 +58,7 @@ class CraftFactory extends Command
             } else {
                 echo "\n";
                 $result["status"]
-                    ? $this->info($result["message"])
+                    ? $this->info("✔︎ ".$result["message"])
                     : $this->error($result["message"]);
             }
         }
