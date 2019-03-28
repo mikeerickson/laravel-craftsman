@@ -32,7 +32,7 @@ class CraftMigration extends Command
     protected $description = 'Craft Migration
                      <name>               Migration Name (will be appened with timestamp)
                      --model, -m          Path to model
-                     --table, -t          Desired tablename
+                     --tablename, -t      Desired tablename
                      --fields, -f         List of fields (optional)
                                            eg. --fields first_name:string, last_name:string(20)
                      --down, -d           Include down methods (skipped by default)
