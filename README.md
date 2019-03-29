@@ -45,40 +45,48 @@ wget ...
 
 ## Commands
 
-| Command          | Name / Option       | Description                                                      |
-|------------------|---------------------|------------------------------------------------------------------|
-| craft:all        | base name           | Creates all assets (Controller, Factory, Migration, Model, Seed) |
-|                  | --model, -m         | Path to model (eg App/Models/Post)                               |
-|                  | --tablename, -t     | Tablename used in database (will set $tablename in Model)        |
-|                  |                     | _If not supplied, default table will be pluralized model name_   |
-|                  | --rows, -r          | Number of rows used by seed when using Factory                   |
-|                  | --no-controller, -c | Do not create controller                                         |
-|                  | --no-factory, -f    | Do not create factory                                            |
-|                  | --no-migration, -g  | Do not create migration                                          |
-|                  | --no-model, -o      | Do not create model                                              |
-|                  | --no-seed, -s       | Do not create seed                                               |
-| craft:class      | class name          | Creates empty class                                              |
-|                  | --constructor, -c   | Include constructor method                                       |
-| craft:controller | controller name     | Create controller using supplied options                         |
-|                  | --model, -m         | Path to model (eg App/Models/Post)                               |
-|                  | --validation, -l    | Create validation blocks where appropriate                       |
-|                  | --api, -a           | Create API controller (skips create and update methods)          |
-|                  | --empty, -e         | Create empty controller                                          |
-| craft:factory    | factory name        | Creates factory using supplied options                           |
-|                  | --model, -m         | Path to model (eg App/Models/Post)                               |
-| craft:migration  | migration name      | Creates migration using supplied options                         |
-|                  | --model, -m         | Path to model (eg App/Models/Post)                               |
-|                  | --tablename, -t     | Tablename used in database (will set $tablename in Model)        |
-|                  |                     | _If not supplied, default table will be pluralized model name_   |
-|                  | --fields, -f        | List of fields (optional)                                        |
-|                  |                     | _eg. --fields first_name:string(30), last_name:string(50)_       |
-|                  | --down, -d          |  Include down methods (skipped by default)                       |
-| craft:model      | model name          | Creates model using supplied options                             |
-|                  | --tablename, -t     | Tablename used in database (will set $tablename in Model)        |
-|                  |                     | _If not supplied, default table will be pluralized model name_   |
-| craft:seed       | base seed name      | Creates seed file using supplied options                         |
-|                  | --model, -m         | Path to model (eg App/Models/Post)                               |
-|                  | --rows, -r          | Number of rows to use in factory call (Optional)                 |
+The following commands are available in any Laravel project.  You can use the individual crafting routines which are similar to the Artisan commands, but the `craft:all` command is the most powerful of the bunch.
+
+Using `craft:all` you can easily generate all assets (controller, factory, migration, model, and seed) for a given resource (ie Post, Customer, etc)
+
+```
+laravel-craftsman craft:all Contact --model App/Models/Contact --tablename contacts --rows 50 --fields fname:string(30)^nullable, lname:string(50)^nullable, email(60):string^unique
+```
+
+| Command              | Name / Option       | Description                                                          |
+|----------------------|---------------------|----------------------------------------------------------------------|
+| **craft:all**        | **base name**       | **Creates all assets (Controller, Factory, Migration, Model, Seed)** |
+|                      | --model, -m         | Path to model (eg App/Models/Post)                                   |
+|                      | --tablename, -t     | Tablename used in database (will set $tablename in Model)            |
+|                      |                     | _If not supplied, default table will be pluralized model name_       |
+|                      | --rows, -r          | Number of rows used by seed when using Factory                       |
+|                      | --no-controller, -c | Do not create controller                                             |
+|                      | --no-factory, -a    | Do not create factory                                                |
+|                      | --no-migration, -g  | Do not create migration                                              |
+|                      | --no-model, -o      | Do not create model                                                  |
+|                      | --no-seed, -s       | Do not create seed                                                   |
+| **craft:class**      | **class name**      | **Creates empty class**                                              |
+|                      | --constructor, -c   | Include constructor method                                           |
+| **craft:controller** | **controller name** | **Create controller using supplied options**                         |
+|                      | --model, -m         | Path to model (eg App/Models/Post)                                   |
+|                      | --validation, -l    | Create validation blocks where appropriate                           |
+|                      | --api, -a           | Create API controller (skips create and update methods)              |
+|                      | --empty, -e         | Create empty controller                                              |
+| **craft:factory**    | **factory name**    | **Creates factory using supplied options**                           |
+|                      | --model, -m         | Path to model (eg App/Models/Post)                                   |
+| **craft:migration**  | **migration name**  | **Creates migration using supplied options**                         |
+|                      | --model, -m         | Path to model (eg App/Models/Post)                                   |
+|                      | --tablename, -t     | Tablename used in database (will set $tablename in Model)            |
+|                      |                     | _If not supplied, default table will be pluralized model name_       |
+|                      | --fields, -f        | List of fields (optional)                                            |
+|                      |                     | _eg. --fields first_name:string(30), last_name:string(50)_           |
+|                      | --down, -d          |  Include down methods (skipped by default)                           |
+| **craft:model**      | **model name**      | **Creates model using supplied options**                             |
+|                      | --tablename, -t     | Tablename used in database (will set $tablename in Model)            |
+|                      |                     | _If not supplied, default table will be pluralized model name_       |
+| **craft:seed**       | **base seed name**  | **Creates seed file using supplied options**                         |
+|                      | --model, -m         | Path to model (eg App/Models/Post)                                   |
+|                      | --rows, -r          | Number of rows to use in factory call (Optional)                     |
 
 
 ## Custom Templates

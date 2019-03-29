@@ -21,10 +21,11 @@ class CraftAll extends Command
                                 {name : Base Entity used by rest of commands} 
                                 {--m|model= : Associated model} 
                                 {--t|tablename= : Associated tablename} 
+                                {--f|fields= : List of fields used in migration} 
                                 {--r|rows= : Number of rows created by migration command} 
                                 
                                 {--c|no-controller : Skip crafting controller}
-                                {--f|no-factory : Skip crafting factory}
+                                {--a|no-factory : Skip crafting factory}
                                 {--g|no-migration : Skip crafting migration}
                                 {--o|no-model : Skip crafting model}
                                 {--s|no-seed : Skip crafting seed}
@@ -39,7 +40,8 @@ class CraftAll extends Command
                      <name>               Base Asset Name
                      --model, -m          Model Name
                      --tablename, -t      Tablename
-                     --rows, -r           Number of rows for migration (passed to factory
+                     --fields, -f         Field List (passed to migration)
+                     --rows, -r           Number of rows for migration (passed to factory)
                      
                      --no-controller, -c  Do not create controller
                      --no-factory, -f     Do not create factory
@@ -67,6 +69,7 @@ class CraftAll extends Command
         $model = $this->option('model');
         $tablename = $this->option('tablename');
         $rows = $this->option('rows');
+        $fields = $this->option('fields');
 
         // grab any options to skip assets
         $noController = $this->option('no-controller');
@@ -93,7 +96,7 @@ class CraftAll extends Command
         }
 
         if (!$noMigration) {
-            Artisan::call("craft:migration create_{$tablename}_table --model {$model} --tablename {$tablename}");
+            Artisan::call("craft:migration create_{$tablename}_table --model {$model} --tablename {$tablename} --fields{$fields}");
             Messenger::success("✔︎ database/migrations/create_{$tablename}_table Migration Created Successfully");
         } else {
             Messenger::info("▶︎ Migration crafting skipped\n");
