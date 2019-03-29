@@ -116,3 +116,12 @@ if (!function_exists("get_build")) {
         return $json["build"];
     }
 }
+
+if (!function_exists("get_version")) {
+    function get_version()
+    {
+        $data = file_get_contents(getcwd().DIRECTORY_SEPARATOR."package.json");
+        $json = json_decode($data, true, 512);
+        return $json["version"];
+    }
+}
