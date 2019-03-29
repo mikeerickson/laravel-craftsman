@@ -169,6 +169,13 @@ class CraftsmanFileSystem
             $vars["down"] = $data["down"];
         }
 
+        // this variable is only used in migration
+        if (isset($data["constructor"])) {
+            $vars["constructor"] = $data["constructor"];
+        } else {
+            $vars["constructor"] = false;
+        }
+
 //        $vars["model_path"] = str_replace("/", "\\", $vars["model_path"]);
 
         $template = $this->fs->get($src);
@@ -176,10 +183,6 @@ class CraftsmanFileSystem
         $mustache = new Mustache_Engine();
 
         $vars["model_path"] = str_replace("/", "\\", $vars["model_path"]);
-
-//        if ($vars["name"] === $vars["namespace"]) {
-//            $vars["namespace"] = "App";
-//        }
 
         $template_data = $mustache->render($template, $vars);
 

@@ -14,7 +14,7 @@ class CraftClass extends Command
      */
     protected $signature = 'craft:class 
                                 {name : Class name} 
-                                {--c|constructor= : Include constructor method}
+                                {--c|constructor : Include constructor method}
                             ';
     /**
      * The description of the command.
@@ -41,9 +41,11 @@ class CraftClass extends Command
     public function handle()
     {
         $className = $this->argument('name');
+        $constructor = $this->option("constructor");
 
         $data = [
             "name" => $className,
+            "constructor" => $constructor,
         ];
 
         $result = $this->fs->createFile('class', $className, $data);
