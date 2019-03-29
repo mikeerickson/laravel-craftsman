@@ -59,10 +59,12 @@ class CraftMigrationTest extends TestCase
         $migrationFilename = $this->fs->getLastFilename("database/migrations", $migrationName);
         $data = file_get_contents($migrationFilename);
 
-        $this->assertStringContainsString("fname", $data);
-        $this->assertStringContainsString("lname", $data);
-        $this->assertStringContainsString("email", $data);
-
+        $this->assertStringContainsString("\$table->string('fname',25)->nullable();", $data);
+        $this->assertStringContainsString("\$table->string('lname',50)->nullable();", $data);
+        $this->assertStringContainsString("\$table->string('email',80)->nullable()->unique();", $data);
+        $this->assertStringContainsString("\$table->datetime('dob');", $data);
+        $this->assertStringContainsString("\$table->text('notes');", $data);
+        $this->assertStringContainsString("\$table->timezone('deleted_at');", $data);
     }
 
 
