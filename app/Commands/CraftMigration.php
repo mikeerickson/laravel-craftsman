@@ -34,7 +34,7 @@ class CraftMigration extends Command
                      --model, -m          Path to model
                      --tablename, -t      Desired tablename
                      --fields, -f         List of fields (optional)
-                                           eg. --fields first_name:string, last_name:string(20)
+                                           eg. --fields first_name:string,20^nullable^unique, last_name:string,20
                      --down, -d           Include down methods (skipped by default)
             ';
 

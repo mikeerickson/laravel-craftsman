@@ -50,7 +50,7 @@ The following commands are available in any Laravel project.  You can use the in
 Using `craft:all` you can easily generate all assets (controller, factory, migration, model, and seed) for a given resource (ie Post, Customer, etc)
 
 ```
-laravel-craftsman craft:all Contact --model App/Models/Contact --tablename contacts --rows 50 --fields fname:string(30)^nullable, lname:string(50)^nullable, email(60):string^unique
+laravel-craftsman craft:all Contact --model App/Models/Contact --tablename contacts --rows 50 --fields fname:string,30^nullable, lname:string,50^nullable, email:string^unique
 ```
 
 | Command              | Name / Option       | Description                                                          |
@@ -78,9 +78,8 @@ laravel-craftsman craft:all Contact --model App/Models/Contact --tablename conta
 |                      | --model, -m         | Path to model (eg App/Models/Post)                                   |
 |                      | --tablename, -t     | Tablename used in database (will set $tablename in Model)            |
 |                      |                     | _If not supplied, default table will be pluralized model name_       |
-|                      | --fields, -f        | List of fields (optional)                                            |
-|                      |                     | _eg. --fields first_name:string(30), last_name:string(50)_           |
-|                      | --down, -d          |  Include down methods (skipped by default)                           |
+|                      | --fields, -f        | List of fields (option) _see syntax below_                           |
+|                      | --down, -d          | Include down methods (skipped by default)                            |
 | **craft:model**      | **model name**      | **Creates model using supplied options**                             |
 |                      | --tablename, -t     | Tablename used in database (will set $tablename in Model)            |
 |                      |                     | _If not supplied, default table will be pluralized model name_       |
@@ -88,6 +87,29 @@ laravel-craftsman craft:all Contact --model App/Models/Contact --tablename conta
 |                      | --model, -m         | Path to model (eg App/Models/Post)                                   |
 |                      | --rows, -r          | Number of rows to use in factory call (Optional)                     |
 
+#### Field Option Syntax
+When using the `--fields` option when building migrations, you should use the following syntax:
+
+```
+format:
+fieldName:fieldType@fieldSize:option1:option2:option3
+
+example:
+email:string@80:nullable:unique 
+
+--fields fname:string@25:nullable,lname:string@50:nullable,email:string@80:nullable:unique,dob:datetime,notes:text,deleted_at:timezone
+
+    Schema::create('contacts', function (Blueprint $table) {
+        $table->bigIncrements('id');
+        $table->timestamps();
+        $table->string('fname', 25)->nullable();
+        $table->string('lname', 50)->nullable();
+        $table->string('email', 80)->nullable()->unique();
+        $table->datetime('dob');
+        $table->text('notes');
+        $table->timezone('deleted_at');
+    });
+```
 
 ## Custom Templates
 Laravel Craftsman provides support for creating custom templates.  

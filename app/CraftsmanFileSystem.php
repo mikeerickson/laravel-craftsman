@@ -83,11 +83,16 @@ class CraftsmanFileSystem
             }
         }
 
+        // https://laravel.com/docs/5.8/migrations
+
         $fields = "";
         if (isset($data["fields"])) {
             $fields = strtolower($data["fields"]);
         }
 
+        // format:
+        // fieldName:fieldType@fieldSize:option1:option2
+        //  eg --fields fname:string@25:nullable:unique,lname:string@50:nullable
         $fieldData = "";
         if (strlen($fields) !== 0) {
             $fieldList = preg_split("/,? ?,/", $fields);
@@ -101,23 +106,22 @@ class CraftsmanFileSystem
                 }
 
                 $fieldSize = "";
-                if (strpos($fieldType, "^") !== false) {
-                    [$fieldType, $fieldSize] = explode("^", $fieldType);
+                if (strpos($fieldType, "@") !== false) {
+                    [$fieldType, $fieldSize] = explode("@", $fieldType);
                     $fieldSize = ",".$fieldSize;
                 }
 
                 $optional = "";
                 if (sizeof($parts) >= 3) {
-                    // remove first 2 items
                     $parts = array_splice($parts, 2);
                     foreach ($parts as $part) {
                         $optional .= "->{$part}()";
                     }
                 }
 
-                // $this->string('first_name',255)->nullable();
+                // $this->string('first_name',255)->nullable()->unique();
                 // $table->string('name');
-                $fieldData .= "\$this->{$fieldType}('{$name}'{$fieldSize}){$optional};".PHP_EOL;
+                $fieldData .= "\$table->{$fieldType}('{$name}'{$fieldSize}){$optional};".PHP_EOL;
             }
         }
 
@@ -183,6 +187,7 @@ class CraftsmanFileSystem
             $this->createParentDirectory($dest);
             $this->fs->put($dest, $template_data);
             $result = [
+                "filename" => $dest,
                 "status" => "success",
                 "message" => "{$dest} Created Successfully",
             ];
@@ -262,5 +267,19 @@ class CraftsmanFileSystem
         }
 
         return ""; // we didnt find the entry, return null string
+    }
+
+    public function getLastFilename($dirname = "", $partial = "")
+    {
+        $files = array_reverse(scandir($dirname));
+        $filename = $files[0];
+
+        foreach ($files as $file) {
+            if (strpos($file, $partial)) {
+                $filename = $file;
+                break;
+            }
+        }
+        return $dirname.DIRECTORY_SEPARATOR.$filename;
     }
 }

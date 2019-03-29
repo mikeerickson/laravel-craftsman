@@ -41,6 +41,7 @@ class CraftAll extends Command
                      --model, -m          Model Name
                      --tablename, -t      Tablename
                      --fields, -f         Field List (passed to migration)
+                                           eg. --fields first_name:string,20^nullable^unique, last_name:string,20
                      --rows, -r           Number of rows for migration (passed to factory)
                      
                      --no-controller, -c  Do not create controller
@@ -96,7 +97,7 @@ class CraftAll extends Command
         }
 
         if (!$noMigration) {
-            Artisan::call("craft:migration create_{$tablename}_table --model {$model} --tablename {$tablename} --fields{$fields}");
+            Artisan::call("craft:migration create_{$tablename}_table --model {$model} --tablename {$tablename} --fields {$fields}");
             Messenger::success("✔︎ database/migrations/create_{$tablename}_table Migration Created Successfully");
         } else {
             Messenger::info("▶︎ Migration crafting skipped\n");

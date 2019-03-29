@@ -19,8 +19,6 @@ class CraftControllerTest extends TestCase
     function tearDown(): void
     {
         parent::tearDown();
-
-        // TODO: Add directory cleaning routine
     }
 
     /** @test */
