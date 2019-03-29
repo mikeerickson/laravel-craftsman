@@ -1,6 +1,6 @@
 {
     "name": "codedungeon/laravel-craftsman",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Laravel Craftsman",
     "keywords": [
         "framework",
@@ -66,6 +66,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "bin": [
-        "laravel-craftsman"
+        "builds/laravel-craftsman"
     ]
 }
