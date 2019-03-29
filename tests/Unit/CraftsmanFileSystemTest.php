@@ -83,4 +83,11 @@ class CraftsmanFileSystemTest extends TestCase
         $this->assertSame($result, $path);
     }
 
+    /** @test */
+    public function should_return_last_migration_filename()
+    {
+        $this->markTestIncomplete();
+    }
+
+
 }
