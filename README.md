@@ -1,4 +1,5 @@
 # laravel-craftsman
+Current Version: 1.0.1
 
 ## Description
 
@@ -112,10 +113,11 @@ email:string@80:nullable:unique
 ```
 
 ## Custom Templates
-Laravel Craftsman provides support for creating custom templates.  
+Laravel Craftsman provides support for creating custom templates if you wish to change the syntax to match your personal style. The default templates use the standard Laravel syntax, but we like to allow ou have your own flair.  
 
 ### Customizing Templates
-If you wish to create derivatives of the supported templates, you can customize the `config.php` located in the `laravel-craftsman` directory
+If you wish to create derivatives of the supported templates, you can customize the `config.php` located in the `laravel-craftsman` directory.
+By default, this will be `~/.composer/vendor/codedungeon/laravel-craftsman`, but may be different depending on the method you chose to install laravel-craftsman.
 
 ```php
     'templates' => [
@@ -133,13 +135,16 @@ If you wish to create derivatives of the supported templates, you can customize 
 ### List of available variables
 The following variables can be used in any of the supported templates (review the `templates` directory for a basis of how to create custom templates)
 
-* fields
-* model
-* model_path
-* name
-* namespace
-* num_rows
-* tablename
+| Variable Name  | Templates which variable is used                                                            |
+|--------------- |---------------------------------------------------------------------------------------------|
+| `fields`       | Used by `migration`                                                                         |
+| `model`        | Used by `api-controller`, `class`, `controller`, `factory`, `migration`, `model` and `seed` |
+| `model_path`   | Used by `api-controller`, `controller`, `factory`, `migration`, `seed`                      |
+| `name`         | Used by `api-controller`, `controller` and `empty-controller`                               |
+| `namespace`    | Used by `class`, `model`                                                                    |
+| `num_rows`     | Used by `seed`                                                                              |
+| `tablename`    | Used by `controller`, `migration`, `model`                                                  |
+
 
 ## License
 
