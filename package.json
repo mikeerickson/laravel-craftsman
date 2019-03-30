@@ -1,18 +1,19 @@
 {
   "name": "laravel-craftsman",
   "version": "1.0.3",
-  "build": "72",
+  "build": "73",
   "description": "Laravel Craftsman",
   "main": "index.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
+    "build": "./tasks/build.sh --deploy",
     "test": "vendor/bin/phpunit",
     "test:ci": "vendor/bin/phpunit -c phpunit.ci.xml",
     "test:feature": "vendor/bin/phpunit --testsuite Feature",
     "test:unit": "vendor/bin/phpunit --testsuite Unit",
-    "test:watch": "vendor/bin/phpunit-watcher watch --filter VerifyTemplatesTest",
+    "test:watch": "vendor/bin/phpunit-watcher watch",
     "pre-commit": "npm run test:ci",
     "todo": "./tasks/todo.js",
     "todo:file": "./tasks/todo.js > TODO.md"

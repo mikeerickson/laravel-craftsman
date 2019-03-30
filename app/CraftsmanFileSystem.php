@@ -121,7 +121,7 @@ class CraftsmanFileSystem
 
                 // $this->string('first_name',255)->nullable()->unique();
                 // $table->string('name');
-                $fieldData .= "\$table->{$fieldType}('{$name}'{$fieldSize}){$optional};".PHP_EOL;
+                $fieldData .= "            \$table->{$fieldType}('{$name}'{$fieldSize}){$optional};".PHP_EOL;
             }
         }
 
