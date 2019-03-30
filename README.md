@@ -1,9 +1,15 @@
 # laravel-craftsman
-Current Version: 1.0.1
+Current Version: 1.0.3
 
 ## Description
 
-Laravel Craftsman provides a suite of scaffolding command using a project agnostic CLI
+Laravel Craftsman provides a suite of crafting assets using a project agnostic CLI. 
+
+You can quickly create `class`, `controller`, `factory`, `migration`, `model`, `seed` assets. In addition, you can create all assets with a single command, allowing you to quickly craft a new resource in seconds!
+
+🚧 __Coming Soon__ 
+
+In addition to above resources, Craftsman will soon support creation of views and tests to complement above assets. 
 
 ## Installation
 
