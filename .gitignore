@@ -20,3 +20,7 @@ database/
 NOTES.md
 app/Test/
 TODO.md
+app/Http/
+resources/
+app/Post.php
+app/Test.php

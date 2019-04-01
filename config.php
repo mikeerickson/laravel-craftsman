@@ -28,6 +28,6 @@
 return [
     "templates" => [
         // example
-        // 'class' => 'templates/class.mustache.user.php',
+        // 'class' => 'templates/class.user.mustache',
     ],
 ];

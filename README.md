@@ -1,15 +1,13 @@
-# laravel-craftsman
-Current Version: 1.0.3
+
+# Laravel Craftsman
+Current Version: 1.0.4
 
 ## Description
 
 Laravel Craftsman provides a suite of crafting assets using a project agnostic CLI. 
 
-You can quickly create `class`, `controller`, `factory`, `migration`, `model`, `seed` assets. In addition, you can create all assets with a single command, allowing you to quickly craft a new resource in seconds!
-
-🚧 __Coming Soon__ 
-
-In addition to above resources, Craftsman will soon support creation of views and tests to complement above assets. 
+You can quickly create `class`, `controller`, `factory`, `migration`, `model`, `seed` and `view` assets. 
+In addition, you can create all assets with a single command, allowing you to quickly craft a new resource in seconds!
 
 ## Installation
 
@@ -127,14 +125,14 @@ By default, this will be `~/.composer/vendor/codedungeon/laravel-craftsman`, but
 
 ```php
     'templates' => [
-            'class' => 'user_templates/class.mustache.php',
-            'api-controller' => 'user_templates/api-controller.mustache.php',
-            'empty-controller' => 'user_templates/empty-controller.mustache.php',
-            'controller' => 'user_templates/controller.mustache.php',
-            'factory' => 'user_templates/factory.mustache.php',
-            'migration' => 'user_templates/migration.mustache.php',
-            'model' => 'user_templates/model.mustache.php',
-            'seed' => 'user_templates/seed.mustache.php',
+            'class' => 'user_templates/class.mustache',
+            'api-controller' => 'user_templates/api-controller.mustache',
+            'empty-controller' => 'user_templates/empty-controller.mustache',
+            'controller' => 'user_templates/controller.mustache',
+            'factory' => 'user_templates/factory.mustache',
+            'migration' => 'user_templates/migration.mustache',
+            'model' => 'user_templates/model.mustache',
+            'seed' => 'user_templates/seed.mustache',
         ],
 ```
     
@@ -150,6 +148,8 @@ The following variables can be used in any of the supported templates (review th
 | `namespace`    | Used by `class`, `model`                                                                    |
 | `num_rows`     | Used by `seed`                                                                              |
 | `tablename`    | Used by `controller`, `migration`, `model`                                                  |
+| `extends`      | Used by `views`                                                                             |
+| `section`      | Used by `views`                                                                             |
 
 
 ## License
