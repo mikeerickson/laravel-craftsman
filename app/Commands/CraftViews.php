@@ -13,9 +13,9 @@ class CraftViews extends Command
      * @var string
      */
     protected $signature = 'craft:views 
-                                {name : Base name} 
-                                {--x|extends= : Include extends block}
-                                {--s|section= : Include section block}
+                                {name : Resource name (resources/views/<name>)} 
+                                {--x|extends= : Include extends block using supplied layout}
+                                {--s|section= : Include section block using supplied name}
                                 {--c|no-create : Don\'t craft create view}
                                 {--d|no-edit : Don\'t craft edit view}
                                 {--i|no-index : Don\'t craft index view}
@@ -28,9 +28,13 @@ class CraftViews extends Command
      */
     // TODO: This needs to be adjusted so the help is accurate (include all no-xxx options)
     protected $description = 'Craft Views
-                     <name>               Base name
-                     --extends, -e        Include extends block
-                     --section, -s        Include section block
+                     <name>               Resource name (resources/views/<name>)
+                     --extends, -e        Include extends block using supplied layout
+                     --section, -s        Include section block using supplied section name
+                     --no-create, -c      Exclude create view
+                     --no-edit, -d        Exclude edit view
+                     --no-index, -i       Exclude index view
+                     --no-show, -w        Exclude show view
             ';
 
     public function __construct()

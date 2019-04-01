@@ -1,6 +1,6 @@
 
 # Laravel Craftsman
-Current Version: 1.0.4
+Current Version: 1.0.6
 
 ## Description
 
@@ -91,6 +91,13 @@ laravel-craftsman craft:all Contact --model App/Models/Contact --tablename conta
 | **craft:seed**       | **base seed name**  | **Creates seed file using supplied options**                         |
 |                      | --model, -m         | Path to model (eg App/Models/Post)                                   |
 |                      | --rows, -r          | Number of rows to use in factory call (Optional)                     |
+| **craft:views**      | **base resource**   | **Creates view files**                                               |
+|                      | --extends, -x       | Includes extends block using supplied layout                         |
+|                      | --section, -s       | Includes section block using supplied name                           |
+|                      | --no-create, -c     | Exclude create view                                                  |
+|                      | --no-edit, -d       | Exclude edit view                                                    |
+|                      | --no-index, -i      | Exclude index view                                                   |
+|                      | --no-show, -w       | Exclude show view                                                    |
 
 #### Field Option Syntax
 When using the `--fields` option when building migrations, you should use the following syntax:
