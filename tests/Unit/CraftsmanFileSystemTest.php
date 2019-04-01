@@ -84,10 +84,19 @@ class CraftsmanFileSystemTest extends TestCase
     }
 
     /** @test */
+    public function should_return_correct_view_path()
+    {
+        // store models in Models directory in app directory
+        $result = path_join(app_path(), "views");
+
+        $path = $this->fs->model_path("views");
+
+        $this->assertSame($result, $path);
+    }
+
+    /** @test */
     public function should_return_last_migration_filename()
     {
         $this->markTestIncomplete();
     }
-
-
 }

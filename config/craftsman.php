@@ -19,6 +19,7 @@ return [
         'migrations' => 'database/migrations',
         'models' => 'app',
         'seeds' => 'database/seeds',
+        'views' => 'resources/views',
     ],
 
     /*
@@ -34,14 +35,18 @@ return [
      */
 
     'templates' => [
-        'class' => 'templates/class.mustache.php',
-        'api-controller' => 'templates/api-controller.mustache.php',
-        'empty-controller' => 'templates/empty-controller.mustache.php',
-        'controller' => 'templates/controller.mustache.php',
-        'factory' => 'templates/factory.mustache.php',
-        'migration' => 'templates/migration.mustache.php',
-        'model' => 'templates/model.mustache.php',
-        'seed' => 'templates/seed.mustache.php',
+        'class' => 'templates/class.mustache',
+        'api-controller' => 'templates/api-controller.mustache',
+        'empty-controller' => 'templates/empty-controller.mustache',
+        'controller' => 'templates/controller.mustache',
+        'factory' => 'templates/factory.mustache',
+        'migration' => 'templates/migration.mustache',
+        'model' => 'templates/model.mustache',
+        'seed' => 'templates/seed.mustache',
+        'view-create' => 'templates/view-create.mustache',
+        'view-edit' => 'templates/view-edit.mustache',
+        'view-index' => 'templates/view-index.mustache',
+        'view-show' => 'templates/view-show.mustache',
     ],
 
 ];

@@ -12,9 +12,12 @@ class CraftsmanFileSystem
 {
     protected $fs;
 
+    protected $mustache;
+
     public function __construct()
     {
         $this->fs = new Filesystem();
+        $this->mustache = new Mustache_Engine();
     }
 
     private function getPharPath()
@@ -26,7 +29,126 @@ class CraftsmanFileSystem
         return $path;
     }
 
-    public function createFile($type = null, $filename = null, $data = [])
+    private function createMergeFile($src, $dest, $data)
+    {
+        $template = $this->fs->get($src);
+
+        $data["useExtends"] = $data["extends"];
+        $data["useSection"] = $data["section"];
+
+        $merged_data = $this->mustache->render($template, $data);
+
+        try {
+            $this->createParentDirectory($dest);
+            $this->fs->put($dest, $merged_data);
+            $result = [
+                "filename" => $dest,
+                "status" => "success",
+                "message" => "{$dest} Created Successfully",
+            ];
+        } catch (\Exception $e) {
+            $result = [
+                "status" => "error",
+                "message" => $e->getMessage(),
+            ];
+        }
+
+        return $result;
+    }
+
+    public function createViewFiles($asset, $data)
+    {
+        $path = $this->getTemplatePath("views");
+
+        $noCreate = $data["noCreate"];
+        $noEdit = $data["noEdit"];
+        $noIndex = $data["noIndex"];
+        $noShow = $data["noShow"];
+
+        $createTemplate = $noCreate ? "" : "view-create";
+        $editTemplate = $noEdit ? "" : "view-edit";
+        $indexTemplate = $noIndex ? "" : "view-index";
+        $showTemplate = $noShow ? "" : "view-show";
+
+        // craft create view
+        if (!$noCreate) {
+            $src = $this->getUserTemplate("./config.php", $createTemplate);
+            if (!file_exists($src)) {
+                $src = config("craftsman.templates.{$createTemplate}");
+            }
+
+            $src = $this->getPharPath().$src;
+
+            $dest = $this->path_join($path, $asset, "create.blade.php");
+
+            $result = $this->createMergeFile($src, $dest, $data);
+        }
+
+        // craft edit view
+        if (!$noEdit) {
+            $src = $this->getUserTemplate("./config.php", $editTemplate);
+            if (!file_exists($src)) {
+                $src = config("craftsman.templates.{$editTemplate}");
+            }
+
+            $src = $this->getPharPath().$src;
+
+            $dest = $this->path_join($path, $asset, "edit.blade.php");
+
+            $result = $this->createMergeFile($src, $dest, $data);
+        }
+
+        // craft index view
+        if (!$noIndex) {
+            $src = $this->getUserTemplate("./config.php", $indexTemplate);
+            if (!file_exists($src)) {
+                $src = config("craftsman.templates.{$indexTemplate}");
+            }
+
+            $src = $this->getPharPath().$src;
+
+            $dest = $this->path_join($path, $asset, "index.blade.php");
+
+            $result = $this->createMergeFile($src, $dest, $data);
+        }
+
+        // craft show view
+        if (!$noShow) {
+            $src = $this->getUserTemplate("./config.php", $showTemplate);
+            if (!file_exists($src)) {
+                $src = config("craftsman.templates.{$showTemplate}");
+            }
+
+            $src = $this->getPharPath().$src;
+
+            $dest = $this->path_join($path, $asset, "show.blade.php");
+
+            $result = $this->createMergeFile($src, $dest, $data);
+        }
+
+        $filenames = [];
+        if (!$noCreate) {
+            $filenames[] = "create";
+        }
+        if (!$noEdit) {
+            $filenames[] = "edit";
+        }
+        if (!$noIndex) {
+            $filenames[] = "index";
+        }
+        if (!$noShow) {
+            $filenames[] = "show";
+        }
+
+        $message = implode(", ", $filenames);
+        return [
+            "status" => "success",
+            "message" => $message,
+        ];
+
+    }
+
+    public function getTemplatePath($type)
     {
         switch ($type) {
             case 'class':
@@ -49,12 +171,23 @@ class CraftsmanFileSystem
             case 'seed':
                 $path = $this->seed_path();
                 break;
+            case 'views':
+                $path = $this->view_path();
+                break;
             default:
                 $path = '';
         }
 
+        return $path;
+    }
+
+    public function createFile($type = null, $filename = null, $data = [])
+    {
+        $path = $this->getTemplatePath($type);
+
         $namespace = "";
-        $src = $this->getUserConfig("./config.php", $type);
+        $src = $this->getUserTemplate("./config.php", $type);
+
 
         if (!file_exists($src)) {
             $src = config("craftsman.templates.{$type}");
@@ -134,7 +267,6 @@ class CraftsmanFileSystem
         } else {
             $model = class_basename($data["name"]);
             $namespace = str_replace("/", "\\", str_replace("/".$model, "", $data["name"]));
-
         }
 
         $vars = [
@@ -251,6 +383,11 @@ class CraftsmanFileSystem
         return config('craftsman.paths.seeds');
     }
 
+    public function view_path()
+    {
+        return config('craftsman.paths.views');
+    }
+
     public function createParentDirectory($filename)
     {
         if (!is_dir(dirname($filename))) {
@@ -258,7 +395,7 @@ class CraftsmanFileSystem
         }
     }
 
-    public function getUserConfig($userConfigFilename = "./config.php", $type = "")
+    public function getUserTemplate($userConfigFilename = "./config.php", $type = "")
     {
         if (file_exists($userConfigFilename)) {
             $config = include($userConfigFilename);
