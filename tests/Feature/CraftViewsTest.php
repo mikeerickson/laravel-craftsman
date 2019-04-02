@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\CraftsmanFileSystem;
 use Tests\TestCase;
 
+// TODO: Add code to delete resource directory instead of just filename
+
 class CraftViewsTest extends TestCase
 {
     protected $fs;
@@ -25,9 +27,11 @@ class CraftViewsTest extends TestCase
         $this->artisan("craft:views {$resource} --extends partials.master --section content --no-index --no-edit --no-show")
             ->assertExitCode(0);
 
-        $createFilename = $this->fs->path_join("resources", "views", $resource, "create.blade.php");
+        $filename = $this->fs->path_join("resources", "views", $resource, "create.blade.php");
 
-        $this->assertFileExists($createFilename);
+        $this->assertFileExists($filename);
+
+        unlink($filename);
     }
 
     /** @test */
@@ -38,10 +42,11 @@ class CraftViewsTest extends TestCase
         $this->artisan("craft:views {$resource} --extends partials.master --section content --no-index --no-create --no-show")
             ->assertExitCode(0);
 
-        $createFilename = $this->fs->path_join("resources", "views", $resource, "edit.blade.php");
+        $filename = $this->fs->path_join("resources", "views", $resource, "edit.blade.php");
 
-        $this->assertFileExists($createFilename);
+        $this->assertFileExists($filename);
 
+        unlink($filename);
     }
 
     /** @test */
@@ -52,10 +57,11 @@ class CraftViewsTest extends TestCase
         $this->artisan("craft:views {$resource} --extends partials.master --section content --no-edit --no-create --no-show")
             ->assertExitCode(0);
 
-        $createFilename = $this->fs->path_join("resources", "views", $resource, "index.blade.php");
+        $filename = $this->fs->path_join("resources", "views", $resource, "index.blade.php");
 
-        $this->assertFileExists($createFilename);
+        $this->assertFileExists($filename);
 
+        unlink($filename);
     }
 
     /** @test */
@@ -66,10 +72,11 @@ class CraftViewsTest extends TestCase
         $this->artisan("craft:views {$resource} --extends partials.master --section content --no-index --no-create --no-edit")
             ->assertExitCode(0);
 
-        $createFilename = $this->fs->path_join("resources", "views", $resource, "show.blade.php");
+        $filename = $this->fs->path_join("resources", "views", $resource, "show.blade.php");
 
-        $this->assertFileExists($createFilename);
+        $this->assertFileExists($filename);
 
+        unlink($filename);
     }
 
     /** @test */
@@ -90,7 +97,9 @@ class CraftViewsTest extends TestCase
         $this->assertFileExists($editFilename);
         $this->assertFileExists($showFilename);
 
-//        $data = file_get_contents($filename);
-//        $this->assertStringContainsString("use {$model_path};", $data);
+        unlink($createFilename);
+        unlink($indexFilename);
+        unlink($editFilename);
+        unlink($showFilename);
     }
 }

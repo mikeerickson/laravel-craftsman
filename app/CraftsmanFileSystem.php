@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Codedungeon\PHPMessenger\Facades\Messenger;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Mustache_Engine;
 use Phar;
@@ -171,6 +171,9 @@ class CraftsmanFileSystem
             case 'seed':
                 $path = $this->seed_path();
                 break;
+            case 'test':
+                $path = $this->test_path();
+                break;
             case 'views':
                 $path = $this->view_path();
                 break;
@@ -181,13 +184,13 @@ class CraftsmanFileSystem
         return $path;
     }
 
+    // TODO: This method needs refactoring
     public function createFile($type = null, $filename = null, $data = [])
     {
         $path = $this->getTemplatePath($type);
 
         $namespace = "";
         $src = $this->getUserTemplate("./config.php", $type);
-
 
         if (!file_exists($src)) {
             $src = config("craftsman.templates.{$type}");
@@ -196,10 +199,11 @@ class CraftsmanFileSystem
         $src = $this->getPharPath().$src;
 
         if (!file_exists($src)) {
-            printf("\n");
-            Messenger::error("'./{$src}' template does not exists", " ERROR ");
+            printf("\n\n");
+            Log::error("Unable to locate template './{$src}' Has it been deleted?");
             exit(1);
         }
+
         if (Str::contains($filename, "App")) {
             $dest = $this->path_join($filename.".php");
         } else {
@@ -223,6 +227,7 @@ class CraftsmanFileSystem
             $fields = strtolower($data["fields"]);
         }
 
+        // TODO: Extract this to a separate method
         // format:
         // fieldName:fieldType@fieldSize:option1:option2
         //  eg --fields fname:string@25:nullable:unique,lname:string@50:nullable
@@ -299,6 +304,21 @@ class CraftsmanFileSystem
         // this variable is only used in migration
         if (isset($data["down"])) {
             $vars["down"] = $data["down"];
+        }
+
+        // this variable is only used in test
+        if (isset($data["extends"])) {
+            $vars["extends"] = $data["extends"];
+        }
+
+        // this variable is only used in test
+        if (isset($data["setup"])) {
+            $vars["setup"] = $data["setup"];
+        }
+
+        // this variable is only used in test
+        if (isset($data["teardown"])) {
+            $vars["teardown"] = $data["teardown"];
         }
 
         // this variable is only used in migration
@@ -381,6 +401,11 @@ class CraftsmanFileSystem
     public function seed_path()
     {
         return config('craftsman.paths.seeds');
+    }
+
+    public function test_path()
+    {
+        return config('craftsman.paths.tests');
     }
 
     public function view_path()

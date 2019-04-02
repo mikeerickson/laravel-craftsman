@@ -1,0 +1,29 @@
+<?php
+
+namespace {{namespace}};
+
+use Tests\TestCase;
+
+class {{model}} extends TestCase
+{
+    {{#setup}}
+    function setUp(): void
+    {
+        parent::setUp();
+        $this->withoutExceptionHandling();
+}
+
+{{/setup}}
+/** @test */
+public function should_pass()
+{
+$this->assertTrue(true);
+}
+
+{{#teardown}}
+    function tearDown(): void
+    {
+    parent::tearDown();
+    }
+{{/teardown}}
+}

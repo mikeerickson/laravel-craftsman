@@ -28,6 +28,8 @@ class CraftClassTest extends TestCase
         $this->assertFileExists($filename);
 
         $data = file_get_contents($filename);
+
+        unlink($filename);
 //        $this->assertStringContainsString("use {$model_path};", $data);
     }
 

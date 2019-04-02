@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use Tests\CraftsmanTestCase;
 
+// TODO: Add code to delete resource directory instead of just filenames
+
 class CraftAllTest extends CraftsmanTestCase
 {
     function setUp(): void

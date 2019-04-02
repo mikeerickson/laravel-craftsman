@@ -19,6 +19,7 @@ return [
         'migrations' => 'database/migrations',
         'models' => 'app',
         'seeds' => 'database/seeds',
+        'tests' => 'tests',
         'views' => 'resources/views',
     ],
 
@@ -43,6 +44,7 @@ return [
         'migration' => 'templates/migration.mustache',
         'model' => 'templates/model.mustache',
         'seed' => 'templates/seed.mustache',
+        'test' => 'templates/test.mustache',
         'view-create' => 'templates/view-create.mustache',
         'view-edit' => 'templates/view-edit.mustache',
         'view-index' => 'templates/view-index.mustache',

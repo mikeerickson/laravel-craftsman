@@ -26,7 +26,6 @@ class CraftViews extends Command
      *
      * @var string
      */
-    // TODO: This needs to be adjusted so the help is accurate (include all no-xxx options)
     protected $description = 'Craft Views
                      <name>               Resource name (resources/views/<name>)
                      --extends, -e        Include extends block using supplied layout

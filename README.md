@@ -1,6 +1,6 @@
 
 # Laravel Craftsman
-Current Version: 1.0.6
+Current Version: 1.0.7
 
 ## Description
 
@@ -45,6 +45,8 @@ or
 > laravel-craftsman craft:model App/Models/Post --tablename posts 
 
 > laravel-craftsman craft:seed PostTableSeeder --model App/Models/Post --rows 100
+
+> laravel-craftsman craft:views authors --extends partials.master --section content
 
 ```
 
@@ -140,6 +142,10 @@ By default, this will be `~/.composer/vendor/codedungeon/laravel-craftsman`, but
             'migration' => 'user_templates/migration.mustache',
             'model' => 'user_templates/model.mustache',
             'seed' => 'user_templates/seed.mustache',
+            'view-create' => 'user_templates/view-create.mustache',
+            'view-edit' => 'user_templates/view-edit.mustache',
+            'view-index' => 'user_templates/view-index.mustache',
+            'view-show' => 'user_templates/view-show.mustache',
         ],
 ```
     

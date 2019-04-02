@@ -30,6 +30,8 @@ class CraftControllerTest extends TestCase
         $controllerPath = $this->fs->controller_path();
         $filename = $this->fs->path_join($controllerPath, "EmptyController.php");
         $this->assertFileExists($filename);
+
+        unlink($filename);
     }
 
     /** @test */
@@ -56,6 +58,8 @@ class CraftControllerTest extends TestCase
 
         $this->assertStringContainsString("edit", $data);
         $this->assertStringContainsString("create", $data);
+
+        unlink($filename);
     }
 
     /** @test */
@@ -83,5 +87,7 @@ class CraftControllerTest extends TestCase
 
         $this->assertStringNotContainsString("edit", $data);
         $this->assertStringNotContainsString("create", $data);
+
+        unlink($filename);
     }
 }

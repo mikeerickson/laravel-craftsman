@@ -20,6 +20,7 @@ class VerifyTemplatesTest extends TestCase
     public function should_verify_class_template_exists()
     {
         $filename = config('craftsman.templates.class');
+
         $this->assertFileExists($filename);
     }
 
@@ -27,6 +28,7 @@ class VerifyTemplatesTest extends TestCase
     public function should_verify_controller_template_exists()
     {
         $filename = config('craftsman.templates.controller');
+
         $this->assertFileExists($filename);
     }
 
@@ -34,6 +36,7 @@ class VerifyTemplatesTest extends TestCase
     public function should_verify_empty_controller_template_exists()
     {
         $filename = config('craftsman.templates.empty-controller');
+
         $this->assertFileExists($filename);
     }
 
@@ -41,6 +44,7 @@ class VerifyTemplatesTest extends TestCase
     public function should_verify_api_controller_template_exists()
     {
         $filename = config('craftsman.templates.api-controller');
+
         $this->assertFileExists($filename);
     }
 
@@ -48,6 +52,7 @@ class VerifyTemplatesTest extends TestCase
     public function should_verify_factory_template_exists()
     {
         $filename = config('craftsman.templates.factory');
+
         $this->assertFileExists($filename);
     }
 
@@ -55,6 +60,7 @@ class VerifyTemplatesTest extends TestCase
     public function should_verify_migration_template_exists()
     {
         $filename = config('craftsman.templates.migration');
+
         $this->assertFileExists($filename);
     }
 
@@ -62,6 +68,7 @@ class VerifyTemplatesTest extends TestCase
     public function should_verify_model_template_exists()
     {
         $filename = config('craftsman.templates.model');
+
         $this->assertFileExists($filename);
     }
 
@@ -69,6 +76,7 @@ class VerifyTemplatesTest extends TestCase
     public function should_verify_seed_template_exists()
     {
         $filename = config('craftsman.templates.seed');
+
         $this->assertFileExists($filename);
     }
 }

@@ -31,5 +31,7 @@ class CraftFactoryTest extends TestCase
 
         $data = file_get_contents($filename);
         $this->assertStringContainsString("use {$model_path};", $data);
+
+        unlink($filename);
     }
 }

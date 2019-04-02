@@ -17,6 +17,9 @@ class CraftModelTest extends TestCase
     {
         $this->artisan('craft:model Post')
             ->assertExitCode(0);
+
+        // TODO: Add code to verify file exists
+        // TODO: Add code to delete file
     }
 
     /** @test */
@@ -24,5 +27,8 @@ class CraftModelTest extends TestCase
     {
         $this->artisan('craft:model App/Models/Post')
             ->assertExitCode(0);
+
+        // TODO: Add code to verify file exists
+        // TODO: Add code to delete file
     }
 }

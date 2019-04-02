@@ -17,5 +17,8 @@ class CraftSeedTest extends TestCase
     {
         $this->artisan('craft:seed TestsTableSeeder --model App/Models/Test --rows 25')
             ->assertExitCode(0);
+
+        // TODO: Add code to verify file exists
+        // TODO: Add code to delete file
     }
 }
