@@ -9,22 +9,27 @@ class {{name}} extends Controller
 {
     public function index()
     {
-    return {{model}}::all();
+        return {{model}}::all();
     }
 
     public function store(Request $request)
-{
-//
+    {
+        $data = {{model}}::insert($request->all());
 }
 
-    public function show($id)
+public function show($id)
 {
-    return {{model}}::findOrFail($id);
-    }
+return {{model}}::findOrFail($id);
+}
 
-    public function destroy($id)
+public function update(Request $request, $id)
 {
-    $row = {{model}}::findOrFail($id);
-        $row->delete();
-    }
+$data = {{model}}::findOrFail($id)->update($request->all());
+}
+
+public function destroy($id)
+{
+$row = {{model}}::findOrFail($id);
+$row->delete();
+}
 }

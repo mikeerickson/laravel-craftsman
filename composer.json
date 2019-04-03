@@ -1,6 +1,6 @@
 {
     "name": "codedungeon/laravel-craftsman",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "Laravel Craftsman",
     "keywords": [
         "framework",
@@ -32,7 +32,7 @@
         "padraic/phar-updater": "^1.0.6"
     },
     "require-dev": {
-        "codedungeon/phpunit-result-printer": "^0.26.1",
+        "codedungeon/phpunit-result-printer": "^0.26.2",
         "mockery/mockery": "^1.0",
         "phpunit/phpunit": "^8",
         "spatie/phpunit-watcher": "^1.8"

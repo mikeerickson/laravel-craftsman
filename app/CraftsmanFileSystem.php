@@ -184,6 +184,51 @@ class CraftsmanFileSystem
         return $path;
     }
 
+    public function buildFieldData($fields = "")
+    {
+        // format:
+        // fieldName:fieldType@fieldSize:option1:option2
+        //  eg --fields fname:string@25:nullable:unique,lname:string@50:nullable
+        $fieldData = "";
+        if (strlen($fields) !== 0) {
+            $fieldList = preg_split("/,? ?,/", $fields);
+            foreach ($fieldList as $field) {
+                $parts = explode(":", trim($field));
+                if (sizeof($parts) >= 2) {
+                    $name = $parts[0];
+                    $fieldType = $parts[1];
+                } else {
+                    $fieldType = "string";
+                }
+
+                $fieldSize = "";
+                if (strpos($fieldType, "@") !== false) {
+                    [$fieldType, $fieldSize] = explode("@", $fieldType);
+                    $fieldSize = ",".$fieldSize;
+                }
+
+                $optional = "";
+                if (sizeof($parts) >= 3) {
+                    $parts = array_splice($parts, 2);
+                    foreach ($parts as $part) {
+                        $optional .= "->{$part}()";
+                    }
+                }
+
+                // $this->string('first_name',255)->nullable()->unique();
+                // $table->string('name');
+                $fieldData .= "            \$table->{$fieldType}('{$name}'{$fieldSize}){$optional};".PHP_EOL;
+            }
+        }
+
+        // strip last PHP_EOL so we have clean migration file
+        if (strlen($fieldData) > 0) {
+            $fieldData = substr($fieldData, 0, strlen($fieldData) - 1);
+        }
+        
+        return $fieldData;
+    }
+
     // TODO: This method needs refactoring
     public function createFile($type = null, $filename = null, $data = [])
     {
@@ -220,49 +265,12 @@ class CraftsmanFileSystem
             }
         }
 
-        // https://laravel.com/docs/5.8/migrations
-
         $fields = "";
         if (isset($data["fields"])) {
             $fields = strtolower($data["fields"]);
         }
 
-        // TODO: Extract this to a separate method
-        // format:
-        // fieldName:fieldType@fieldSize:option1:option2
-        //  eg --fields fname:string@25:nullable:unique,lname:string@50:nullable
-        $fieldData = "";
-        if (strlen($fields) !== 0) {
-            $fieldList = preg_split("/,? ?,/", $fields);
-            foreach ($fieldList as $field) {
-                $parts = explode(":", trim($field));
-                if (sizeof($parts) >= 2) {
-                    $name = $parts[0];
-                    $fieldType = $parts[1];
-                } else {
-                    $fieldType = "string";
-                }
-
-                $fieldSize = "";
-                if (strpos($fieldType, "@") !== false) {
-                    [$fieldType, $fieldSize] = explode("@", $fieldType);
-                    $fieldSize = ",".$fieldSize;
-                }
-
-                $optional = "";
-                if (sizeof($parts) >= 3) {
-                    $parts = array_splice($parts, 2);
-                    foreach ($parts as $part) {
-                        $optional .= "->{$part}()";
-                    }
-                }
-
-                // $this->string('first_name',255)->nullable()->unique();
-                // $table->string('name');
-                $fieldData .= "            \$table->{$fieldType}('{$name}'{$fieldSize}){$optional};".PHP_EOL;
-            }
-        }
-
+        $fieldData = $this->buildFieldData($fields);
         $model = "";
         $model_path = "";
 
