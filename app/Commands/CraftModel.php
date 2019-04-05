@@ -18,6 +18,7 @@ class CraftModel extends Command
     protected $signature = 'craft:model 
                                 {name : Model name} 
                                 {--t|tablename= : Tablename if different than model name}
+                                {--w|overwrite : Overwrite existing model}
                             ';
 
     /**
@@ -28,6 +29,7 @@ class CraftModel extends Command
     protected $description = 'Craft Model
                      <name>               Model Name (eg App\Models\Post)
                      --tablename, -t      Desired tablename
+                     --overwrite, -w      Overwrite existing model
             ';
 
     public function __construct()
@@ -45,6 +47,8 @@ class CraftModel extends Command
     public function handle()
     {
         $modelName = $this->argument('name');
+        $overwrite = $this->option('overwrite');
+
         $parts = explode("/", $modelName);
         $model = array_pop($parts);
         $namespace = count($parts) > 0 ? implode($parts, "\\") : "App";
@@ -58,17 +62,9 @@ class CraftModel extends Command
             "name" => $modelName,
             "tablename" => $tablename,
             "namespace" => $namespace,
+            "overwrite" => $overwrite,
         ];
 
-        $result = $this->fs->createFile('model', $modelName, $data);
-
-        if (getenv("APP_ENV") === "testing") {
-            $this->info($result["message"]);
-        } else {
-            echo "\n";
-            $result["status"]
-                ? $this->info("✔︎ ".$result["message"])
-                : $this->error($result["message"]);
-        }
+        $this->fs->createFile('model', $modelName, $data);
     }
 }

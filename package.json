@@ -1,14 +1,16 @@
 {
   "name": "laravel-craftsman",
   "version": "1.0.8",
-  "build": "79",
+  "build": "80",
   "description": "Laravel Craftsman",
   "main": "index.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "build": "./tasks/build.sh --deploy",
+    "build": "./tasks/build.sh",
+    "build:deploy": "./tasks/build.sh --deploy",
+    "deploy": "./tasks/deploy.sh",
     "test": "vendor/bin/phpunit",
     "test:ci": "vendor/bin/phpunit -c phpunit.ci.xml",
     "test:feature": "vendor/bin/phpunit --testsuite Feature",

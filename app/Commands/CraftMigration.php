@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use App\CraftsmanFileSystem;
 use Carbon\Carbon;
+use Codedungeon\PHPMessenger\Facades\Messenger;
 use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
 
@@ -18,10 +19,11 @@ class CraftMigration extends Command
      */
     protected $signature = 'craft:migration 
                                 {name : Migration name (timestamp applied at creation)} 
+                                {--m|model= : Path to migration model (required)} 
                                 {--t|tablename= : Desired tablename} 
-                                {--m|model= : Path to migration model} 
                                 {--f|fields= : List of fields (optional)} 
                                 {--d|down : Include down method in migration}
+                                {--w|overwrite : Overwrite migration (default: true)}
                             ';
 
     /**
@@ -30,12 +32,13 @@ class CraftMigration extends Command
      * @var string
      */
     protected $description = 'Craft Migration
-                     <name>               Migration Name (will be appened with timestamp)
-                     --model, -m          Path to model
+                     <name>               Migration Name (will be appended with timestamp)
+                     --model, -m          Path to model (required)
                      --tablename, -t      Desired tablename
                      --fields, -f         List of fields (optional)
-                                           eg. --fields first_name:string,20^nullable^unique, last_name:string,20
+                                           eg. --fields first_name:string@20:nullable, email:string@80:nullable:unique
                      --down, -d           Include down methods (skipped by default)
+                     --overwrite, -w      Overwrite migration (skipped by default, default: true)
             ';
 
     public function __construct()
@@ -52,15 +55,13 @@ class CraftMigration extends Command
      */
     public function handle()
     {
-        // timestamp to be prepended to name
-        $dt = Carbon::now()->format('Y_m_d_His');
-
         $migrationName = $this->argument('name');
         $model = $this->option('model');
-        $down = $this->option('down');
 
         if (strlen($model) === 0) {
-            $this->error("Must supply model name");
+            Messenger::log("");
+            Messenger::error("Migrations require model name (--model)\n", "ERROR");
+            return;
         } else {
             $tablename = $this->option('tablename');
             $fields = $this->option('fields');
@@ -74,20 +75,15 @@ class CraftMigration extends Command
                 "name" => $migrationName,
                 "tablename" => $tablename,
                 "fields" => $fields,
-                "down" => $down,
+                "down" => $this->option('down'),
+                "overwrite" => $this->option('overwrite'),
             ];
 
+            // timestamp to be prepended to name
+            $dt = Carbon::now()->format('Y_m_d_His');
             $migrationFilename = $dt."_".$migrationName;
-            $result = $this->fs->createFile('migration', $migrationFilename, $data);
 
-            if (getenv("APP_ENV") === "testing") {
-                $this->info($result["message"]);
-            } else {
-                echo "\n";
-                $result["status"]
-                    ? $this->info("✔︎ ".$result["message"])
-                    : $this->error($result["message"]);
-            }
+            $this->fs->createFile('migration', $migrationFilename, $data);
         }
     }
 }

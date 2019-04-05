@@ -17,17 +17,19 @@ class CraftTest extends Command
                                 {--s|setup : Include setUp block}
                                 {--d|teardown : Include tearDown block}
                                 {--u|unit : Create unit test}
+                                {--w|overwrite : Overwrite existing test}
                             ';
     /**
      * The description of the command.
      *
      * @var string
      */
-    protected $description = 'Craft Class
+    protected $description = 'Craft Test
                      <name>               Class Name
                      --setup, -s          Include setUp block
                      --teardown, -d       Include tearDown block
                      --unit, -u           Create unit test
+                     --overwrite, -w      Overwrite existing test
             ';
 
     public function __construct()
@@ -48,6 +50,7 @@ class CraftTest extends Command
         $setup = $this->option("setup");
         $teardown = $this->option("teardown");
         $unit = $this->option("unit");
+        $overwrite = $this->option("overwrite");
 
         $namespace = "App\\Feature";
         if ($unit) {
@@ -59,16 +62,10 @@ class CraftTest extends Command
             "setup" => $setup,
             "teardown" => $teardown,
             "namespace" => $namespace,
+            "overwrite" => $overwrite,
         ];
 
         $filename = $this->fs->path_join($unit ? "Unit" : "Feature", $className);
-        $result = $this->fs->createFile('test', $filename, $data);
-
-        if (getenv("APP_ENV") === "testing") {
-            $this->info($result["message"]);
-        } else {
-            echo "\n";
-            $this->info("✔︎ ".$result["message"]);
-        }
+        $this->fs->createFile('test', $filename, $data);
     }
 }

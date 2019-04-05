@@ -23,6 +23,7 @@ class CraftAll extends Command
                                 {--t|tablename= : Associated tablename} 
                                 {--f|fields= : List of fields used in migration} 
                                 {--r|rows= : Number of rows created by migration command} 
+                                {--w|overwrite : Overwrite existing files} 
                                 
                                 {--c|no-controller : Skip crafting controller}
                                 {--a|no-factory : Skip crafting factory}
@@ -43,6 +44,7 @@ class CraftAll extends Command
                      --fields, -f         Field List (passed to migration)
                                            eg. --fields first_name:string,20^nullable^unique, last_name:string,20
                      --rows, -r           Number of rows for migration (passed to factory)
+                     --overwrite, -w      Overwrite existing files (WARNING: This can\'t be undone)
                      
                      --no-controller, -c  Do not create controller
                      --no-factory, -f     Do not create factory
@@ -71,6 +73,10 @@ class CraftAll extends Command
         $tablename = $this->option('tablename');
         $rows = $this->option('rows');
         $fields = $this->option('fields');
+        $overwrite = $this->option('overwrite');
+        if ($overwrite) {
+            $overwrite = "--overwrite";
+        }
 
         // grab any options to skip assets
         $noController = $this->option('no-controller');
@@ -79,40 +85,34 @@ class CraftAll extends Command
         $noModel = $this->option('no-model');
         $noSeed = $this->option('no-seed');
 
-
         $this->info("\n");
 
         if (!$noController) {
-            Artisan::call("craft:controller {$name}Controller --model {$model}");
-            Messenger::success("✔︎ app/Http/Controllers/{$name}Controller Created Successfully");
+            Artisan::call("craft:controller {$name}Controller --model {$model} {$overwrite}");
         } else {
             Messenger::info("▶︎ Controller crafting skipped\n");
         }
 
         if (!$noFactory) {
-            Artisan::call("craft:factory {$name}Factory --model {$model}");
-            Messenger::success("✔︎ database/factories/{$name}Factory Created Successfully");
+            Artisan::call("craft:factory {$name}Factory --model {$model} {$overwrite}");
         } else {
             Messenger::info("▶︎ Factory crafting skipped\n");
         }
 
         if (!$noMigration) {
-            Artisan::call("craft:migration create_{$tablename}_table --model {$model} --tablename {$tablename} --fields {$fields}");
-            Messenger::success("✔︎ database/migrations/create_{$tablename}_table Migration Created Successfully");
+            Artisan::call("craft:migration create_{$tablename}_table --model {$model} --tablename {$tablename} --fields {$fields} {$overwrite}");
         } else {
             Messenger::info("▶︎ Migration crafting skipped\n");
         }
 
         if (!$noModel) {
-            Artisan::call("craft:model {$model} --tablename {$tablename}");
-            Messenger::success("✔︎ {$model} Model Created Successfully");
+            Artisan::call("craft:model {$model} --tablename {$tablename} {$overwrite}");
         } else {
             Messenger::info("▶︎ Model crafting skipped\n");
         }
 
         if (!$noSeed) {
-            Artisan::call("craft:seed {$name}sTableSeeder --model {$model} --rows {$rows}");
-            Messenger::success("✔︎ database/seeds/{$name}TableSeeder Created Successfully");
+            Artisan::call("craft:seed {$name}sTableSeeder --model {$model} --rows {$rows} {$overwrite}");
         } else {
             Messenger::info("▶︎ Seed crafting skipped\n");
         }
@@ -134,6 +134,7 @@ class CraftAll extends Command
 
         if (!$noSeed) {
             Messenger::warning("       ⚈  Update 'database/seeds/DatabaseSeed.php' to call {$name}sTableSeeder");
+            Messenger::warning("       ⚈  Run 'composer dump-autoload' after you have completed above steps");
         }
 
         Messenger::success("\n================================================================================\n");
@@ -141,7 +142,7 @@ class CraftAll extends Command
         if ($skipAll) {
             Messenger::warning("You skipped all assets, nothing created", "WARNING");
         } else {
-            Messenger::success("Asset Crafting Completed Successfully", "SUCCESS");
+            Messenger::success("Asset Crafting Complete", "COMPLETE");
         }
     }
 }

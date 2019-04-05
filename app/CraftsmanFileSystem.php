@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Codedungeon\PHPMessenger\Facades\Messenger;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -10,6 +11,9 @@ use Phar;
 
 class CraftsmanFileSystem
 {
+    const SUCCESS = 0;
+    const FILE_EXIST = -43;
+
     protected $fs;
 
     protected $mustache;
@@ -38,14 +42,20 @@ class CraftsmanFileSystem
 
         $merged_data = $this->mustache->render($template, $data);
 
+        if (file_exists($dest) && !$data["overwrite"]) {
+            Messenger::error("✖︎ {$dest} already exists\n");
+            return self::FILE_EXIST;
+        }
+
         try {
             $this->createParentDirectory($dest);
             $this->fs->put($dest, $merged_data);
             $result = [
                 "filename" => $dest,
                 "status" => "success",
-                "message" => "{$dest} Created Successfully",
+                "message" => "{$dest} created successfully",
             ];
+            Messenger::success("✓ {$result['message']}\n");
         } catch (\Exception $e) {
             $result = [
                 "status" => "error",
@@ -53,11 +63,13 @@ class CraftsmanFileSystem
             ];
         }
 
-        return $result;
+
+        return self::SUCCESS;
     }
 
     public function createViewFiles($asset, $data)
     {
+        $asset = strtolower($asset);
         $path = $this->getTemplatePath("views");
 
         $noCreate = $data["noCreate"];
@@ -70,6 +82,9 @@ class CraftsmanFileSystem
         $indexTemplate = $noIndex ? "" : "view-index";
         $showTemplate = $noShow ? "" : "view-show";
 
+        $filenames = [];
+        $overwrite = isset($data["overwrite"]) ? $data["overwrite"] : false;
+
         // craft create view
         if (!$noCreate) {
             $src = $this->getUserTemplate("./config.php", $createTemplate);
@@ -81,7 +96,7 @@ class CraftsmanFileSystem
 
             $dest = $this->path_join($path, $asset, "create.blade.php");
 
-            $result = $this->createMergeFile($src, $dest, $data);
+            $this->createMergeFile($src, $dest, $data);
         }
 
         // craft edit view
@@ -95,7 +110,7 @@ class CraftsmanFileSystem
 
             $dest = $this->path_join($path, $asset, "edit.blade.php");
 
-            $result = $this->createMergeFile($src, $dest, $data);
+            $this->createMergeFile($src, $dest, $data);
         }
 
         // craft index view
@@ -109,7 +124,7 @@ class CraftsmanFileSystem
 
             $dest = $this->path_join($path, $asset, "index.blade.php");
 
-            $result = $this->createMergeFile($src, $dest, $data);
+            $this->createMergeFile($src, $dest, $data);
         }
 
         // craft show view
@@ -123,29 +138,8 @@ class CraftsmanFileSystem
 
             $dest = $this->path_join($path, $asset, "show.blade.php");
 
-            $result = $this->createMergeFile($src, $dest, $data);
+            $this->createMergeFile($src, $dest, $data);
         }
-
-        $filenames = [];
-        if (!$noCreate) {
-            $filenames[] = "create";
-        }
-        if (!$noEdit) {
-            $filenames[] = "edit";
-        }
-        if (!$noIndex) {
-            $filenames[] = "index";
-        }
-        if (!$noShow) {
-            $filenames[] = "show";
-        }
-
-        $message = implode(", ", $filenames);
-        return [
-            "status" => "success",
-            "message" => $message,
-        ];
-
     }
 
     public function getTemplatePath($type)
@@ -225,13 +219,17 @@ class CraftsmanFileSystem
         if (strlen($fieldData) > 0) {
             $fieldData = substr($fieldData, 0, strlen($fieldData) - 1);
         }
-        
+
         return $fieldData;
     }
 
     // TODO: This method needs refactoring
     public function createFile($type = null, $filename = null, $data = [])
     {
+        $overwrite = false;
+        if (isset($data["overwrite"])) {
+            $overwrite = $data["overwrite"];
+        }
         $path = $this->getTemplatePath($type);
 
         $namespace = "";
@@ -255,6 +253,14 @@ class CraftsmanFileSystem
             $dest = $this->path_join($path, $filename.".php");
         }
 
+        if (file_exists($dest) && (!$overwrite)) {
+            Messenger::error("✖︎ {$dest} already exists\n");
+            return [
+                "status" => self::FILE_EXIST,
+                "message" => "{$dest} already exists",
+            ];
+        }
+
         $tablename = "";
 
         if (isset($data["tablename"])) {
@@ -271,9 +277,9 @@ class CraftsmanFileSystem
         }
 
         $fieldData = $this->buildFieldData($fields);
-        $model = "";
         $model_path = "";
 
+        $model = "";
         if (isset($data["model"])) {
             $model = class_basename($data["model"]);
             $model_path = $data["model"];
@@ -352,13 +358,18 @@ class CraftsmanFileSystem
             $result = [
                 "filename" => $dest,
                 "status" => "success",
-                "message" => "{$dest} Created Successfully",
+                "message" => "{$dest} created successfully",
             ];
         } catch (\Exception $e) {
             $result = [
+                "filename" => $dest,
                 "status" => "error",
                 "message" => $e->getMessage(),
             ];
+        }
+
+        if ($result["status"] === "success") {
+            Messenger::success("✔︎ {$dest} created successfully\n");
         }
 
         return $result;

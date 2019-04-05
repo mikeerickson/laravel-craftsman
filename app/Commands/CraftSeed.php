@@ -18,6 +18,7 @@ class CraftSeed extends Command
                                 {name : Seed name} 
                                 {--m|model= : Associated model} 
                                 {--r|rows= : Alternate number of rows to use in factory call}
+                                {--w|overwrite : Overwrite existing seed}
                             ';
 
     /**
@@ -29,6 +30,7 @@ class CraftSeed extends Command
                      <name>               Seed Name
                      --model, -m          Path to model
                      --rows, -r           Number of rows to use in factory call (Optional)
+                     --overwrite, -w      Overwrite existing seed
             ';
 
     public function __construct()
@@ -48,6 +50,8 @@ class CraftSeed extends Command
         try {
             $seedName = $this->argument('name');
             $model = $this->option('model');
+            $overwrite = $this->option('overwrite');
+
             if (strlen($model) === 0) {
                 $this->error("Must supply model name");
             } else {
@@ -56,19 +60,12 @@ class CraftSeed extends Command
                     "model" => $model,
                     "name" => $seedName,
                     "num_rows" => $num_rows,
+                    "overwrite" => $overwrite,
                 ];
 
-                $result = $this->fs->createFile('seed', $seedName, $data);
-
-                if (getenv("APP_ENV") === "testing") {
-                    $this->info($result["message"]);
-                } else {
-                    echo "\n";
-                    $this->info("✔︎ ".$result["message"]);
-                }
+                $this->fs->createFile('seed', $seedName, $data);
             }
         } catch (Exception $e) {
-            echo "\n";
             $this->error($e->getMessage());
         }
 

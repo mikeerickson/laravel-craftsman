@@ -15,6 +15,7 @@ class CraftFactory extends Command
     protected $signature = 'craft:factory 
                                 {name : Factory Name} 
                                 {--m|model= : Associated model}
+                                {--w|overwrite : Overwrite existing factory}
                             ';
     /**
      * The description of the command.
@@ -24,6 +25,7 @@ class CraftFactory extends Command
     protected $description = 'Craft Factory
                      <name>               Factory Name
                      --model, -m          Use <model> when creating controller
+                     --overwrite, -w      Overwrite existing factory
             ';
 
     public function __construct()
@@ -40,27 +42,19 @@ class CraftFactory extends Command
      */
     public function handle()
     {
-        $tablename = "";
         $factoryName = $this->argument('name');
         $model = $this->option('model');
+
         if (strlen($model) === 0) {
             $this->error("Must supply model name");
         } else {
             $data = [
                 "model" => $model,
                 "name" => $factoryName,
+                "overwrite" => $this->option('overwrite'),
             ];
 
-            $result = $this->fs->createFile('factory', $factoryName, $data);
-
-            if (getenv("APP_ENV") === "testing") {
-                $this->info($result["message"]);
-            } else {
-                echo "\n";
-                $result["status"]
-                    ? $this->info("✔︎ ".$result["message"])
-                    : $this->error($result["message"]);
-            }
+            $this->fs->createFile('factory', $factoryName, $data);
         }
     }
 }

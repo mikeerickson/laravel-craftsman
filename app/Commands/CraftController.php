@@ -17,6 +17,7 @@ class CraftController extends Command
      */
     protected $signature = 'craft:controller {name : Controller Name} 
                                 {--m|model= : Associated model} 
+                                {--w|overwrite : Overwrite existing controller} 
                                 {--l|validation : Scaffold validation} 
                                 {--a|api : create API controller (skips create and update methods)}
                            ';
@@ -31,6 +32,7 @@ class CraftController extends Command
                      --validation, -l     Create validation blocks
                      --api, -a            Create API controller (skips create and update methods)
                      --empty, -e          Create empty controller
+                     --overwrite, -w      Overwrite existing controller
             ';
 
     public function __construct()
@@ -53,26 +55,18 @@ class CraftController extends Command
         $data = [
             "model" => $model,
             "name" => $controllerName,
+            "overwrite" => $this->option('overwrite'),
         ];
+
         $api = $this->option('api');
         if ($api) {
-            $result = $this->fs->createFile('api-controller', $controllerName, $data);
+            $this->fs->createFile('api-controller', $controllerName, $data);
         } else {
             if (strlen($model) === 0) {
-                $result = $this->fs->createFile('empty-controller', $controllerName, $data);
+                $this->fs->createFile('empty-controller', $controllerName, $data);
             } else {
-                $result = $this->fs->createFile('controller', $controllerName, $data);
+                $this->fs->createFile('controller', $controllerName, $data);
             }
         }
-
-        if (getenv("APP_ENV") === "testing") {
-            $this->info($result["message"]);
-        } else {
-            echo "\n";
-            $result["status"]
-                ? $this->info("✔︎ ".$result["message"])
-                : $this->error($result["message"]);
-        }
-
     }
 }

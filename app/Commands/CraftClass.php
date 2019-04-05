@@ -15,6 +15,7 @@ class CraftClass extends Command
     protected $signature = 'craft:class 
                                 {name : Class name} 
                                 {--c|constructor : Include constructor method}
+                                {--w|overwrite : Overwrite existing class}
                             ';
     /**
      * The description of the command.
@@ -24,6 +25,7 @@ class CraftClass extends Command
     protected $description = 'Craft Class
                      <name>               Class Name
                      --constructor, -c    Include constructor method
+                     --overwrite, -w      Overwrite existing class
             ';
 
     public function __construct()
@@ -41,20 +43,13 @@ class CraftClass extends Command
     public function handle()
     {
         $className = $this->argument('name');
-        $constructor = $this->option("constructor");
 
         $data = [
             "name" => $className,
-            "constructor" => $constructor,
+            "constructor" => $this->option("constructor"),
+            "overwrite" => $this->option("overwrite"),
         ];
 
-        $result = $this->fs->createFile('class', $className, $data);
-
-        if (getenv("APP_ENV") === "testing") {
-            $this->info($result["message"]);
-        } else {
-            echo "\n";
-            $this->info("✔︎ ".$result["message"]);
-        }
+        $this->fs->createFile('class', $className, $data);
     }
 }
