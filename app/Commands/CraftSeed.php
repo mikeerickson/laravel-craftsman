@@ -6,8 +6,15 @@ use App\CraftsmanFileSystem;
 use Exception;
 use LaravelZero\Framework\Commands\Command;
 
+/**
+ * Class CraftSeed
+ * @package App\Commands
+ */
 class CraftSeed extends Command
 {
+    /**
+     * @var CraftsmanFileSystem
+     */
     protected $fs;
     /**
      * The signature of the command.
@@ -33,6 +40,9 @@ class CraftSeed extends Command
                      --overwrite, -w      Overwrite existing seed
             ';
 
+    /**
+     * CraftSeed constructor.
+     */
     public function __construct()
     {
         parent::__construct();

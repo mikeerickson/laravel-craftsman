@@ -5,8 +5,15 @@ namespace App\Commands;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
+/**
+ * Class CraftDeveloper
+ * @package App\Commands
+ */
 class CraftDeveloper extends Command
 {
+    /**
+     * @var bool
+     */
     protected $hidden = true;
 
     /**

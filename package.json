@@ -1,18 +1,20 @@
 {
   "name": "laravel-craftsman",
-  "version": "1.0.8",
-  "build": "80",
+  "version": "1.0.9",
+  "build": "92",
   "description": "Laravel Craftsman",
   "main": "index.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
+    "bump": "./tasks/bumpBuild.js",
     "build": "./tasks/build.sh",
     "build:deploy": "./tasks/build.sh --deploy",
     "deploy": "./tasks/deploy.sh",
     "test": "vendor/bin/phpunit",
     "test:ci": "vendor/bin/phpunit -c phpunit.ci.xml",
+    "test:coverage": "vendor/bin/phpunit --testsuite Unit --coverage-html coverage",
     "test:feature": "vendor/bin/phpunit --testsuite Feature",
     "test:unit": "vendor/bin/phpunit --testsuite Unit",
     "test:watch": "vendor/bin/phpunit-watcher watch",

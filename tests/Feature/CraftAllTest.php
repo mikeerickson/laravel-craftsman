@@ -2,15 +2,29 @@
 
 namespace Tests\Feature;
 
+use App\CraftsmanFileSystem;
 use Tests\CraftsmanTestCase;
 
-// TODO: Add code to delete resource directory instead of just filenames
-
+/**
+ * Class CraftAllTest
+ * @package Tests\Feature
+ */
 class CraftAllTest extends CraftsmanTestCase
 {
+    /**
+     * @var CraftsmanFileSystem
+     */
+    protected $fs;
+
+    /**
+     *
+     */
     function setUp(): void
     {
         parent::setUp();
+
+        $this->fs = new CraftsmanFileSystem();
+
         $this->withoutExceptionHandling();
     }
 
@@ -19,5 +33,12 @@ class CraftAllTest extends CraftsmanTestCase
     {
         $this->artisan('craft:all Author --model App/Models/Author --tablename posts --rows 44')
             ->assertExitCode(0);
+
+        $this->fs->rmdir("app/Http");
+        $this->fs->rmdir("app/Models");
+        $this->fs->rmdir("app/Test");
+        $this->fs->rmdir("database/migrations");
+        $this->fs->rmdir("database/factories");
+        $this->fs->rmdir("database/seeds");
     }
 }

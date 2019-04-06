@@ -4,11 +4,24 @@ namespace Tests\Feature;
 
 use App\CraftsmanFileSystem;
 use Tests\TestCase;
+use Tests\TestHelpersTrait;
 
+/**
+ * Class CraftTestTest
+ * @package Tests\Feature
+ */
 class CraftTestTest extends TestCase
 {
+    use TestHelpersTrait;
+
+    /**
+     * @var CraftsmanFileSystem
+     */
     protected $fs;
 
+    /**
+     *
+     */
     function setUp(): void
     {
         parent::setUp();
@@ -16,6 +29,9 @@ class CraftTestTest extends TestCase
 //        $this->withoutExceptionHandling();
     }
 
+    /**
+     *
+     */
     function tearDown(): void
     {
         parent::tearDown();
@@ -33,6 +49,8 @@ class CraftTestTest extends TestCase
 
         $this->assertFileExists($filename);
 
+        $this->assertFileContainsString($filename, "class ${class}");
+
         unlink($filename);
     }
 
@@ -44,9 +62,12 @@ class CraftTestTest extends TestCase
         $this->artisan("craft:test {$class} --unit")
             ->assertExitCode(0);
 
-        $filename = $this->fs->path_join("tests", "Unit", "{$class}.php");
+        $filename = $this->pathJoin("tests", "Unit", "{$class}.php");
 
         $this->assertFileExists($filename);
+
+        $this->assertFileContainsString($filename, "class ${class}");
+        $this->assertFileContainsString($filename, "namespace App\Unit;");
 
         unlink($filename);
     }

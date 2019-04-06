@@ -4,15 +4,30 @@ namespace Tests\Feature;
 
 use App\CraftsmanFileSystem;
 use Tests\TestCase;
+use Tests\TestHelpersTrait;
 
+/**
+ * Class CraftClassTest
+ * @package Tests\Feature
+ */
 class CraftClassTest extends TestCase
 {
+    use TestHelpersTrait;
+
+    /**
+     * @var CraftsmanFileSystem
+     */
     protected $fs;
 
+    /**
+     *
+     */
     function setUp(): void
     {
         parent::setUp();
+
         $this->fs = new CraftsmanFileSystem();
+
         $this->withoutExceptionHandling();
     }
 
@@ -24,13 +39,12 @@ class CraftClassTest extends TestCase
         $this->artisan("craft:class {$class}")
             ->assertExitCode(0);
 
-        $filename = $this->fs->path_join("app", "Test.php");
+        $filename = $this->pathJoin("app", "Test.php");
         $this->assertFileExists($filename);
 
-        $data = file_get_contents($filename);
+        $this->assertFileContainsString($filename, "class {$class}");
 
         unlink($filename);
-//        $this->assertStringContainsString("use {$model_path};", $data);
     }
 
     /** @test */
@@ -41,10 +55,11 @@ class CraftClassTest extends TestCase
         $this->artisan("craft:class {$class}")
             ->assertExitCode(0);
 
-        $filename = $this->fs->path_join("app/Test", "SampleClass.php");
+        $filename = $this->pathJoin("app/Test", "SampleClass.php");
         $this->assertFileExists($filename);
 
-        $data = file_get_contents($filename);
-        $this->assertStringContainsString("class SampleClass", $data);
+        $this->assertFileContainsString($filename, "class SampleClass");
+
+        $this->fs->rmdir("app/Test");
     }
 }

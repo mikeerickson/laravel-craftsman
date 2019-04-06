@@ -29,5 +29,6 @@ return [
     "templates" => [
         // example
         // 'class' => 'templates/class.user.mustache',
+        "sample" => "templates/sample.user.mustache",
     ],
 ];

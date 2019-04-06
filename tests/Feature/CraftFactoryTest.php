@@ -4,15 +4,30 @@ namespace Tests\Feature;
 
 use App\CraftsmanFileSystem;
 use Tests\TestCase;
+use Tests\TestHelpersTrait;
 
+/**
+ * Class CraftFactoryTest
+ * @package Tests\Feature
+ */
 class CraftFactoryTest extends TestCase
 {
+    use TestHelpersTrait;
+
+    /**
+     * @var CraftsmanFileSystem
+     */
     protected $fs;
 
+    /**
+     *
+     */
     function setUp(): void
     {
         parent::setUp();
+
         $this->fs = new CraftsmanFileSystem();
+
         $this->withoutExceptionHandling();
     }
 
@@ -29,9 +44,8 @@ class CraftFactoryTest extends TestCase
         $filename = $this->fs->path_join($factoryPath, "TestFactory.php");
         $this->assertFileExists($filename);
 
-        $data = file_get_contents($filename);
-        $this->assertStringContainsString("use {$model_path};", $data);
+        $this->assertFileContainsString($filename, "use {$model_path};");
 
-        unlink($filename);
+        $this->fs->rmdir("database/factories");
     }
 }

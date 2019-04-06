@@ -14,7 +14,8 @@ rm -rf database/migrations
 success " ✔︎ database/migrations removed"
 rm -rf database/seeds
 success " ✔︎ database/seeds removed"
-
+rm app/Post.php
+rm app/TestClass.php
 
 printf "\n"
 success "Directories Cleaned Successfully" " SUCCESS "

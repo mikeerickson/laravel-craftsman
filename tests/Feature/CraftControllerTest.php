@@ -4,18 +4,36 @@ namespace Tests\Feature;
 
 use App\CraftsmanFileSystem;
 use Tests\TestCase;
+use Tests\TestHelpersTrait;
 
+/**
+ * Class CraftControllerTest
+ * @package Tests\Feature
+ */
 class CraftControllerTest extends TestCase
 {
+    use TestHelpersTrait;
+
+    /**
+     * @var CraftsmanFileSystem
+     */
     protected $fs;
 
+    /**
+     *
+     */
     function setUp(): void
     {
         parent::setUp();
+
         $this->fs = new CraftsmanFileSystem();
+
         $this->withoutExceptionHandling();
     }
 
+    /**
+     *
+     */
     function tearDown(): void
     {
         parent::tearDown();
@@ -24,14 +42,18 @@ class CraftControllerTest extends TestCase
     /** @test */
     public function should_create_empty_controller()
     {
+        $class = "EmptyController";
+
         $this->artisan("craft:controller EmptyController")
             ->assertExitCode(0);
 
         $controllerPath = $this->fs->controller_path();
-        $filename = $this->fs->path_join($controllerPath, "EmptyController.php");
+        $filename = $this->pathJoin($controllerPath, "{$class}.php");
         $this->assertFileExists($filename);
 
-        unlink($filename);
+        $this->assertFileContainsString($filename, "class EmptyController");
+
+        $this->fs->rmdir("app/Http");
     }
 
     /** @test */
@@ -59,7 +81,7 @@ class CraftControllerTest extends TestCase
         $this->assertStringContainsString("edit", $data);
         $this->assertStringContainsString("create", $data);
 
-        unlink($filename);
+        $this->fs->rmdir("app/Http");
     }
 
     /** @test */
@@ -88,6 +110,6 @@ class CraftControllerTest extends TestCase
         $this->assertStringNotContainsString("edit", $data);
         $this->assertStringNotContainsString("create", $data);
 
-        unlink($filename);
+        $this->fs->rmdir("app/Http");
     }
 }

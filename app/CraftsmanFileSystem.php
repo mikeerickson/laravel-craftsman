@@ -9,22 +9,52 @@ use Illuminate\Support\Str;
 use Mustache_Engine;
 use Phar;
 
+/**
+ * Class CraftsmanFileSystem
+ * @package App
+ */
 class CraftsmanFileSystem
 {
+    /**
+     *
+     */
     const SUCCESS = 0;
+    /**
+     *
+     */
     const FILE_EXIST = -43;
 
+    /**
+     * @var Filesystem
+     */
     protected $fs;
 
+    /**
+     * @var Mustache_Engine
+     */
     protected $mustache;
 
+    /**
+     * CraftsmanFileSystem constructor.
+     */
     public function __construct()
     {
         $this->fs = new Filesystem();
         $this->mustache = new Mustache_Engine();
     }
 
-    private function getPharPath()
+    /**
+     * @param $dirname
+     */
+    public function rmdir($dirname)
+    {
+        system("rm -rf ".escapeshellarg($dirname));
+    }
+
+    /**
+     * @return string
+     */
+    public function getPharPath()
     {
         $path = Phar::running(false);
         if (strlen($path) > 0) {
@@ -33,6 +63,13 @@ class CraftsmanFileSystem
         return $path;
     }
 
+    /**
+     * @param $src
+     * @param $dest
+     * @param $data
+     * @return int
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
     private function createMergeFile($src, $dest, $data)
     {
         $template = $this->fs->get($src);
@@ -63,14 +100,27 @@ class CraftsmanFileSystem
             ];
         }
 
-
-        return self::SUCCESS;
+        return basename($dest);
     }
 
+    /**
+     * @param $type
+     * @return \Illuminate\Config\Repository|mixed
+     */
+    public function getTemplateFilename($type)
+    {
+        return config("craftsman.templates.{$type}");
+    }
+
+    /**
+     * @param $asset
+     * @param $data
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
     public function createViewFiles($asset, $data)
     {
         $asset = strtolower($asset);
-        $path = $this->getTemplatePath("views");
+        $path = $this->getOutputPath("views");
 
         $noCreate = $data["noCreate"];
         $noEdit = $data["noEdit"];
@@ -96,7 +146,7 @@ class CraftsmanFileSystem
 
             $dest = $this->path_join($path, $asset, "create.blade.php");
 
-            $this->createMergeFile($src, $dest, $data);
+            $filenames[] = $this->createMergeFile($src, $dest, $data);
         }
 
         // craft edit view
@@ -110,7 +160,7 @@ class CraftsmanFileSystem
 
             $dest = $this->path_join($path, $asset, "edit.blade.php");
 
-            $this->createMergeFile($src, $dest, $data);
+            $filenames[] = $this->createMergeFile($src, $dest, $data);
         }
 
         // craft index view
@@ -124,7 +174,7 @@ class CraftsmanFileSystem
 
             $dest = $this->path_join($path, $asset, "index.blade.php");
 
-            $this->createMergeFile($src, $dest, $data);
+            $filenames[] = $this->createMergeFile($src, $dest, $data);
         }
 
         // craft show view
@@ -138,11 +188,17 @@ class CraftsmanFileSystem
 
             $dest = $this->path_join($path, $asset, "show.blade.php");
 
-            $this->createMergeFile($src, $dest, $data);
+            $filenames[] = $this->createMergeFile($src, $dest, $data);
         }
+
+        return $filenames;
     }
 
-    public function getTemplatePath($type)
+    /**
+     * @param $type
+     * @return \Illuminate\Config\Repository|mixed|string|string[]|null
+     */
+    public function getOutputPath($type)
     {
         switch ($type) {
             case 'class':
@@ -153,21 +209,26 @@ class CraftsmanFileSystem
             case 'controller':
                 $path = $this->controller_path();
                 break;
+            case 'factories':
             case 'factory':
                 $path = $this->factory_path();
                 break;
+            case 'migrations':
             case 'migration':
                 $path = $this->migration_path();
                 break;
             case 'model':
                 $path = $this->model_path();
                 break;
+            case 'seeds':
             case 'seed':
                 $path = $this->seed_path();
                 break;
+            case 'tests':
             case 'test':
                 $path = $this->test_path();
                 break;
+            case 'view':
             case 'views':
                 $path = $this->view_path();
                 break;
@@ -178,6 +239,10 @@ class CraftsmanFileSystem
         return $path;
     }
 
+    /**
+     * @param  string  $fields
+     * @return bool|string
+     */
     public function buildFieldData($fields = "")
     {
         // format:
@@ -224,13 +289,21 @@ class CraftsmanFileSystem
     }
 
     // TODO: This method needs refactoring
+
+    /**
+     * @param  null  $type
+     * @param  null  $filename
+     * @param  array  $data
+     * @return array
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
     public function createFile($type = null, $filename = null, $data = [])
     {
         $overwrite = false;
         if (isset($data["overwrite"])) {
             $overwrite = $data["overwrite"];
         }
-        $path = $this->getTemplatePath($type);
+        $path = $this->getOutputPath($type);
 
         $namespace = "";
         $src = $this->getUserTemplate("./config.php", $type);
@@ -375,26 +448,42 @@ class CraftsmanFileSystem
         return $result;
     }
 
+    /**
+     * @return \Illuminate\Config\Repository|mixed
+     */
     public function class_path()
     {
         return config('craftsman.paths.class');
     }
 
+    /**
+     * @return \Illuminate\Config\Repository|mixed
+     */
     public function controller_path()
     {
         return config('craftsman.paths.controllers');
     }
 
+    /**
+     * @return \Illuminate\Config\Repository|mixed
+     */
     public function factory_path()
     {
         return config('craftsman.paths.factories');
     }
 
+    /**
+     * @return \Illuminate\Config\Repository|mixed
+     */
     public function migration_path()
     {
         return config('craftsman.paths.migrations');
     }
 
+    /**
+     * @param  null  $model_path
+     * @return \Illuminate\Config\Repository|mixed|string|string[]|null
+     */
     public function model_path($model_path = null)
     {
         if (!is_null($model_path)) {
@@ -404,6 +493,9 @@ class CraftsmanFileSystem
         }
     }
 
+    /**
+     * @return string|string[]|null
+     */
     public function path_join()
     {
         $paths = array();
@@ -417,21 +509,49 @@ class CraftsmanFileSystem
         return preg_replace('#/+#', '/', join('/', $paths));
     }
 
+    /**
+     * @return string|string[]|null
+     */
+    public function pathJoin()
+    {
+        $paths = array();
+
+        foreach (func_get_args() as $arg) {
+            if ($arg !== '') {
+                $paths[] = $arg;
+            }
+        }
+
+        return preg_replace('#/+#', '/', join('/', $paths));
+    }
+
+    /**
+     * @return \Illuminate\Config\Repository|mixed
+     */
     public function seed_path()
     {
         return config('craftsman.paths.seeds');
     }
 
+    /**
+     * @return \Illuminate\Config\Repository|mixed
+     */
     public function test_path()
     {
         return config('craftsman.paths.tests');
     }
 
+    /**
+     * @return \Illuminate\Config\Repository|mixed
+     */
     public function view_path()
     {
         return config('craftsman.paths.views');
     }
 
+    /**
+     * @param $filename
+     */
     public function createParentDirectory($filename)
     {
         if (!is_dir(dirname($filename))) {
@@ -439,6 +559,11 @@ class CraftsmanFileSystem
         }
     }
 
+    /**
+     * @param  string  $userConfigFilename
+     * @param  string  $type
+     * @return mixed|string
+     */
     public function getUserTemplate($userConfigFilename = "./config.php", $type = "")
     {
         if (file_exists($userConfigFilename)) {
@@ -453,6 +578,11 @@ class CraftsmanFileSystem
         return ""; // we didnt find the entry, return null string
     }
 
+    /**
+     * @param  string  $dirname
+     * @param  string  $partial
+     * @return string
+     */
     public function getLastFilename($dirname = "", $partial = "")
     {
         $files = array_reverse(scandir($dirname));

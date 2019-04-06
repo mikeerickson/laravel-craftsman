@@ -4,6 +4,10 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 
+/**
+ * Class HelpersTest
+ * @package Tests\Unit
+ */
 class HelpersTest extends TestCase
 {
     /**

@@ -5,6 +5,10 @@ namespace App\Commands;
 use App\CraftsmanFileSystem;
 use LaravelZero\Framework\Commands\Command;
 
+/**
+ * Class CraftViews
+ * @package App\Commands
+ */
 class CraftViews extends Command
 {
     /**
@@ -39,6 +43,9 @@ class CraftViews extends Command
                      --no-show, -w        Exclude show view
             ';
 
+    /**
+     * CraftViews constructor.
+     */
     public function __construct()
     {
         parent::__construct();

@@ -5,6 +5,10 @@ namespace App\Commands;
 use App\CraftsmanFileSystem;
 use LaravelZero\Framework\Commands\Command;
 
+/**
+ * Class CraftTest
+ * @package App\Commands
+ */
 class CraftTest extends Command
 {
     /**
@@ -32,6 +36,9 @@ class CraftTest extends Command
                      --overwrite, -w      Overwrite existing test
             ';
 
+    /**
+     * CraftTest constructor.
+     */
     public function __construct()
     {
         parent::__construct();

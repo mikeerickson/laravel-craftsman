@@ -4,16 +4,28 @@ namespace Tests\Feature;
 
 use App\CraftsmanFileSystem;
 use Tests\TestCase;
+use Tests\TestHelpersTrait;
 
-// TODO: Add code to delete resource directory instead of just filename
-
+/**
+ * Class CraftViewsTest
+ * @package Tests\Feature
+ */
 class CraftViewsTest extends TestCase
 {
+    use TestHelpersTrait;
+
+    /**
+     * @var CraftsmanFileSystem
+     */
     protected $fs;
 
+    /**
+     *
+     */
     function setUp(): void
     {
         parent::setUp();
+
         $this->fs = new CraftsmanFileSystem();
 
         $this->withoutExceptionHandling();
@@ -27,11 +39,14 @@ class CraftViewsTest extends TestCase
         $this->artisan("craft:views {$resource} --extends partials.master --section content --no-index --no-edit --no-show")
             ->assertExitCode(0);
 
-        $filename = $this->fs->path_join("resources", "views", $resource, "create.blade.php");
+        $filename = $this->pathJoin("resources", "views", $resource, "create.blade.php");
 
         $this->assertFileExists($filename);
 
-        unlink($filename);
+        $this->assertFileContainsString($filename, "View Create");
+        $this->assertFileContainsString($filename, "@section('content')");
+
+        $this->fs->rmdir("resources/views/{$resource}");
     }
 
     /** @test */
@@ -46,7 +61,10 @@ class CraftViewsTest extends TestCase
 
         $this->assertFileExists($filename);
 
-        unlink($filename);
+        $this->assertFileContainsString($filename, "View Edit");
+        $this->assertFileContainsString($filename, "@section('content')");
+
+        $this->fs->rmdir("resources/views/{$resource}");
     }
 
     /** @test */
@@ -54,14 +72,20 @@ class CraftViewsTest extends TestCase
     {
         $resource = "contacts";
 
-        $this->artisan("craft:views {$resource} --extends partials.master --section content --no-edit --no-create --no-show")
+        $this->artisan("craft:views {$resource} --no-edit --no-create --no-show")
             ->assertExitCode(0);
 
         $filename = $this->fs->path_join("resources", "views", $resource, "index.blade.php");
 
         $this->assertFileExists($filename);
 
-        unlink($filename);
+        $this->assertFileContainsString($filename, "View Index");
+
+        $this->assertFileNotContainString($filename, "@section");
+        $this->assertFileNotContainString($filename, "@extends");
+
+        $this->fs->rmdir("resources/views/{$resource}");
+
     }
 
     /** @test */
@@ -69,14 +93,19 @@ class CraftViewsTest extends TestCase
     {
         $resource = "contacts";
 
-        $this->artisan("craft:views {$resource} --extends partials.master --section content --no-index --no-create --no-edit")
+        $this->artisan("craft:views {$resource} --extends partials.master --no-index --no-create --no-edit")
             ->assertExitCode(0);
 
-        $filename = $this->fs->path_join("resources", "views", $resource, "show.blade.php");
+        $filename = $this->pathJoin("resources", "views", $resource, "show.blade.php");
 
         $this->assertFileExists($filename);
 
-        unlink($filename);
+        $this->assertFileContainsString($filename, "View Show");
+        $this->assertFileContainsString($filename, "@extends('partials.master')");
+        $this->assertFileNotContainString($filename, "@section('content')");
+
+        $this->fs->rmdir("resources/views/{$resource}");
+
     }
 
     /** @test */
@@ -97,9 +126,22 @@ class CraftViewsTest extends TestCase
         $this->assertFileExists($editFilename);
         $this->assertFileExists($showFilename);
 
-        unlink($createFilename);
-        unlink($indexFilename);
-        unlink($editFilename);
-        unlink($showFilename);
+        $this->fs->rmdir("resources/views/{$resource}");
+
     }
+
+    /** @test */
+    public function should_create_merge_file()
+    {
+        $data = [];
+        $src = $this->fs->getTemplateFilename("views");
+
+        echo $src;
+
+//        $result = $this->fs->createMergeFile($src, $dest, $data);
+
+        $this->assertTrue(true);
+
+    }
+
 }

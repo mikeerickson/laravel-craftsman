@@ -6,9 +6,16 @@ use App\CraftsmanFileSystem;
 use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
 
+/**
+ * Class CraftModel
+ * @package App\Commands
+ */
 class CraftModel extends Command
 {
 
+    /**
+     * @var CraftsmanFileSystem
+     */
     protected $fs;
     /**
      * The signature of the command.
@@ -32,6 +39,9 @@ class CraftModel extends Command
                      --overwrite, -w      Overwrite existing model
             ';
 
+    /**
+     * CraftModel constructor.
+     */
     public function __construct()
     {
         parent::__construct();

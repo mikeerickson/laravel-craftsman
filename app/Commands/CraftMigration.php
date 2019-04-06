@@ -8,8 +8,15 @@ use Codedungeon\PHPMessenger\Facades\Messenger;
 use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
 
+/**
+ * Class CraftMigration
+ * @package App\Commands
+ */
 class CraftMigration extends Command
 {
+    /**
+     * @var CraftsmanFileSystem
+     */
     protected $fs;
 
     /**
@@ -41,6 +48,9 @@ class CraftMigration extends Command
                      --overwrite, -w      Overwrite migration (skipped by default, default: true)
             ';
 
+    /**
+     * CraftMigration constructor.
+     */
     public function __construct()
     {
         parent::__construct();

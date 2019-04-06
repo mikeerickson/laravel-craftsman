@@ -5,6 +5,10 @@ namespace App\Commands;
 use App\CraftsmanFileSystem;
 use LaravelZero\Framework\Commands\Command;
 
+/**
+ * Class CraftFactory
+ * @package App\Commands
+ */
 class CraftFactory extends Command
 {
     /**
@@ -28,6 +32,9 @@ class CraftFactory extends Command
                      --overwrite, -w      Overwrite existing factory
             ';
 
+    /**
+     * CraftFactory constructor.
+     */
     public function __construct()
     {
         parent::__construct();

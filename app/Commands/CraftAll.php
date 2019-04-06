@@ -7,9 +7,16 @@ use Codedungeon\PHPMessenger\Facades\Messenger;
 use Illuminate\Support\Facades\Artisan;
 use LaravelZero\Framework\Commands\Command;
 
+/**
+ * Class CraftAll
+ * @package App\Commands
+ */
 class CraftAll extends Command
 {
 
+    /**
+     * @var CraftsmanFileSystem
+     */
     protected $fs;
 
     /**
@@ -53,6 +60,9 @@ class CraftAll extends Command
                      --no-seed, -s        Do not create seed
             ';
 
+    /**
+     * CraftAll constructor.
+     */
     public function __construct()
     {
         parent::__construct();

@@ -5,9 +5,16 @@ namespace App\Commands;
 use App\CraftsmanFileSystem;
 use LaravelZero\Framework\Commands\Command;
 
+/**
+ * Class CraftController
+ * @package App\Commands
+ */
 class CraftController extends Command
 {
 
+    /**
+     * @var CraftsmanFileSystem
+     */
     protected $fs;
 
     /**
@@ -35,6 +42,9 @@ class CraftController extends Command
                      --overwrite, -w      Overwrite existing controller
             ';
 
+    /**
+     * CraftController constructor.
+     */
     public function __construct()
     {
         parent::__construct();
