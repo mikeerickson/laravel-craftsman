@@ -13,7 +13,7 @@ use Tests\TestHelpersTrait;
 class CraftAllTest extends TestCase
 {
     use TestHelpersTrait;
-    
+
     /**
      * @var CraftsmanFileSystem
      */
