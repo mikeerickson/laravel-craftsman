@@ -31,11 +31,18 @@ class CraftsmanFileSystemTest extends TestCase
     }
 
     /**
-     *
+     * setUp
      */
     public function setUp(): void
     {
         parent::setUp();
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+        parent::tearDownAfterClass();
+
+        rmdir("resources/views/coverage");
     }
 
     /** @test */
@@ -342,42 +349,93 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_call_create_view_create()
     {
+        $filename = "resources/views/coverage/create.blade.php";
+
         $data = $this->getDefaultViewOptions(["noCreate" => false]);
 
         $filenames = $this->fs->createViewFiles("coverage", $data);
 
         $this->assertContains("create.blade.php", $filenames);
+
+        unlink($filename);
+
     }
 
     /** @test */
     public function should_call_create_view_edit()
     {
+        $filename = "resources/views/coverage/edit.blade.php";
+
         $data = $this->getDefaultViewOptions(["noEdit" => false]);
 
         $filenames = $this->fs->createViewFiles("coverage", $data);
 
         $this->assertContains("edit.blade.php", $filenames);
 
+        unlink($filename);
+
     }
 
     /** @test */
     public function should_call_create_view_index()
     {
+        $filename = "resources/views/coverage/index.blade.php";
+
         $data = $this->getDefaultViewOptions(["noIndex" => false]);
 
         $filenames = $this->fs->createViewFiles("coverage", $data);
 
         $this->assertContains("index.blade.php", $filenames);
+
+        unlink($filename);
+
     }
 
     /** @test */
     public function should_call_create_view_show()
     {
+        $filename = "resources/views/coverage/show.blade.php";
+
         $data = $this->getDefaultViewOptions(["noShow" => false]);
 
         $filenames = $this->fs->createViewFiles("coverage", $data);
 
         $this->assertContains("show.blade.php", $filenames);
+
+        unlink($filename);
+    }
+
+    /** @test */
+    public function should_call_create_view_with_extends_show()
+    {
+        $filename = "resources/views/coverage/show.blade.php";
+
+        $data = $this->getDefaultViewOptions(["noShow" => false, "extends" => "partials.master"]);
+
+        $filenames = $this->fs->createViewFiles("coverage", $data);
+
+        $this->assertContains("show.blade.php", $filenames);
+
+        $this->assertFileContainsString($filename, "@extends");
+
+        unlink($filename);
+    }
+
+    /** @test */
+    public function should_call_create_view_with_content_show()
+    {
+        $filename = "resources/views/coverage/show.blade.php";
+
+        $data = $this->getDefaultViewOptions(["noShow" => false, "section" => "content"]);
+
+        $filenames = $this->fs->createViewFiles("coverage", $data);
+
+        $this->assertContains("show.blade.php", $filenames);
+
+        $this->assertFileContainsString($filename, "@section");
+
+        unlink($filename);
+
     }
 
     /** @test */
@@ -435,6 +493,10 @@ class CraftsmanFileSystemTest extends TestCase
      * View Option Factory
      */
 
+    /**
+     * @param $overrides
+     * @return array
+     */
     public function getDefaultViewOptions($overrides)
     {
         return array_merge([

@@ -3,14 +3,17 @@
 namespace Tests\Feature;
 
 use App\CraftsmanFileSystem;
-use Tests\CraftsmanTestCase;
+use Tests\TestCase;
+use Tests\TestHelpersTrait;
 
 /**
  * Class CraftAllTest
  * @package Tests\Feature
  */
-class CraftAllTest extends CraftsmanTestCase
+class CraftAllTest extends TestCase
 {
+    use TestHelpersTrait;
+    
     /**
      * @var CraftsmanFileSystem
      */

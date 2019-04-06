@@ -18,6 +18,16 @@ if (!function_exists('path_join')) {
     }
 }
 
+if (!function_exists("rmdir")) {
+    /**
+     * @param $dirname
+     */
+    function rmdir($dirname)
+    {
+        system("rm -rf ".escapeshellarg($dirname));
+    }
+}
+
 if (!function_exists("valid_path")) {
     /**
      * @param $path
