@@ -1,6 +1,6 @@
 
 # Laravel Craftsman
-Current Version: 1.0.9
+Current Version: 1.0.10
 
 ## Description
 
@@ -32,7 +32,7 @@ or
 ```bash
 > laravel-craftsman <command> [options] [arguments]
 
-> laravel-craftsman craft:all Post --model App/Models/Post --tablename posts --rows 50 
+> laravel-craftsman craft:all Post --model App/Models/Post --tablename posts --rows 50 --extends partials.app --section content
 
 > laravel-craftsman craft:class App/TestClass --constructor
 
@@ -67,11 +67,14 @@ laravel-craftsman craft:all Contact --model App/Models/Contact --tablename conta
 |                      | --tablename, -t     | Tablename used in database (will set $tablename in Model)            |
 |                      |                     | _If not supplied, default table will be pluralized model name_       |
 |                      | --rows, -r          | Number of rows used by seed when using Factory                       |
+|                      | --extends, -x       | View extends block (optional)                                        |
+|                      | --section, -i       | View section block (optional)                                        |
 |                      | --no-controller, -c | Do not create controller                                             |
 |                      | --no-factory, -a    | Do not create factory                                                |
 |                      | --no-migration, -g  | Do not create migration                                              |
 |                      | --no-model, -o      | Do not create model                                                  |
 |                      | --no-seed, -s       | Do not create seed                                                   |
+|                      | --no-views, -e       | Do not create seed                                                   |
 | **craft:class**      | **class name**      | **Creates empty class**                                              |
 |                      | --constructor, -c   | Include constructor method                                           |
 | **craft:controller** | **controller name** | **Create controller using supplied options**                         |

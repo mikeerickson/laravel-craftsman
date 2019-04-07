@@ -19,7 +19,7 @@ class CraftClass extends Command
     protected $signature = 'craft:class 
                                 {name : Class name} 
                                 {--c|constructor : Include constructor method}
-                                {--w|overwrite : Overwrite existing class}
+                                {--w|overwrite   : Overwrite existing class}
                             ';
     /**
      * The description of the command.

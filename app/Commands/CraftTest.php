@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use App\CraftsmanFileSystem;
+use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
 
 /**
@@ -71,6 +72,10 @@ class CraftTest extends Command
             "namespace" => $namespace,
             "overwrite" => $overwrite,
         ];
+
+        if (!Str::endsWith($className, "Test")) {
+            $className .= "Test";
+        }
 
         $filename = $this->fs->path_join($unit ? "Unit" : "Feature", $className);
         $this->fs->createFile('test', $filename, $data);

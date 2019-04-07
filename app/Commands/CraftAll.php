@@ -5,6 +5,7 @@ namespace App\Commands;
 use App\CraftsmanFileSystem;
 use Codedungeon\PHPMessenger\Facades\Messenger;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
 
 /**
@@ -30,6 +31,8 @@ class CraftAll extends Command
                                 {--t|tablename= : Associated tablename} 
                                 {--f|fields= : List of fields used in migration} 
                                 {--r|rows= : Number of rows created by migration command} 
+                                {--x|extends= : Views extend block} 
+                                {--i|section= : Views section block} 
                                 {--w|overwrite : Overwrite existing files} 
                                 
                                 {--c|no-controller : Skip crafting controller}
@@ -37,6 +40,7 @@ class CraftAll extends Command
                                 {--g|no-migration : Skip crafting migration}
                                 {--o|no-model : Skip crafting model}
                                 {--s|no-seed : Skip crafting seed}
+                                {--e|no-views : Skip crafting resource views}
                             ';
 
     /**
@@ -51,6 +55,8 @@ class CraftAll extends Command
                      --fields, -f         Field List (passed to migration)
                                            eg. --fields first_name:string,20^nullable^unique, last_name:string,20
                      --rows, -r           Number of rows for migration (passed to factory)
+                     --extends, -x        View extends block (optional)
+                     --section, -i        View section block (optional)
                      --overwrite, -w      Overwrite existing files (WARNING: This can\'t be undone)
                      
                      --no-controller, -c  Do not create controller
@@ -58,6 +64,7 @@ class CraftAll extends Command
                      --no-migration, -g   Do not create migration
                      --no-model, -o       Do not create model
                      --no-seed, -s        Do not create seed
+                     --no-views, -e       Do not create resource views
             ';
 
     /**
@@ -83,18 +90,23 @@ class CraftAll extends Command
         $tablename = $this->option('tablename');
         $rows = $this->option('rows');
         $fields = $this->option('fields');
+        $extends = $this->option('extends');
+        $section = $this->option('section');
         $overwrite = $this->option('overwrite');
         if ($overwrite) {
             $overwrite = "--overwrite";
         }
-
         // grab any options to skip assets
         $noController = $this->option('no-controller');
         $noFactory = $this->option('no-factory');
         $noMigration = $this->option('no-migration');
         $noModel = $this->option('no-model');
         $noSeed = $this->option('no-seed');
+        $noViews = $this->option('no-views');
 
+        if (strlen($tablename) === 0) {
+            $tablename = Str::plural(strtolower($name));
+        }
         $this->info("\n");
 
         if (!$noController) {
@@ -123,6 +135,12 @@ class CraftAll extends Command
 
         if (!$noSeed) {
             Artisan::call("craft:seed {$name}sTableSeeder --model {$model} --rows {$rows} {$overwrite}");
+        } else {
+            Messenger::info("▶︎ Seed crafting skipped\n");
+        }
+
+        if (!$noViews) {
+            Artisan::call("craft:views {$tablename} --extends {$extends} --section {$section} {$overwrite}");
         } else {
             Messenger::info("▶︎ Seed crafting skipped\n");
         }
