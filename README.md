@@ -1,6 +1,5 @@
 
 # Laravel Craftsman
-Current Version: 1.0.11
 
 ## Description
 Laravel Craftsman (written using the awesome [Laravel-Zero](https://www.laravel-zero.com) CLI builder) provides a suite of crafting assets using a project agnostic CLI. 
@@ -9,11 +8,7 @@ You can quickly create `class`, `controller`, `factory`, `migration`, `model`, `
 In addition, you can create all assets with a single command, allowing you to quickly craft a new resource in seconds!
 
 <h1 align="center">
-	<br>
-	<br>
 	<img src="docs/images/laravel-craftsman.png" alt="Laravel Craftsman">
-	<br>
-	<br>
 </h1>
 
 ## Installation
