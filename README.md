@@ -8,7 +8,13 @@ Laravel Craftsman (written using the awesome [Laravel-Zero](https://www.laravel-
 You can quickly create `class`, `controller`, `factory`, `migration`, `model`, `seed` and `view` assets. 
 In addition, you can create all assets with a single command, allowing you to quickly craft a new resource in seconds!
 
-https://raw.githubusercontent.com/mikeerickson/laravel-craftsman/master/docs/images/laravel-craftsman.png
+<h1 align="center">
+	<br>
+	<br>
+	<img src="docs/images/laravel-craftsman.png" alt="Laravel Craftsman">
+	<br>
+	<br>
+</h1>
 
 ## Installation
 
