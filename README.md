@@ -3,13 +3,12 @@
 Current Version: 1.0.11
 
 ## Description
-
-(https://raw.githubusercontent.com/mikeerickson/laravel-craftsman/master/docs/images/laravel-craftsman.png)
-
 Laravel Craftsman (written using the awesome [Laravel-Zero](https://www.laravel-zero.com) CLI builder) provides a suite of crafting assets using a project agnostic CLI. 
 
 You can quickly create `class`, `controller`, `factory`, `migration`, `model`, `seed` and `view` assets. 
 In addition, you can create all assets with a single command, allowing you to quickly craft a new resource in seconds!
+
+https://raw.githubusercontent.com/mikeerickson/laravel-craftsman/master/docs/images/laravel-craftsman.png
 
 ## Installation
 
@@ -34,7 +33,7 @@ or
 ```bash
 > laravel-craftsman <command> [options] [arguments]
 
-> laravel-craftsman craft:all Post --model App/Models/Post --tablename posts --rows 50 --extends partials.app --section content
+> laravel-craftsman craft:all Post --model App/Models/Post --tablename posts --rows 50 --extends layouts.app --section content
 
 > laravel-craftsman craft:class App/TestClass --constructor
 
