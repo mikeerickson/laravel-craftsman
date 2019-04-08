@@ -1,10 +1,12 @@
 
 # Laravel Craftsman
-Current Version: 1.0.10
+Current Version: 1.0.11
 
 ## Description
 
-Laravel Craftsman provides a suite of crafting assets using a project agnostic CLI. 
+(https://raw.githubusercontent.com/mikeerickson/laravel-craftsman/master/docs/images/laravel-craftsman.png)
+
+Laravel Craftsman (written using the awesome [Laravel-Zero](https://www.laravel-zero.com) CLI builder) provides a suite of crafting assets using a project agnostic CLI. 
 
 You can quickly create `class`, `controller`, `factory`, `migration`, `model`, `seed` and `view` assets. 
 In addition, you can create all assets with a single command, allowing you to quickly craft a new resource in seconds!
@@ -127,6 +129,25 @@ email:string@80:nullable:unique
         $table->timezone('deleted_at');
     });
 ```
+
+## Tips
+When executing any of the `laravel-craftsman` commands, if you wish to apply one or more switches (those options which do not require a corresponding value), you can use the standard CLI shorthands (this tip can be used in any CLI based tool, not just `laravel-craftsman` (well assuming the CLI actually supports shorthand).
+
+For example:
+
+Lets assume you wish to wish to create `views`, you can use the following command to skip creation of the create (-c), edit (-d) and show (-w) views (only creating the index view). The combination of `-cdw` is shorthand for `--no-create --no-edit --no-show`
+
+```bash
+> laravel-craftsman craft:views --extends layouts.app --section content -cdw
+
+is same as
+
+> laravel-craftsman craft:views --extends layouts.app --section content --no-create --no-edit --no-show
+or
+> laravel-craftsman craft:views --extends layouts.app --section content -c -d -w
+```
+
+
 
 ## Custom Templates
 Laravel Craftsman provides support for creating custom templates if you wish to change the syntax to match your personal style. The default templates use the standard Laravel syntax, but we like to allow ou have your own flair.  
