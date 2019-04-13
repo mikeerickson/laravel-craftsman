@@ -2,10 +2,15 @@
 # Laravel Craftsman
 
 ## Description
-Laravel Craftsman (written using the awesome [Laravel-Zero](https://www.laravel-zero.com) CLI builder) provides a suite of crafting assets using a project agnostic CLI. 
 
-You can quickly create `class`, `controller`, `factory`, `migration`, `model`, `seed` and `view` assets. 
+Laravel Craftsman (written using the awesome [Laravel-Zero](https://www.laravel-zero.com) CLI builder) provides a suite of crafting assets using a project agnostic CLI.
+
+You can quickly create `class`, `controller`, `factory`, `migration`, `model`, `seed` and `view` assets.
 In addition, you can create all assets with a single command, allowing you to quickly craft a new resource in seconds!
+
+📝 [Laravel News Article](https://laravel-news.com/laravel-craftsman-cli)
+
+📦 [Packagist](https://packagist.org/packages/codedungeon/laravel-craftsman)
 
 <h1 align="center">
 	<img src="docs/images/laravel-craftsman.png" alt="Laravel Craftsman">
@@ -13,13 +18,13 @@ In addition, you can create all assets with a single command, allowing you to qu
 
 ## Installation
 
-**Using Composer**
+### Using Composer
 
 ```bash
-> composer global require codedungeon/laravel-craftsman 
+> composer global require codedungeon/laravel-craftsman
 ```
 
-**Using curl/wget**
+### Using curl/wget
 
 ```bash
 > curl -o laravel-craftsman https://github.com/mikeerickson/laravel-craftsman/archive/master.zip
@@ -44,7 +49,7 @@ or
 
 > laravel-craftsman craft:migration create_posts_table --model App/Models/Post --tablename posts
 
-> laravel-craftsman craft:model App/Models/Post --tablename posts 
+> laravel-craftsman craft:model App/Models/Post --tablename posts
 
 > laravel-craftsman craft:seed PostTableSeeder --model App/Models/Post --rows 100
 
@@ -58,12 +63,16 @@ The following commands are available in any Laravel project.  You can use the in
 
 Using `craft:all` you can easily generate all assets (controller, factory, migration, model, and seed) for a given resource (ie Post, Customer, etc)
 
-```
-laravel-craftsman craft:all Contact --model App/Models/Contact --tablename contacts --rows 50 --fields fname:string,30^nullable, lname:string,50^nullable, email:string^unique
+```bash
+laravel-craftsman craft:all Contact \
+  --model App/Models/Contact \
+  --tablename contacts \
+  --rows 50 \
+  --fields first_name:string@30:nullable, last_name:string@50:nullable, email:string@80:nullable:unique
 ```
 
 | Command              | Name / Option       | Description                                                          |
-|----------------------|---------------------|----------------------------------------------------------------------|
+| -------------------- | ------------------- | -------------------------------------------------------------------- |
 | **craft:all**        | **base name**       | **Creates all assets (Controller, Factory, Migration, Model, Seed)** |
 |                      | --model, -m         | Path to model (eg App/Models/Post)                                   |
 |                      | --tablename, -t     | Tablename used in database (will set $tablename in Model)            |
@@ -76,7 +85,7 @@ laravel-craftsman craft:all Contact --model App/Models/Contact --tablename conta
 |                      | --no-migration, -g  | Do not create migration                                              |
 |                      | --no-model, -o      | Do not create model                                                  |
 |                      | --no-seed, -s       | Do not create seed                                                   |
-|                      | --no-views, -e       | Do not create seed                                                   |
+|                      | --no-views, -e      | Do not create seed                                                   |
 | **craft:class**      | **class name**      | **Creates empty class**                                              |
 |                      | --constructor, -c   | Include constructor method                                           |
 | **craft:controller** | **controller name** | **Create controller using supplied options**                         |
@@ -114,7 +123,7 @@ format:
 fieldName:fieldType@fieldSize:option1:option2:option3
 
 example:
-email:string@80:nullable:unique 
+email:string@80:nullable:unique
 
 --fields fname:string@25:nullable,lname:string@50:nullable,email:string@80:nullable:unique,dob:datetime,notes:text,deleted_at:timezone
 
@@ -150,7 +159,7 @@ or
 
 
 ## Custom Templates
-Laravel Craftsman provides support for creating custom templates if you wish to change the syntax to match your personal style. The default templates use the standard Laravel syntax, but we like to allow ou have your own flair.  
+Laravel Craftsman provides support for creating custom templates if you wish to change the syntax to match your personal style. The default templates use the standard Laravel syntax, but we like to allow ou have your own flair.
 
 ### Customizing Templates
 If you wish to create derivatives of the supported templates, you can customize the `config.php` located in the `laravel-craftsman` directory.
@@ -172,21 +181,21 @@ By default, this will be `~/.composer/vendor/codedungeon/laravel-craftsman`, but
             'view-show' => 'user_templates/view-show.mustache',
         ],
 ```
-    
+
 ### List of available variables
 The following variables can be used in any of the supported templates (review the `templates` directory for a basis of how to create custom templates)
 
-| Variable Name  | Templates which variable is used                                                            |
-|--------------- |---------------------------------------------------------------------------------------------|
-| `fields`       | Used by `migration`                                                                         |
-| `model`        | Used by `api-controller`, `class`, `controller`, `factory`, `migration`, `model` and `seed` |
-| `model_path`   | Used by `api-controller`, `controller`, `factory`, `migration`, `seed`                      |
-| `name`         | Used by `api-controller`, `controller` and `empty-controller`                               |
-| `namespace`    | Used by `class`, `model`                                                                    |
-| `num_rows`     | Used by `seed`                                                                              |
-| `tablename`    | Used by `controller`, `migration`, `model`                                                  |
-| `extends`      | Used by `views`                                                                             |
-| `section`      | Used by `views`                                                                             |
+| Variable Name | Templates which variable is used                                                            |
+| ------------- | ------------------------------------------------------------------------------------------- |
+| `fields`      | Used by `migration`                                                                         |
+| `model`       | Used by `api-controller`, `class`, `controller`, `factory`, `migration`, `model` and `seed` |
+| `model_path`  | Used by `api-controller`, `controller`, `factory`, `migration`, `seed`                      |
+| `name`        | Used by `api-controller`, `controller` and `empty-controller`                               |
+| `namespace`   | Used by `class`, `model`                                                                    |
+| `num_rows`    | Used by `seed`                                                                              |
+| `tablename`   | Used by `controller`, `migration`, `model`                                                  |
+| `extends`     | Used by `views`                                                                             |
+| `section`     | Used by `views`                                                                             |
 
 
 ## License
