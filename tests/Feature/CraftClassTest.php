@@ -62,4 +62,23 @@ class CraftClassTest extends TestCase
 
         $this->fs->rmdir("app/Test");
     }
+
+    /** @test */
+    public function should_create_class_using_user_template()
+    {
+        $class = "App/Test/SampleClass";
+
+        $this->artisan("craft:class {$class} --template <project>/templates/custom.mustache")
+            ->assertExitCode(0);
+
+        $filename = $this->pathJoin("app/Test", "SampleClass.php");
+        $this->assertFileExists($filename);
+
+        $this->assertFileContainsString($filename, "class SampleClass");
+        $this->assertFileContainsString($filename, "testMethod");
+
+        $this->fs->rmdir("app/Test");
+
+    }
+
 }

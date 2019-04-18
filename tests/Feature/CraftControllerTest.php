@@ -112,4 +112,28 @@ class CraftControllerTest extends TestCase
 
         $this->fs->rmdir("app/Http");
     }
+
+    /** @test */
+    public function should_create_controller_using_custom_template()
+    {
+        $model = "App/Models/Contact";
+        $model_path = "App\\Models\\Contact";
+
+        $this->artisan("craft:controller CustomController --model {$model} --template <project>/templates/custom.mustache --overwrite")
+            ->assertExitCode(0);
+
+        $controllerPath = $this->fs->controller_path();
+        $filename = $this->fs->path_join($controllerPath, "CustomController.php");
+        $this->assertFileExists($filename);
+
+        $parts = explode("/", $model);
+        $model_name = array_pop($parts);
+
+        // spot check merged data
+        $data = file_get_contents($filename);
+
+        $this->assertStringContainsString("testMethod", $data);
+
+        $this->fs->rmdir("app/Http");
+    }
 }

@@ -19,6 +19,7 @@ class CraftFactory extends Command
     protected $signature = 'craft:factory 
                                 {name : Factory Name} 
                                 {--m|model= : Associated model}
+                                {--t|template= : Template path (override configuration file)} 
                                 {--w|overwrite : Overwrite existing factory}
                             ';
     /**
@@ -29,6 +30,7 @@ class CraftFactory extends Command
     protected $description = 'Craft Factory
                      <name>               Factory Name
                      --model, -m          Use <model> when creating controller
+                     --template, -t       Template path (override configuration file)
                      --overwrite, -w      Overwrite existing factory
             ';
 
@@ -58,6 +60,7 @@ class CraftFactory extends Command
             $data = [
                 "model" => $model,
                 "name" => $factoryName,
+                "template" => $this->option('template'),
                 "overwrite" => $this->option('overwrite'),
             ];
 

@@ -19,6 +19,7 @@ class CraftClass extends Command
     protected $signature = 'craft:class 
                                 {name : Class name} 
                                 {--c|constructor : Include constructor method}
+                                {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite   : Overwrite existing class}
                             ';
     /**
@@ -29,6 +30,7 @@ class CraftClass extends Command
     protected $description = 'Craft Class
                      <name>               Class Name
                      --constructor, -c    Include constructor method
+                     --template, -t       Path to custom template (override config file)
                      --overwrite, -w      Overwrite existing class
             ';
 
@@ -54,6 +56,7 @@ class CraftClass extends Command
         $data = [
             "name" => $className,
             "constructor" => $this->option("constructor"),
+            "template" => $this->option("template"),
             "overwrite" => $this->option("overwrite"),
         ];
 

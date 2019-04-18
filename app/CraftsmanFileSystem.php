@@ -3,6 +3,7 @@
 namespace App;
 
 use Codedungeon\PHPMessenger\Facades\Messenger;
+use CraftsmanFileSystemException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -109,6 +110,12 @@ class CraftsmanFileSystem
      */
     public function getTemplateFilename($type)
     {
+        if (strpos($type, "<project>") !== false) {
+            $filename = str_replace("<project>", "", $type);
+            $filename = getcwd().DIRECTORY_SEPARATOR.$filename;
+            $filename = str_replace("//", "/", $filename);
+            return $filename;
+        }
         return config("craftsman.templates.{$type}");
     }
 
@@ -306,17 +313,23 @@ class CraftsmanFileSystem
         $path = $this->getOutputPath($type);
 
         $namespace = "";
-        $src = $this->getUserTemplate("./config.php", $type);
 
-        if (!file_exists($src)) {
-            $src = config("craftsman.templates.{$type}");
+        if (isset($data["template"])) {
+            $src = $this->getTemplateFilename($data["template"]);
+        } else {
+            $src = $this->getUserTemplate("./config.php", $type);
+            if (!file_exists($src)) {
+                $src = config("craftsman.templates.{$type}");
+            }
+
+            $src = $this->getPharPath().$src;
+            $src = str_replace("//", "/", $src);
         }
-
-        $src = $this->getPharPath().$src;
 
         if (!file_exists($src)) {
             printf("\n\n");
             Log::error("Unable to locate template './{$src}' Has it been deleted?");
+//            throw new CraftsmanFileSystemException($errMsg);
             exit(1);
         }
 
@@ -415,8 +428,6 @@ class CraftsmanFileSystem
             $vars["constructor"] = false;
         }
 
-//        $vars["model_path"] = str_replace("/", "\\", $vars["model_path"]);
-
         $template = $this->fs->get($src);
 
         $mustache = new Mustache_Engine();
@@ -430,6 +441,7 @@ class CraftsmanFileSystem
             $this->fs->put($dest, $template_data);
             $result = [
                 "filename" => $dest,
+                "fullPath" => getcwd().DIRECTORY_SEPARATOR.$dest,
                 "status" => "success",
                 "message" => "{$dest} created successfully",
             ];
@@ -444,6 +456,7 @@ class CraftsmanFileSystem
         if ($result["status"] === "success") {
             Messenger::success("✔︎ {$dest} created successfully\n");
         }
+
 
         return $result;
     }

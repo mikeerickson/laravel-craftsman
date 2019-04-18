@@ -62,4 +62,20 @@ class CraftModelTest extends TestCase
 
         $this->fs->rmdir("app/Models");
     }
+
+    /** @test */
+    public function should_craft_model_using_custom_template()
+    {
+        $model = "Post";
+
+        $this->artisan('craft:model App/Models/Post --template <project>/templates/custom.mustache --overwrite')
+            ->assertExitCode(0);
+
+        $modelPath = $this->fs->model_path();
+        $filename = $this->pathJoin($modelPath, "Models", "{$model}.php");
+
+        $this->assertFileContainsString($filename, "class {$model} extends Model");
+
+//        $this->fs->rmdir("app/Models");
+    }
 }

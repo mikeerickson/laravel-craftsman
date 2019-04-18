@@ -25,6 +25,7 @@ class CraftController extends Command
     protected $signature = 'craft:controller {name : Controller Name} 
                                 {--m|model= : Associated model} 
                                 {--w|overwrite : Overwrite existing controller} 
+                                {--t|template= : Template path (override configuration file)} 
                                 {--l|validation : Scaffold validation} 
                                 {--a|api : create API controller (skips create and update methods)}
                            ';
@@ -39,6 +40,7 @@ class CraftController extends Command
                      --validation, -l     Create validation blocks
                      --api, -a            Create API controller (skips create and update methods)
                      --empty, -e          Create empty controller
+                     --template, -t       Template path (override configuration file)
                      --overwrite, -w      Overwrite existing controller
             ';
 
@@ -65,6 +67,7 @@ class CraftController extends Command
         $data = [
             "model" => $model,
             "name" => $controllerName,
+            "template" => $this->option('template'),
             "overwrite" => $this->option('overwrite'),
         ];
 

@@ -25,6 +25,7 @@ class CraftModel extends Command
     protected $signature = 'craft:model 
                                 {name : Model name} 
                                 {--t|tablename= : Tablename if different than model name}
+                                {--m|template= : Template path (override configuration file)}
                                 {--w|overwrite : Overwrite existing model}
                             ';
 
@@ -36,6 +37,7 @@ class CraftModel extends Command
     protected $description = 'Craft Model
                      <name>               Model Name (eg App\Models\Post)
                      --tablename, -t      Desired tablename
+                     --template, -m       Template path (override configuration file)
                      --overwrite, -w      Overwrite existing model
             ';
 

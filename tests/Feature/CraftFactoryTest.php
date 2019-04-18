@@ -48,4 +48,22 @@ class CraftFactoryTest extends TestCase
 
         $this->fs->rmdir("database/factories");
     }
+
+    /** @test */
+    public function should_craft_factory_using_custom_template()
+    {
+        $model = "App/Models/Test";
+        $model_path = "App\\Models\\Test";
+
+        $this->artisan("craft:factory TestFactory --model {$model} --template <project>/templates/custom.mustache --overwrite")
+            ->assertExitCode(0);
+
+        $factoryPath = $this->fs->factory_path();
+        $filename = $this->fs->path_join($factoryPath, "TestFactory.php");
+        $this->assertFileExists($filename);
+
+        $this->assertFileContainsString($filename, "testMethod");
+
+//        $this->fs->rmdir("database/factories");
+    }
 }

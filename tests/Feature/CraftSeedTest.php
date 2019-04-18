@@ -49,4 +49,20 @@ class CraftSeedTest extends TestCase
 
         $this->fs->rmdir("database/seeds");
     }
+
+    public function should_craft_seed_using_custom_template()
+    {
+        $class = "TestsTableSeeder";
+
+        $this->artisan("craft:seed TestsTableSeeder --template <project>/templates/custom.mustache --overwrite")
+            ->assertExitCode(0);
+
+        $seedPath = $this->fs->seed_path();
+        $filename = $this->pathJoin($seedPath, "{$class}.php");
+        var_dump($filename);
+
+//        $this->assertFileContainsString($filename, "testMethod");
+
+//        $this->fs->rmdir("database/seeds");
+    }
 }

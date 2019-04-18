@@ -1,7 +1,7 @@
 {
   "name": "laravel-craftsman",
-  "version": "1.0.12",
-  "build": "99",
+  "version": "1.0.13",
+  "build": "126",
   "description": "Laravel Craftsman",
   "main": "index.js",
   "directories": {
@@ -12,6 +12,7 @@
     "build": "./tasks/build.sh",
     "build:deploy": "./tasks/build.sh --deploy",
     "deploy": "./tasks/deploy.sh",
+    "publish": "./tasks/publish.sh",
     "test": "vendor/bin/phpunit",
     "test:ci": "vendor/bin/phpunit -c phpunit.ci.xml",
     "test:coverage": "vendor/bin/phpunit --testsuite Unit --coverage-html coverage",

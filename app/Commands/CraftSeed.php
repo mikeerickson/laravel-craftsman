@@ -25,6 +25,7 @@ class CraftSeed extends Command
                                 {name : Seed name} 
                                 {--m|model= : Associated model} 
                                 {--r|rows= : Alternate number of rows to use in factory call}
+                                {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite : Overwrite existing seed}
                             ';
 
@@ -37,6 +38,7 @@ class CraftSeed extends Command
                      <name>               Seed Name
                      --model, -m          Path to model
                      --rows, -r           Number of rows to use in factory call (Optional)
+                     --template, -t       Template path (override configuration file)
                      --overwrite, -w      Overwrite existing seed
             ';
 
@@ -71,6 +73,7 @@ class CraftSeed extends Command
                     "name" => $seedName,
                     "num_rows" => $num_rows,
                     "overwrite" => $overwrite,
+                    "template" => $this->option('template'),
                 ];
 
                 $this->fs->createFile('seed', $seedName, $data);
