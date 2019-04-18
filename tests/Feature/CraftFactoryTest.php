@@ -64,6 +64,6 @@ class CraftFactoryTest extends TestCase
 
         $this->assertFileContainsString($filename, "testMethod");
 
-//        $this->fs->rmdir("database/factories");
+        $this->fs->rmdir("database/factories");
     }
 }

@@ -118,7 +118,7 @@ class CraftMigrationTest extends TestCase
 
         $this->assertFileContainsString($lastFilename, "\$table->string('first_name',20)->nullable();");
 
-        unlink($lastFilename);
+        $this->fs->rmdir("database/migrations");
     }
 
 
