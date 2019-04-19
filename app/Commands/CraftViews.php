@@ -11,11 +11,6 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftViews extends Command
 {
-    /**
-     * The signature of the command.
-     *
-     * @var string
-     */
     protected $signature = 'craft:views 
                                 {name : Resource name (resources/views/<name>)} 
                                 {--x|extends= : Include extends block using supplied layout}
@@ -41,9 +36,6 @@ class CraftViews extends Command
                      --no-show, -w        Exclude show view
             ';
 
-    /**
-     * CraftViews constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -53,11 +45,6 @@ class CraftViews extends Command
         $this->setHelp($this->help);
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     public function handle()
     {
         $assetName = strtolower($this->argument('name'));

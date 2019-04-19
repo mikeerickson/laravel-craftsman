@@ -12,11 +12,6 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftTest extends Command
 {
-    /**
-     * The signature of the command.
-     *
-     * @var string
-     */
     protected $signature = 'craft:test 
                                 {name : Class name} 
                                 {--s|setup : Include setUp block}
@@ -35,9 +30,6 @@ class CraftTest extends Command
                      --overwrite, -w      Overwrite existing test
             ';
 
-    /**
-     * CraftTest constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -47,11 +39,6 @@ class CraftTest extends Command
         $this->setHelp($this->help);
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     public function handle()
     {
         $className = $this->argument('name');

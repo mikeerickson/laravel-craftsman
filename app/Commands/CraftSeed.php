@@ -12,15 +12,8 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftSeed extends Command
 {
-    /**
-     * @var CraftsmanFileSystem
-     */
     protected $fs;
-    /**
-     * The signature of the command.
-     *
-     * @var string
-     */
+
     protected $signature = 'craft:seed 
                                 {name : Seed name} 
                                 {--m|model= : Associated model} 
@@ -28,7 +21,6 @@ class CraftSeed extends Command
                                 {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite : Overwrite existing seed}
                             ';
-
 
     protected $description = "Craft Seed";
 
@@ -40,9 +32,6 @@ class CraftSeed extends Command
                      --overwrite, -w      Overwrite existing seed
             ';
 
-    /**
-     * CraftSeed constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -52,11 +41,6 @@ class CraftSeed extends Command
         $this->setHelp($this->help);
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     public function handle()
     {
         try {

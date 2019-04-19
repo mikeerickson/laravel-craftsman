@@ -11,11 +11,6 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftFactory extends Command
 {
-    /**
-     * The signature of the command.
-     *
-     * @var string
-     */
     protected $signature = 'craft:factory 
                                 {name : Factory Name} 
                                 {--m|model= : Associated model}
@@ -32,9 +27,6 @@ class CraftFactory extends Command
                      --overwrite, -w      Overwrite existing factory
             ';
 
-    /**
-     * CraftFactory constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -44,11 +36,6 @@ class CraftFactory extends Command
         $this->setHelp($this->help);
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     public function handle()
     {
         $factoryName = $this->argument('name');

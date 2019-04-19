@@ -11,17 +11,8 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftController extends Command
 {
-
-    /**
-     * @var CraftsmanFileSystem
-     */
     protected $fs;
 
-    /**
-     * The signature of the command.
-     *
-     * @var string
-     */
     protected $signature = 'craft:controller {name : Controller Name} 
                                 {--m|model= : Associated model} 
                                 {--w|overwrite : Overwrite existing controller} 
@@ -42,9 +33,6 @@ class CraftController extends Command
                      --overwrite, -w      Overwrite existing controller
             ';
 
-    /**
-     * CraftController constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -54,11 +42,6 @@ class CraftController extends Command
         $this->setHelp($this->help);
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     public function handle()
     {
         $controllerName = $this->argument('name');

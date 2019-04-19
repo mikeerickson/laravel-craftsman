@@ -13,16 +13,8 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftMigration extends Command
 {
-    /**
-     * @var CraftsmanFileSystem
-     */
     protected $fs;
 
-    /**
-     * The signature of the command.
-     *
-     * @var string
-     */
     protected $signature = 'craft:migration 
                                 {name : Migration name (timestamp applied at creation)} 
                                 {--m|model= : Path to migration model (required)} 
@@ -31,7 +23,6 @@ class CraftMigration extends Command
                                 {--d|down : Include down method in migration}
                                 {--w|overwrite : Overwrite migration (default: true)}
                             ';
-
 
     protected $description = "Craft Database Migration";
 
@@ -45,9 +36,6 @@ class CraftMigration extends Command
                      --overwrite, -w      Overwrite migration (skipped by default, default: true)
             ';
 
-    /**
-     * CraftMigration constructor.
-     */
     public function __construct()
     {
         parent::__construct();

@@ -14,17 +14,8 @@ use Codedungeon\PHPMessenger\Facades\Messenger;
  */
 class CraftAll extends Command
 {
-
-    /**
-     * @var CraftsmanFileSystem
-     */
     protected $fs;
 
-    /**
-     * The signature of the command.
-     *
-     * @var string
-     */
     protected $signature = 'craft:all 
                                 {name : Base Entity used by rest of commands} 
                                 {--m|model= : Associated model} 
@@ -43,11 +34,6 @@ class CraftAll extends Command
                                 {--e|no-views : Skip crafting resource views}
                             ';
 
-    /**
-     * The description of the command.
-     *
-     * @var string
-     */
     protected $description = 'Craft All Assets (controller, factory, migration, model, seed, test, views)';
 
     protected $help = 'Craft All Assets
@@ -69,9 +55,6 @@ class CraftAll extends Command
                      --no-views, -e       Do not create resource views
             ';
 
-    /**
-     * CraftAll constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -80,11 +63,6 @@ class CraftAll extends Command
         $this->fs = new CraftsmanFileSystem();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     public function handle()
     {
         $name = $this->argument('name');

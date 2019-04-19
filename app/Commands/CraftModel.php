@@ -12,16 +12,8 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftModel extends Command
 {
-
-    /**
-     * @var CraftsmanFileSystem
-     */
     protected $fs;
-    /**
-     * The signature of the command.
-     *
-     * @var string
-     */
+
     protected $signature = 'craft:model 
                                 {name : Model name} 
                                 {--t|tablename= : Tablename if different than model name}
@@ -39,9 +31,6 @@ class CraftModel extends Command
                      --overwrite, -w      Overwrite existing model
             ';
 
-    /**
-     * CraftModel constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -51,11 +40,6 @@ class CraftModel extends Command
         $this->setHelp($this->help);
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     public function handle()
     {
         $modelName = $this->argument('name');
