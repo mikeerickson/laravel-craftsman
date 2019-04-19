@@ -36,7 +36,7 @@ class CraftMigrationTest extends TestCase
     /** @test */
     public function should_execute_default_craft_migration_command()
     {
-        $class = "CreateTestsTable";
+        $class = "CreateTestTable";
         $model = "App/Models/Test";
         $migrationName = "create_tests_table";
 
@@ -117,6 +117,43 @@ class CraftMigrationTest extends TestCase
         $this->assertFileExists($lastFilename);
 
         $this->assertFileContainsString($lastFilename, "\$table->string('first_name',20)->nullable();");
+
+        $this->fs->rmdir("database/migrations");
+    }
+
+    /** @test */
+    public function should_create_migration_without_tablename()
+    {
+        $migrationName = "create_product_contacts_table";
+
+        $this->artisan("craft:migration {$migrationName}")
+            ->assertExitCode(0);
+
+        $this->assertMigrationFileExists($migrationName);
+
+        $migrationFilename = $this->fs->getLastFilename("database/migrations", $migrationName);
+        $data = file_get_contents($migrationFilename);
+
+        $this->assertStringContainsString("CreateProductContactsTable", $data);
+
+        $this->fs->rmdir("database/migrations");
+
+    }
+
+    /** @test */
+    public function should_create_migration_without_model()
+    {
+        $migrationName = "create_product_contacts_table";
+
+        $this->artisan("craft:migration {$migrationName} --tablename product_contacts")
+            ->assertExitCode(0);
+
+        $this->assertMigrationFileExists($migrationName);
+
+        $migrationFilename = $this->fs->getLastFilename("database/migrations", $migrationName);
+        $data = file_get_contents($migrationFilename);
+
+        $this->assertStringContainsString("CreateProductContactsTable", $data);
 
         $this->fs->rmdir("database/migrations");
     }

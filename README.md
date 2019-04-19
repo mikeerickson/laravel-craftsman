@@ -68,7 +68,7 @@ laravel-craftsman craft:all Contact \
   --model App/Models/Contact \
   --tablename contacts \
   --rows 50 \
-  --fields first_name:string@30:nullable, last_name:string@50:nullable, email:string@80:nullable:unique
+  --fields first_name:string@30:nullable,last_name:string@50:nullable,email:string@80:nullable:unique
 ```
 
 | Command              | Name / Option       | Description                                                          |
@@ -104,6 +104,8 @@ laravel-craftsman craft:all Contact \
 |                      | --tablename, -t     | Tablename used in database (will set $tablename in Model)            |
 |                      |                     | _If not supplied, default table will be pluralized model name_       |
 |                      | --fields, -f        | List of fields (option) _see syntax below_                           |
+|                      |                     | **🚨 If you have spaces separating fields, you must surround**       |
+|                      |                     | **fields list in quotes**                                            |
 |                      | --down, -d          | Include down methods (skipped by default)                            |
 |                      | --template, -t      | Path to custom template (override config file)                       |
 |                      | --overwrite, -w     | Overwrite existing class                                             |

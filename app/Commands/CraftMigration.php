@@ -4,7 +4,6 @@ namespace App\Commands;
 
 use App\CraftsmanFileSystem;
 use Carbon\Carbon;
-use Codedungeon\PHPMessenger\Facades\Messenger;
 use Illuminate\Support\Str;
 use LaravelZero\Framework\Commands\Command;
 
@@ -67,33 +66,45 @@ class CraftMigration extends Command
     {
         $migrationName = $this->argument('name');
         $model = $this->option('model');
+        $tablename = $this->option('tablename');
+        $fields = $this->option('fields');
 
-        if (strlen($model) === 0) {
-            Messenger::log("");
-            Messenger::error("Migrations require model name (--model)\n", "ERROR");
-            return;
-        } else {
-            $tablename = $this->option('tablename');
-            $fields = $this->option('fields');
 
-            if (strlen($tablename) === 0) {
+        // CreateProductUsersTable
+        // CreateProductsNutritionalFactsTable
+
+        if (strlen($tablename) === 0 || (is_null($tablename))) {
+            if (strlen($model) === 0) {
+                $parts = explode("_", $migrationName);
+                array_shift($parts);
+                array_pop($parts);
+                $tablename = implode($parts, "_");
+                $model = str_replace("_", "", Str::title($tablename));
+            } else {
                 $parts = explode("/", $model);
                 $tablename = Str::plural(array_pop($parts));
             }
-            $data = [
-                "model" => $model,
-                "name" => $migrationName,
-                "tablename" => $tablename,
-                "fields" => $fields,
-                "down" => $this->option('down'),
-                "overwrite" => $this->option('overwrite'),
-            ];
-
-            // timestamp to be prepended to name
-            $dt = Carbon::now()->format('Y_m_d_His');
-            $migrationFilename = $dt."_".$migrationName;
-
-            $this->fs->createFile('migration', $migrationFilename, $data);
+        } else {
+            if (strlen($model) === 0) {
+                $model = str_replace("_", "", Str::title($tablename));
+            }
         }
+
+
+        $data = [
+            "model" => $model,
+            "name" => $migrationName,
+            "tablename" => $tablename,
+            "fields" => $fields,
+            "down" => $this->option('down'),
+            "overwrite" => $this->option('overwrite'),
+        ];
+
+        // timestamp to be prepended to name
+        $dt = Carbon::now()->format('Y_m_d_His');
+        $migrationFilename = $dt."_".$migrationName;
+
+        $this->fs->createFile('migration', $migrationFilename, $data);
+
     }
 }

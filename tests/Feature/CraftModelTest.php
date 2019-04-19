@@ -76,6 +76,6 @@ class CraftModelTest extends TestCase
 
         $this->assertFileContainsString($filename, "class {$model} extends Model");
 
-//        $this->fs->rmdir("app/Models");
+        $this->fs->rmdir("app/Models");
     }
 }

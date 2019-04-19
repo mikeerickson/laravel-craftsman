@@ -433,7 +433,7 @@ class CraftsmanFileSystem
         $mustache = new Mustache_Engine();
 
         $vars["model_path"] = str_replace("/", "\\", $vars["model_path"]);
-
+        
         $template_data = $mustache->render($template, $vars);
 
         try {
