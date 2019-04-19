@@ -1,6 +1,6 @@
 {
   "name": "laravel-craftsman",
-  "version": "1.1.3",
+  "version": "1.2.0",
   "build": "133",
   "description": "Laravel Craftsman",
   "main": "index.js",
@@ -17,7 +17,7 @@
     "test:ci": "vendor/bin/phpunit -c phpunit.ci.xml",
     "test:coverage": "vendor/bin/phpunit --testsuite Unit --coverage-html coverage",
     "test:feature": "vendor/bin/phpunit --testsuite Feature",
-    "test:unit": "vendor/bin/phpunit --testsuite Unit",
+    "test:unit": "vendor/bin/phpunit --testsuite Unit --stop-on-failure",
     "test:watch": "vendor/bin/phpunit-watcher watch",
     "pre-commit": "npm run test:ci",
     "todo": "./tasks/todo.js",

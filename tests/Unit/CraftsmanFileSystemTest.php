@@ -2,10 +2,10 @@
 
 namespace Tests\Unit;
 
-use App\CraftsmanFileSystem;
 use Carbon\Carbon;
 use Tests\TestCase;
 use Tests\TestHelpersTrait;
+use App\CraftsmanFileSystem;
 
 /**
  * Class CraftsmanFileSystemTest
@@ -30,6 +30,13 @@ class CraftsmanFileSystemTest extends TestCase
         $this->fs = new CraftsmanFileSystem();
     }
 
+    public static function tearDownAfterClass(): void
+    {
+        parent::tearDownAfterClass();
+
+        (new CraftsmanFileSystem())->rmdir("resources/views/coverage");
+    }
+
     /**
      * setUp
      */
@@ -45,20 +52,22 @@ class CraftsmanFileSystemTest extends TestCase
         $this->fs->rmdir("database/migrations");
     }
 
-    public static function tearDownAfterClass(): void
-    {
-        parent::tearDownAfterClass();
-
-        rmdir("resources/views/coverage");
-    }
-
     /** @test */
     public function should_return_correct_controller_path()
     {
-        // store models in Models directory in app directory
-        $result = $this->fs->path_join(app_path(), "Controllers");
+        $result = $this->fs->path_join(app_path(), "Http", "Controllers");
 
-        $path = $this->fs->model_path("Controllers");
+        $path = $this->fs->controller_path("Controllers");
+
+        $this->assertSame($result, $path);
+    }
+
+    /** @test */
+    public function should_return_correct_resources_path()
+    {
+        $result = $this->fs->path_join(app_path(), "Http", "Resources");
+
+        $path = $this->fs->resource_path("Resources");
 
         $this->assertSame($result, $path);
     }
@@ -66,10 +75,9 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_correct_migration_path()
     {
-        // store models in Models directory in app directory
-        $result = $this->fs->path_join(app_path(), "migrations");
+        $result = $this->fs->path_join(base_path(), "database", "migrations");
 
-        $path = $this->fs->model_path("migrations");
+        $path = $this->fs->migration_path("migrations");
 
         $this->assertSame($result, $path);
     }
@@ -77,10 +85,9 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_correct_factory_path()
     {
-        // store models in Models directory in app directory
-        $result = $this->fs->path_join(app_path(), "factory");
+        $result = $this->fs->path_join(database_path(), "factories");
 
-        $path = $this->fs->model_path("factory");
+        $path = $this->fs->factory_path();
 
         $this->assertSame($result, $path);
     }
@@ -88,8 +95,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_correct_default_model_path()
     {
-        // store models in Models directory in app directory
-        $result = basename(app_path());
+        $result = app_path();
 
         $path = $this->fs->model_path();
 
@@ -99,7 +105,6 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_correct_custom_model_path()
     {
-        // store models in Models directory in app directory
         $result = $this->fs->path_join(app_path(), "Models");
 
         $path = $this->fs->model_path("Models");
@@ -110,10 +115,9 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_correct_seed_path()
     {
-        // store models in Models directory in app directory
-        $result = $this->fs->path_join(app_path(), "seeds");
+        $result = $this->fs->path_join(database_path(), "seeds");
 
-        $path = $this->fs->model_path("seeds");
+        $path = $this->fs->seed_path();
 
         $this->assertSame($result, $path);
     }
@@ -121,10 +125,9 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_correct_view_path()
     {
-        // store models in Models directory in app directory
-        $result = $this->fs->path_join(app_path(), "views");
+        $result = $this->fs->path_join(resource_path(), "views");
 
-        $path = $this->fs->model_path("views");
+        $path = $this->fs->view_path("views");
 
         $this->assertSame($result, $path);
     }
@@ -227,15 +230,6 @@ class CraftsmanFileSystemTest extends TestCase
     }
 
     /** @test */
-    public function should_return_last_filename()
-    {
-        // This returns files sorted in descending order
-        $filename = $this->fs->getLastFilename("tests", "TestCase.php");
-
-        $this->assertSame("tests/CraftsmanTestCase.php", $filename);
-    }
-
-    /** @test */
     public function should_return_last_migration_filename()
     {
         $migrationName = "create_customers_file";
@@ -255,13 +249,11 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_views_output_path()
     {
+        $result = $this->fs->path_join(base_path(), "resources", "views");
+
         $path = $this->fs->getOutputPath("views");
 
-        $this->assertSame("resources/views", $path);
-
-        $path = $this->fs->getOutputPath("view");
-
-        $this->assertSame("resources/views", $path);
+        $this->assertSame($result, $path);
     }
 
     /** @test */
@@ -275,65 +267,62 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_controller_output_path()
     {
+        $result = $this->fs->path_join(app_path(), "Http", "Controllers");
+
         $path = $this->fs->getOutputPath("controller");
 
-        $this->assertSame("app/Http/Controllers", $path);
+        $this->assertSame($result, $path);
     }
 
     /** @test */
     public function should_return_migrations_output_path()
     {
+
+        $result = $this->fs->path_join(database_path(), "migrations");
+
         $path = $this->fs->getOutputPath("migrations");
 
-        $this->assertSame("database/migrations", $path);
-
-        $path = $this->fs->getOutputPath("migration");
-
-        $this->assertSame("database/migrations", $path);
+        $this->assertSame($result, $path);
     }
 
     /** @test */
     public function should_return_models_output_path()
     {
+        $result = $this->fs->path_join(app_path());
+
         $path = $this->fs->getOutputPath("model");
 
-        $this->assertSame("app", $path);
+        $this->assertSame($result, $path);
     }
 
     /** @test */
     public function should_return_seeds_output_path()
     {
-        $path = $this->fs->getOutputPath("seeds");
-
-        $this->assertSame("database/seeds", $path);
+        $result = $this->fs->path_join(database_path(), "seeds");
 
         $path = $this->fs->getOutputPath("seed");
 
-        $this->assertSame("database/seeds", $path);
+        $this->assertSame($result, $path);
     }
 
     /** @test */
     public function should_return_factories_output_path()
     {
+        $result = $this->fs->path_join(database_path(), "factories");
+
         $path = $this->fs->getOutputPath("factory");
 
-        $this->assertSame("database/factories", $path);
-
-        $path = $this->fs->getOutputPath("factories");
-
-        $this->assertSame("database/factories", $path);
+        $this->assertSame($result, $path);
     }
 
     /** @test */
     public function should_return_tests_output_path()
     {
+        $result = $this->fs->path_join(base_path(), "tests");
+
         $path = $this->fs->getOutputPath("test");
 
-        $this->assertSame("tests", $path);
-
-        $path = $this->fs->getOutputPath("tests");
-
-        $this->assertSame("tests", $path);
+        $this->assertSame($result, $path);
     }
 
     /** @test */
@@ -366,6 +355,23 @@ class CraftsmanFileSystemTest extends TestCase
 
         unlink($filename);
 
+    }
+
+    /**
+     * @param $overrides
+     * @return array
+     */
+    public function getDefaultViewOptions($overrides)
+    {
+        return array_merge([
+            "noCreate" => true,
+            "noEdit" => true,
+            "noIndex" => true,
+            "noShow" => true,
+            "extends" => "",
+            "section" => "",
+            "overwrite" => true,
+        ], $overrides);
     }
 
     /** @test */
@@ -486,6 +492,10 @@ class CraftsmanFileSystemTest extends TestCase
         $this->assertArrayHasKey("version", $result);
     }
 
+    /*
+     * View Option Factory
+     */
+
     /** @test */
     public function should_get_version()
     {
@@ -494,27 +504,6 @@ class CraftsmanFileSystemTest extends TestCase
         $parts = explode(".", $result);
 
         $this->assertTrue(count($parts) === 3);
-    }
-
-    /*
-     * View Option Factory
-     */
-
-    /**
-     * @param $overrides
-     * @return array
-     */
-    public function getDefaultViewOptions($overrides)
-    {
-        return array_merge([
-            "noCreate" => true,
-            "noEdit" => true,
-            "noIndex" => true,
-            "noShow" => true,
-            "extends" => "",
-            "section" => "",
-            "overwrite" => true,
-        ], $overrides);
     }
 
 }

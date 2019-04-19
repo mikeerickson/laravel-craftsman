@@ -15,6 +15,7 @@ return [
     'paths' => [
         'class' => 'app',
         'controllers' => 'app/Http/Controllers',
+        'resources' => 'app/Http/Resources',
         'factories' => 'database/factories',
         'migrations' => 'database/migrations',
         'models' => 'app',
@@ -39,6 +40,7 @@ return [
         'class' => 'templates/class.mustache',
         'api-controller' => 'templates/api-controller.mustache',
         'empty-controller' => 'templates/empty-controller.mustache',
+        'resource-controller' => 'templates/resource-controller.mustache',
         'controller' => 'templates/controller.mustache',
         'factory' => 'templates/factory.mustache',
         'migration' => 'templates/migration.mustache',

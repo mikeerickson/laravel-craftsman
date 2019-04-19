@@ -14,6 +14,7 @@
 /database/migrations
 box.json
 app/Http/Controllers
+app/Http/Resources
 app/Http/Utilities
 app/Models
 database/

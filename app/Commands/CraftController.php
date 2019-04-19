@@ -16,12 +16,14 @@ class CraftController extends Command
     protected $signature = 'craft:controller {name : Controller Name} 
                                 {--m|model= : Associated model} 
                                 {--w|overwrite : Overwrite existing controller} 
+                                {--u|resource : Create resource controller} 
+                                {--c|collection : Create resource collection} 
                                 {--t|template= : Template path (override configuration file)} 
                                 {--l|validation : Scaffold validation} 
-                                {--a|api : create API controller (skips create and update methods)}
+                                {--a|api : Create API controller (skips create and update methods)}
                            ';
 
-    protected $description = "Craft Controller (standard, api, resource)";
+    protected $description = "Craft Controller (standard, api, empty, resource)";
 
     protected $help = 'Craft Controller
                      <name>               Controller Name
@@ -29,6 +31,8 @@ class CraftController extends Command
                      --validation, -l     Create validation blocks
                      --api, -a            Create API controller (skips create and update methods)
                      --empty, -e          Create empty controller
+                     --resource, -u       Create resource controller
+                     --collection, -c     Use resource collection
                      --template, -t       Template path (override configuration file)
                      --overwrite, -w      Overwrite existing controller
             ';
@@ -52,11 +56,17 @@ class CraftController extends Command
             "name" => $controllerName,
             "template" => $this->option('template'),
             "overwrite" => $this->option('overwrite'),
+            "collection" => false,
         ];
 
         $api = $this->option('api');
+        $resource = $this->option('resource');
+
         if ($api) {
             $this->fs->createFile('api-controller', $controllerName, $data);
+        } elseif ($resource) {
+            $data["collection"] = $this->option("collection");
+            $this->fs->createFile('resource-controller', $controllerName, $data);
         } else {
             if (strlen($model) === 0) {
                 $this->fs->createFile('empty-controller', $controllerName, $data);

@@ -23,6 +23,8 @@ class CraftAll extends Command
                                 {--f|fields= : List of fields used in migration} 
                                 {--r|rows= : Number of rows created by migration command} 
                                 {--x|extends= : Views extend block} 
+                                {--u|resource : Create resource controller} 
+                                {--l|collection : Create resource collection} 
                                 {--i|section= : Views section block} 
                                 {--w|overwrite : Overwrite existing files} 
                                 
@@ -45,6 +47,8 @@ class CraftAll extends Command
                      --rows, -r           Number of rows for migration (passed to factory)
                      --extends, -x        View extends block (optional)
                      --section, -i        View section block (optional)
+                     --resource, -o       Create resource controller
+                     --collection, -l     Create resource collection
                      --overwrite, -w      Overwrite existing files (WARNING: This can\'t be undone)
                      
                      --no-controller, -c  Do not create controller

@@ -52,7 +52,9 @@ class CraftsmanFileSystem
      */
     public function rmdir($dirname)
     {
-        system("rm -rf ".escapeshellarg($dirname));
+        if (is_dir($dirname)) {
+            system("rm -rf ".escapeshellarg($dirname));
+        }
     }
 
     /**
@@ -163,6 +165,10 @@ class CraftsmanFileSystem
             case 'model':
                 $path = $this->model_path();
                 break;
+            case 'resource-controller':
+            case 'resource':
+                $path = $this->resource_path();
+                break;
             case 'seeds':
             case 'seed':
                 $path = $this->seed_path();
@@ -195,7 +201,7 @@ class CraftsmanFileSystem
      */
     public function controller_path()
     {
-        return config('craftsman.paths.controllers');
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.controllers');
     }
 
     /**
@@ -203,7 +209,7 @@ class CraftsmanFileSystem
      */
     public function factory_path()
     {
-        return config('craftsman.paths.factories');
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.factories');
     }
 
     /**
@@ -211,7 +217,7 @@ class CraftsmanFileSystem
      */
     public function migration_path()
     {
-        return config('craftsman.paths.migrations');
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.migrations');
     }
 
     // TODO: This method needs refactoring
@@ -222,27 +228,16 @@ class CraftsmanFileSystem
      */
     public function model_path($model_path = null)
     {
-        if (!is_null($model_path)) {
-            return $this->path_join(app_path(), $model_path);
+        if (is_null($model_path)) {
+            return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.models');
         } else {
-            return config('craftsman.paths.models');
+            return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.models').DIRECTORY_SEPARATOR.$model_path;
         }
     }
 
-    /**
-     * @return string|string[]|null
-     */
-    public function path_join()
+    public function resource_path()
     {
-        $paths = array();
-
-        foreach (func_get_args() as $arg) {
-            if ($arg !== '') {
-                $paths[] = $arg;
-            }
-        }
-
-        return preg_replace('#/+#', '/', join('/', $paths));
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.resources');
     }
 
     /**
@@ -250,7 +245,7 @@ class CraftsmanFileSystem
      */
     public function seed_path()
     {
-        return config('craftsman.paths.seeds');
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.seeds');
     }
 
     /**
@@ -258,7 +253,7 @@ class CraftsmanFileSystem
      */
     public function test_path()
     {
-        return config('craftsman.paths.tests');
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.tests');
     }
 
     /**
@@ -266,7 +261,7 @@ class CraftsmanFileSystem
      */
     public function view_path()
     {
-        return config('craftsman.paths.views');
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.views');
     }
 
     /**
@@ -298,6 +293,22 @@ class CraftsmanFileSystem
             $path = dirname($path).DIRECTORY_SEPARATOR;
         }
         return $path;
+    }
+
+    /**
+     * @return string|string[]|null
+     */
+    public function path_join()
+    {
+        $paths = array();
+
+        foreach (func_get_args() as $arg) {
+            if ($arg !== '') {
+                $paths[] = $arg;
+            }
+        }
+
+        return preg_replace('#/+#', '/', join('/', $paths));
     }
 
     /**
@@ -433,6 +444,7 @@ class CraftsmanFileSystem
             "model_path" => $model_path,
             "tablename" => $tablename,
             "fields" => $fieldData,
+            "collection" => isset($data["collection"]) ? $data["collection"] : false,
         ];
 
         if (isset($data["namespace"])) {
@@ -509,7 +521,6 @@ class CraftsmanFileSystem
         if ($result["status"] === "success") {
             Messenger::success("✔︎ {$dest} created successfully\n");
         }
-
 
         return $result;
     }
@@ -610,6 +621,9 @@ class CraftsmanFileSystem
                 break;
             }
         }
+
+        $dirname = getcwd().DIRECTORY_SEPARATOR.$dirname;
+
         return $dirname.DIRECTORY_SEPARATOR.$filename;
     }
 }
