@@ -27,12 +27,10 @@ class CraftViews extends Command
                                 {--i|no-index : Don\'t craft index view}
                                 {--o|no-show : Don\'t craft show view}
                             ';
-    /**
-     * The description of the command.
-     *
-     * @var string
-     */
-    protected $description = 'Craft Views
+
+    protected $description = "Craft Views (create, edit, index, show)";
+
+    protected $help = 'Craft Views
                      <name>               Resource name (resources/views/<name>)
                      --extends, -e        Include extends block using supplied layout
                      --section, -s        Include section block using supplied section name
@@ -51,6 +49,8 @@ class CraftViews extends Command
         parent::__construct();
 
         $this->fs = new CraftsmanFileSystem();
+
+        $this->setHelp($this->help);
     }
 
     /**

@@ -22,12 +22,10 @@ class CraftFactory extends Command
                                 {--t|template= : Template path (override configuration file)} 
                                 {--w|overwrite : Overwrite existing factory}
                             ';
-    /**
-     * The description of the command.
-     *
-     * @var string
-     */
-    protected $description = 'Craft Factory
+
+    protected $description = "Craft Factory";
+
+    protected $help = 'Craft Factory
                      <name>               Factory Name
                      --model, -m          Use <model> when creating controller
                      --template, -t       Template path (override configuration file)
@@ -42,6 +40,8 @@ class CraftFactory extends Command
         parent::__construct();
 
         $this->fs = new CraftsmanFileSystem();
+
+        $this->setHelp($this->help);
     }
 
     /**

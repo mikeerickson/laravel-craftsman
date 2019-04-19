@@ -29,12 +29,10 @@ class CraftController extends Command
                                 {--l|validation : Scaffold validation} 
                                 {--a|api : create API controller (skips create and update methods)}
                            ';
-    /**
-     * The description of the command.
-     *
-     * @var string
-     */
-    protected $description = 'Craft Controller
+
+    protected $description = "Craft Controller (standard, api, resource)";
+
+    protected $help = 'Craft Controller
                      <name>               Controller Name
                      --model, -m          Use <model> when creating controller
                      --validation, -l     Create validation blocks
@@ -52,6 +50,8 @@ class CraftController extends Command
         parent::__construct();
 
         $this->fs = new CraftsmanFileSystem();
+
+        $this->setHelp($this->help);
     }
 
     /**

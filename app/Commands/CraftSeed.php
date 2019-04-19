@@ -2,8 +2,8 @@
 
 namespace App\Commands;
 
-use App\CraftsmanFileSystem;
 use Exception;
+use App\CraftsmanFileSystem;
 use LaravelZero\Framework\Commands\Command;
 
 /**
@@ -29,12 +29,10 @@ class CraftSeed extends Command
                                 {--w|overwrite : Overwrite existing seed}
                             ';
 
-    /**
-     * The description of the command.
-     *
-     * @var string
-     */
-    protected $description = 'Craft Seed
+
+    protected $description = "Craft Seed";
+
+    protected $help = 'Craft Seed
                      <name>               Seed Name
                      --model, -m          Path to model
                      --rows, -r           Number of rows to use in factory call (Optional)
@@ -50,6 +48,8 @@ class CraftSeed extends Command
         parent::__construct();
 
         $this->fs = new CraftsmanFileSystem();
+
+        $this->setHelp($this->help);
     }
 
     /**

@@ -2,9 +2,9 @@
 
 namespace App\Commands;
 
-use App\CraftsmanFileSystem;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use App\CraftsmanFileSystem;
 use LaravelZero\Framework\Commands\Command;
 
 /**
@@ -32,12 +32,10 @@ class CraftMigration extends Command
                                 {--w|overwrite : Overwrite migration (default: true)}
                             ';
 
-    /**
-     * The description of the command.
-     *
-     * @var string
-     */
-    protected $description = 'Craft Migration
+
+    protected $description = "Craft Database Migration";
+
+    protected $help = 'Craft Migration
                      <name>               Migration Name (will be appended with timestamp)
                      --model, -m          Path to model (required)
                      --tablename, -t      Desired tablename
@@ -55,23 +53,16 @@ class CraftMigration extends Command
         parent::__construct();
 
         $this->fs = new CraftsmanFileSystem();
+
+        $this->setHelp($this->help);
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     public function handle()
     {
         $migrationName = $this->argument('name');
         $model = $this->option('model');
         $tablename = $this->option('tablename');
         $fields = $this->option('fields');
-
-
-        // CreateProductUsersTable
-        // CreateProductsNutritionalFactsTable
 
         if (strlen($tablename) === 0 || (is_null($tablename))) {
             if (strlen($model) === 0) {
@@ -89,7 +80,6 @@ class CraftMigration extends Command
                 $model = str_replace("_", "", Str::title($tablename));
             }
         }
-
 
         $data = [
             "model" => $model,

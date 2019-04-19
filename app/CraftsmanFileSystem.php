@@ -2,13 +2,16 @@
 
 namespace App;
 
-use Codedungeon\PHPMessenger\Facades\Messenger;
-use CraftsmanFileSystemException;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
-use Mustache_Engine;
 use Phar;
+use Exception;
+use Mustache_Engine;
+use Illuminate\Support\Str;
+use Illuminate\Config\Repository;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Filesystem\Filesystem;
+use Codedungeon\PHPMessenger\Facades\Messenger;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+
 
 /**
  * Class CraftsmanFileSystem
@@ -53,76 +56,9 @@ class CraftsmanFileSystem
     }
 
     /**
-     * @return string
-     */
-    public function getPharPath()
-    {
-        $path = Phar::running(false);
-        if (strlen($path) > 0) {
-            $path = dirname($path).DIRECTORY_SEPARATOR;
-        }
-        return $path;
-    }
-
-    /**
-     * @param $src
-     * @param $dest
-     * @param $data
-     * @return int
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
-    private function createMergeFile($src, $dest, $data)
-    {
-        $template = $this->fs->get($src);
-
-        $data["useExtends"] = $data["extends"];
-        $data["useSection"] = $data["section"];
-
-        $merged_data = $this->mustache->render($template, $data);
-
-        if (file_exists($dest) && !$data["overwrite"]) {
-            Messenger::error("✖︎ {$dest} already exists\n");
-            return self::FILE_EXIST;
-        }
-
-        try {
-            $this->createParentDirectory($dest);
-            $this->fs->put($dest, $merged_data);
-            $result = [
-                "filename" => $dest,
-                "status" => "success",
-                "message" => "{$dest} created successfully",
-            ];
-            Messenger::success("✓ {$result['message']}\n");
-        } catch (\Exception $e) {
-            $result = [
-                "status" => "error",
-                "message" => $e->getMessage(),
-            ];
-        }
-
-        return basename($dest);
-    }
-
-    /**
-     * @param $type
-     * @return \Illuminate\Config\Repository|mixed
-     */
-    public function getTemplateFilename($type)
-    {
-        if (strpos($type, "<project>") !== false) {
-            $filename = str_replace("<project>", "", $type);
-            $filename = getcwd().DIRECTORY_SEPARATOR.$filename;
-            $filename = str_replace("//", "/", $filename);
-            return $filename;
-        }
-        return config("craftsman.templates.{$type}");
-    }
-
-    /**
      * @param $asset
      * @param $data
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     public function createViewFiles($asset, $data)
     {
@@ -203,7 +139,7 @@ class CraftsmanFileSystem
 
     /**
      * @param $type
-     * @return \Illuminate\Config\Repository|mixed|string|string[]|null
+     * @return Repository|mixed|string|string[]|null
      */
     public function getOutputPath($type)
     {
@@ -247,62 +183,179 @@ class CraftsmanFileSystem
     }
 
     /**
-     * @param  string  $fields
-     * @return bool|string
+     * @return Repository|mixed
      */
-    public function buildFieldData($fields = "")
+    public function class_path()
     {
-        // format:
-        // fieldName:fieldType@fieldSize:option1:option2
-        //  eg --fields fname:string@25:nullable:unique,lname:string@50:nullable
-        $fieldData = "";
-        if (strlen($fields) !== 0) {
-            $fieldList = preg_split("/,? ?,/", $fields);
-            foreach ($fieldList as $field) {
-                $parts = explode(":", trim($field));
-                if (sizeof($parts) >= 2) {
-                    $name = $parts[0];
-                    $fieldType = $parts[1];
-                } else {
-                    $fieldType = "string";
-                }
+        return config('craftsman.paths.class');
+    }
 
-                $fieldSize = "";
-                if (strpos($fieldType, "@") !== false) {
-                    [$fieldType, $fieldSize] = explode("@", $fieldType);
-                    $fieldSize = ",".$fieldSize;
-                }
+    /**
+     * @return Repository|mixed
+     */
+    public function controller_path()
+    {
+        return config('craftsman.paths.controllers');
+    }
 
-                $optional = "";
-                if (sizeof($parts) >= 3) {
-                    $parts = array_splice($parts, 2);
-                    foreach ($parts as $part) {
-                        $optional .= "->{$part}()";
-                    }
-                }
+    /**
+     * @return Repository|mixed
+     */
+    public function factory_path()
+    {
+        return config('craftsman.paths.factories');
+    }
 
-                // $this->string('first_name',255)->nullable()->unique();
-                // $table->string('name');
-                $fieldData .= "            \$table->{$fieldType}('{$name}'{$fieldSize}){$optional};".PHP_EOL;
-            }
-        }
-
-        // strip last PHP_EOL so we have clean migration file
-        if (strlen($fieldData) > 0) {
-            $fieldData = substr($fieldData, 0, strlen($fieldData) - 1);
-        }
-
-        return $fieldData;
+    /**
+     * @return Repository|mixed
+     */
+    public function migration_path()
+    {
+        return config('craftsman.paths.migrations');
     }
 
     // TODO: This method needs refactoring
+
+    /**
+     * @param  null  $model_path
+     * @return Repository|mixed|string|string[]|null
+     */
+    public function model_path($model_path = null)
+    {
+        if (!is_null($model_path)) {
+            return $this->path_join(app_path(), $model_path);
+        } else {
+            return config('craftsman.paths.models');
+        }
+    }
+
+    /**
+     * @return string|string[]|null
+     */
+    public function path_join()
+    {
+        $paths = array();
+
+        foreach (func_get_args() as $arg) {
+            if ($arg !== '') {
+                $paths[] = $arg;
+            }
+        }
+
+        return preg_replace('#/+#', '/', join('/', $paths));
+    }
+
+    /**
+     * @return Repository|mixed
+     */
+    public function seed_path()
+    {
+        return config('craftsman.paths.seeds');
+    }
+
+    /**
+     * @return Repository|mixed
+     */
+    public function test_path()
+    {
+        return config('craftsman.paths.tests');
+    }
+
+    /**
+     * @return Repository|mixed
+     */
+    public function view_path()
+    {
+        return config('craftsman.paths.views');
+    }
+
+    /**
+     * @param  string  $userConfigFilename
+     * @param  string  $type
+     * @return mixed|string
+     */
+    public function getUserTemplate($userConfigFilename = "./config.php", $type = "")
+    {
+        if (file_exists($userConfigFilename)) {
+            $config = include($userConfigFilename);
+            if (isset($config["templates"])) {
+                if (isset($config["templates"][$type])) {
+                    return $config["templates"][$type];
+                }
+            }
+        }
+
+        return ""; // we didnt find the entry, return null string
+    }
+
+    /**
+     * @return string
+     */
+    public function getPharPath()
+    {
+        $path = Phar::running(false);
+        if (strlen($path) > 0) {
+            $path = dirname($path).DIRECTORY_SEPARATOR;
+        }
+        return $path;
+    }
+
+    /**
+     * @param $src
+     * @param $dest
+     * @param $data
+     * @return int
+     * @throws FileNotFoundException
+     */
+    private function createMergeFile($src, $dest, $data)
+    {
+        $template = $this->fs->get($src);
+
+        $data["useExtends"] = $data["extends"];
+        $data["useSection"] = $data["section"];
+
+        $merged_data = $this->mustache->render($template, $data);
+
+        if (file_exists($dest) && !$data["overwrite"]) {
+            Messenger::error("✖︎ {$dest} already exists\n");
+            return self::FILE_EXIST;
+        }
+
+        try {
+            $this->createParentDirectory($dest);
+            $this->fs->put($dest, $merged_data);
+            $result = [
+                "filename" => $dest,
+                "status" => "success",
+                "message" => "{$dest} created successfully",
+            ];
+            Messenger::success("✓ {$result['message']}\n");
+        } catch (Exception $e) {
+            $result = [
+                "status" => "error",
+                "message" => $e->getMessage(),
+            ];
+        }
+
+        return basename($dest);
+    }
+
+    /**
+     * @param $filename
+     */
+    public function createParentDirectory($filename)
+    {
+        if (!is_dir(dirname($filename))) {
+            mkdir(dirname($filename), 0777, true);
+        }
+    }
 
     /**
      * @param  null  $type
      * @param  null  $filename
      * @param  array  $data
      * @return array
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     public function createFile($type = null, $filename = null, $data = [])
     {
@@ -433,7 +486,7 @@ class CraftsmanFileSystem
         $mustache = new Mustache_Engine();
 
         $vars["model_path"] = str_replace("/", "\\", $vars["model_path"]);
-        
+
         $template_data = $mustache->render($template, $vars);
 
         try {
@@ -445,7 +498,7 @@ class CraftsmanFileSystem
                 "status" => "success",
                 "message" => "{$dest} created successfully",
             ];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = [
                 "filename" => $dest,
                 "status" => "error",
@@ -462,64 +515,67 @@ class CraftsmanFileSystem
     }
 
     /**
-     * @return \Illuminate\Config\Repository|mixed
+     * @param $type
+     * @return Repository|mixed
      */
-    public function class_path()
+    public function getTemplateFilename($type)
     {
-        return config('craftsman.paths.class');
-    }
-
-    /**
-     * @return \Illuminate\Config\Repository|mixed
-     */
-    public function controller_path()
-    {
-        return config('craftsman.paths.controllers');
-    }
-
-    /**
-     * @return \Illuminate\Config\Repository|mixed
-     */
-    public function factory_path()
-    {
-        return config('craftsman.paths.factories');
-    }
-
-    /**
-     * @return \Illuminate\Config\Repository|mixed
-     */
-    public function migration_path()
-    {
-        return config('craftsman.paths.migrations');
-    }
-
-    /**
-     * @param  null  $model_path
-     * @return \Illuminate\Config\Repository|mixed|string|string[]|null
-     */
-    public function model_path($model_path = null)
-    {
-        if (!is_null($model_path)) {
-            return $this->path_join(app_path(), $model_path);
-        } else {
-            return config('craftsman.paths.models');
+        if (strpos($type, "<project>") !== false) {
+            $filename = str_replace("<project>", "", $type);
+            $filename = getcwd().DIRECTORY_SEPARATOR.$filename;
+            $filename = str_replace("//", "/", $filename);
+            return $filename;
         }
+        return config("craftsman.templates.{$type}");
     }
 
     /**
-     * @return string|string[]|null
+     * @param  string  $fields
+     * @return bool|string
      */
-    public function path_join()
+    public function buildFieldData($fields = "")
     {
-        $paths = array();
+        // format:
+        // fieldName:fieldType@fieldSize:option1:option2
+        //  eg --fields fname:string@25:nullable:unique,lname:string@50:nullable
+        $fieldData = "";
+        if (strlen($fields) !== 0) {
+            $fieldList = preg_split("/,? ?,/", $fields);
+            foreach ($fieldList as $field) {
+                $parts = explode(":", trim($field));
+                if (sizeof($parts) >= 2) {
+                    $name = $parts[0];
+                    $fieldType = $parts[1];
+                } else {
+                    $fieldType = "string";
+                }
 
-        foreach (func_get_args() as $arg) {
-            if ($arg !== '') {
-                $paths[] = $arg;
+                $fieldSize = "";
+                if (strpos($fieldType, "@") !== false) {
+                    [$fieldType, $fieldSize] = explode("@", $fieldType);
+                    $fieldSize = ",".$fieldSize;
+                }
+
+                $optional = "";
+                if (sizeof($parts) >= 3) {
+                    $parts = array_splice($parts, 2);
+                    foreach ($parts as $part) {
+                        $optional .= "->{$part}()";
+                    }
+                }
+
+                // $this->string('first_name',255)->nullable()->unique();
+                // $table->string('name');
+                $fieldData .= "            \$table->{$fieldType}('{$name}'{$fieldSize}){$optional};".PHP_EOL;
             }
         }
 
-        return preg_replace('#/+#', '/', join('/', $paths));
+        // strip last PHP_EOL so we have clean migration file
+        if (strlen($fieldData) > 0) {
+            $fieldData = substr($fieldData, 0, strlen($fieldData) - 1);
+        }
+
+        return $fieldData;
     }
 
     /**
@@ -536,59 +592,6 @@ class CraftsmanFileSystem
         }
 
         return preg_replace('#/+#', '/', join('/', $paths));
-    }
-
-    /**
-     * @return \Illuminate\Config\Repository|mixed
-     */
-    public function seed_path()
-    {
-        return config('craftsman.paths.seeds');
-    }
-
-    /**
-     * @return \Illuminate\Config\Repository|mixed
-     */
-    public function test_path()
-    {
-        return config('craftsman.paths.tests');
-    }
-
-    /**
-     * @return \Illuminate\Config\Repository|mixed
-     */
-    public function view_path()
-    {
-        return config('craftsman.paths.views');
-    }
-
-    /**
-     * @param $filename
-     */
-    public function createParentDirectory($filename)
-    {
-        if (!is_dir(dirname($filename))) {
-            mkdir(dirname($filename), 0777, true);
-        }
-    }
-
-    /**
-     * @param  string  $userConfigFilename
-     * @param  string  $type
-     * @return mixed|string
-     */
-    public function getUserTemplate($userConfigFilename = "./config.php", $type = "")
-    {
-        if (file_exists($userConfigFilename)) {
-            $config = include($userConfigFilename);
-            if (isset($config["templates"])) {
-                if (isset($config["templates"][$type])) {
-                    return $config["templates"][$type];
-                }
-            }
-        }
-
-        return ""; // we didnt find the entry, return null string
     }
 
     /**

@@ -2,8 +2,8 @@
 
 namespace App\Commands;
 
-use App\CraftsmanFileSystem;
 use Illuminate\Support\Str;
+use App\CraftsmanFileSystem;
 use LaravelZero\Framework\Commands\Command;
 
 /**
@@ -24,12 +24,10 @@ class CraftTest extends Command
                                 {--u|unit : Create unit test}
                                 {--w|overwrite : Overwrite existing test}
                             ';
-    /**
-     * The description of the command.
-     *
-     * @var string
-     */
-    protected $description = 'Craft Test
+
+    protected $description = "Craft Test (dusk, unit, feature)";
+
+    protected $help = 'Craft Test
                      <name>               Class Name
                      --setup, -s          Include setUp block
                      --teardown, -d       Include tearDown block
@@ -45,6 +43,8 @@ class CraftTest extends Command
         parent::__construct();
 
         $this->fs = new CraftsmanFileSystem();
+
+        $this->setHelp($this->help);
     }
 
     /**

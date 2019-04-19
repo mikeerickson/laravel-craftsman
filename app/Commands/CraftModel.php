@@ -2,8 +2,8 @@
 
 namespace App\Commands;
 
-use App\CraftsmanFileSystem;
 use Illuminate\Support\Str;
+use App\CraftsmanFileSystem;
 use LaravelZero\Framework\Commands\Command;
 
 /**
@@ -29,12 +29,10 @@ class CraftModel extends Command
                                 {--w|overwrite : Overwrite existing model}
                             ';
 
-    /**
-     * The description of the command.
-     *
-     * @var string
-     */
-    protected $description = 'Craft Model
+
+    protected $description = "Craft Model";
+
+    protected $help = 'Craft Model
                      <name>               Model Name (eg App\Models\Post)
                      --tablename, -t      Desired tablename
                      --template, -m       Template path (override configuration file)
@@ -49,6 +47,8 @@ class CraftModel extends Command
         parent::__construct();
 
         $this->fs = new CraftsmanFileSystem();
+
+        $this->setHelp($this->help);
     }
 
     /**

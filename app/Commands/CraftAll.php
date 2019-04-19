@@ -2,11 +2,11 @@
 
 namespace App\Commands;
 
-use App\CraftsmanFileSystem;
-use Codedungeon\PHPMessenger\Facades\Messenger;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
+use App\CraftsmanFileSystem;
+use Illuminate\Support\Facades\Artisan;
 use LaravelZero\Framework\Commands\Command;
+use Codedungeon\PHPMessenger\Facades\Messenger;
 
 /**
  * Class CraftAll
@@ -48,7 +48,9 @@ class CraftAll extends Command
      *
      * @var string
      */
-    protected $description = 'Craft All Assets
+    protected $description = 'Craft All Assets (controller, factory, migration, model, seed, test, views)';
+
+    protected $help = 'Craft All Assets
                      <name>               Base Asset Name
                      --model, -m          Model Name
                      --tablename, -t      Tablename
@@ -73,6 +75,7 @@ class CraftAll extends Command
     public function __construct()
     {
         parent::__construct();
+        $this->setHelp($this->help);
 
         $this->fs = new CraftsmanFileSystem();
     }

@@ -22,12 +22,10 @@ class CraftClass extends Command
                                 {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite   : Overwrite existing class}
                             ';
-    /**
-     * The description of the command.
-     *
-     * @var string
-     */
-    protected $description = 'Craft Class
+
+    protected $description = "Craft Standard Classes (may use any type of standard PHP class)";
+
+    protected $help = 'Craft Class
                      <name>               Class Name
                      --constructor, -c    Include constructor method
                      --template, -t       Path to custom template (override config file)
@@ -42,6 +40,9 @@ class CraftClass extends Command
         parent::__construct();
 
         $this->fs = new CraftsmanFileSystem();
+
+        $this->setHelp($this->help);
+
     }
 
     /**
