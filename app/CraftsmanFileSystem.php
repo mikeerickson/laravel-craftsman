@@ -7,7 +7,6 @@ use Exception;
 use Mustache_Engine;
 use Illuminate\Support\Str;
 use Illuminate\Config\Repository;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Filesystem\Filesystem;
 use Codedungeon\PHPMessenger\Facades\Messenger;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -275,7 +274,7 @@ class CraftsmanFileSystem
             $config = include($userConfigFilename);
             if (isset($config["templates"])) {
                 if (isset($config["templates"][$type])) {
-                    return $config["templates"][$type];
+                    return getcwd().DIRECTORY_SEPARATOR.$config["templates"][$type];
                 }
             }
         }
@@ -370,13 +369,14 @@ class CraftsmanFileSystem
      */
     public function createFile($type = null, $filename = null, $data = [])
     {
+        $namespace = "";
+
         $overwrite = false;
         if (isset($data["overwrite"])) {
             $overwrite = $data["overwrite"];
         }
-        $path = $this->getOutputPath($type);
 
-        $namespace = "";
+        $path = $this->getOutputPath($type);
 
         if (isset($data["template"])) {
             $src = $this->getTemplateFilename($data["template"]);
@@ -391,12 +391,13 @@ class CraftsmanFileSystem
         }
 
         if (!file_exists($src)) {
-            printf("\n\n");
-            Log::error("Unable to locate template './{$src}' Has it been deleted?");
-//            throw new CraftsmanFileSystemException($errMsg);
+            printf("\n");
+            $src = str_replace($this->getUserHome(), "~", $src);
+            Messenger::error("Unable to locate template '{$src}'", "ERROR");
             exit(1);
         }
 
+        // if we have supplied a custom path (ie App/Models/Contact) it will be used instead of default path
         if (Str::contains($filename, "App")) {
             $dest = $this->path_join($filename.".php");
         } else {
@@ -535,9 +536,27 @@ class CraftsmanFileSystem
             $filename = str_replace("<project>", "", $type);
             $filename = getcwd().DIRECTORY_SEPARATOR.$filename;
             $filename = str_replace("//", "/", $filename);
-            return $filename;
+            return file_exists($filename) ? $filename : $this->tildify($filename)." Not Found";
         }
-        return config("craftsman.templates.{$type}");
+
+        if (strpos($type, "<root>") !== false) {
+            $filename = str_replace("<root>", "", $type);
+            $filename = getcwd().DIRECTORY_SEPARATOR.$filename;
+            $filename = str_replace("//", "/", $filename);
+            return file_exists($filename) ? $filename : $this->tildify($filename)." Not Found";
+        }
+
+        return getcwd().DIRECTORY_SEPARATOR.config("craftsman.templates.{$type}");
+    }
+
+    public function tildify($filename)
+    {
+        return str_replace($this->getUserHome(), "~", $filename);
+    }
+
+    public function getUserHome()
+    {
+        return getenv("HOME");
     }
 
     /**

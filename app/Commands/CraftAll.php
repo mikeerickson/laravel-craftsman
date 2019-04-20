@@ -69,14 +69,18 @@ class CraftAll extends Command
 
     public function handle()
     {
+        // argument
         $name = $this->argument('name');
 
+        // require value
         $model = $this->option('model');
         $tablename = $this->option('tablename');
         $rows = $this->option('rows');
         $fields = $this->option('fields');
         $extends = $this->option('extends');
         $section = $this->option('section');
+
+        // boolean options
         $overwrite = $this->option('overwrite') ? '--overwrite' : '';
         $resource = $this->option('resource') ? '--resource' : '';
         $collection = $this->option('collection') ? '--collection' : '';

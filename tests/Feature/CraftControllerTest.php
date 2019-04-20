@@ -37,6 +37,8 @@ class CraftControllerTest extends TestCase
     function tearDown(): void
     {
         parent::tearDown();
+
+        $this->fs->rmdir("app/Http");
     }
 
     /** @test */
@@ -52,8 +54,6 @@ class CraftControllerTest extends TestCase
         $this->assertFileExists($filename);
 
         $this->assertFileContainsString($filename, "class EmptyController");
-
-        $this->fs->rmdir("app/Http");
     }
 
     /** @test */
@@ -80,8 +80,6 @@ class CraftControllerTest extends TestCase
 
         $this->assertStringContainsString("edit", $data);
         $this->assertStringContainsString("create", $data);
-
-        $this->fs->rmdir("app/Http");
     }
 
     /** @test */
@@ -109,15 +107,12 @@ class CraftControllerTest extends TestCase
 
         $this->assertStringNotContainsString("edit", $data);
         $this->assertStringNotContainsString("create", $data);
-
-        $this->fs->rmdir("app/Http");
     }
 
     /** @test */
     public function should_create_controller_using_custom_template()
     {
         $model = "App/Models/Contact";
-        $model_path = "App\\Models\\Contact";
 
         $this->artisan("craft:controller CustomController --model {$model} --template <project>/templates/custom.mustache --overwrite")
             ->assertExitCode(0);
@@ -126,15 +121,10 @@ class CraftControllerTest extends TestCase
         $filename = $this->fs->path_join($controllerPath, "CustomController.php");
         $this->assertFileExists($filename);
 
-        $parts = explode("/", $model);
-        $model_name = array_pop($parts);
-
         // spot check merged data
         $data = file_get_contents($filename);
 
         $this->assertStringContainsString("testMethod", $data);
-
-        $this->fs->rmdir("app/Http");
     }
 
     /** @test */
@@ -152,8 +142,6 @@ class CraftControllerTest extends TestCase
 
         $this->assertStringContainsString("CustomResource", $data);
         $this->assertStringNotContainsString("use Illuminate\Http\Resources\Json\ResourceCollection;", $data);
-
-        $this->fs->rmdir("app/Http/Resources");
     }
 
     /** @test */
@@ -162,8 +150,8 @@ class CraftControllerTest extends TestCase
         $this->artisan("craft:controller CustomResource --resource --collection --overwrite")
             ->assertExitCode(0);
 
-        $controllerPath = $this->fs->resource_path();
-        $filename = $this->fs->path_join($controllerPath, "CustomResource.php");
+        $resourcePath = $this->fs->resource_path();
+        $filename = $this->fs->path_join($resourcePath, "CustomResource.php");
         $this->assertFileExists($filename);
 
         // spot check merged data
@@ -171,6 +159,5 @@ class CraftControllerTest extends TestCase
 
         $this->assertStringContainsString("use Illuminate\Http\Resources\Json\ResourceCollection;", $data);
 
-        $this->fs->rmdir("app/Http/Resources");
     }
 }

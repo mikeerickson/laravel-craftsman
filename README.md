@@ -152,7 +152,15 @@ The following commands support defining class path
 In addition to the standard templates, you may also define a single use template which is only used during command execution.  Single use templates are designed to reference project specific templates, and you use the `<projet>` keyword when executing the desire command.
 
 ```bash
-> laravel-craftsman craft:class App/Services/SyncService --template <project>/templates/service.mustache ...
+> laravel-craftsman craft:class App/Services/SyncService --template "<project>/templates/service.mustache" ...
+```
+
+##### oh-my-zsh Conflict
+If you have `oh-my-zsh` installed, make sure you wrap template value in quotes, otherwise you may receive an error
+
+```
+laravel-craftsman craft:class TestService --template <project>/templates/custom.mustache --overwrite
+zsh: no such file or directory: project
 ```
 
 #### Field Option Syntax

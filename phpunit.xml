@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false" backupStaticAttributes="false" bootstrap="vendor/autoload.php" colors="true"
-         convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true"
-         processIsolation="false" stopOnFailure="false" printerClass="Codedungeon\PHPUnitPrettyResultPrinter\Printer">
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         columns="max"
+         cacheResult="true"
+         printerClass="Codedungeon\PHPUnitPrettyResultPrinter\Printer">
     <testsuites>
         <testsuite name="Feature">
             <directory suffix="Test.php">./tests/Feature</directory>

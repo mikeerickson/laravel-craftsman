@@ -37,9 +37,6 @@ class CraftsmanFileSystemTest extends TestCase
         (new CraftsmanFileSystem())->rmdir("resources/views/coverage");
     }
 
-    /**
-     * setUp
-     */
     public function setUp(): void
     {
         parent::setUp();
@@ -133,75 +130,144 @@ class CraftsmanFileSystemTest extends TestCase
     }
 
     /** @test */
+    public function should_produce_error_when_template_not_found()
+    {
+        $filename = $this->fs->getTemplateFilename("<project>/templates/class-missing.mustache");
+
+        $this->assertStringContainsString("templates/class-missing.mustache Not Found", $filename);
+    }
+
+    /** @test */
+    public function should_return_custom_template_using_root()
+    {
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/class.mustache";
+
+        $filename = $this->fs->getTemplateFilename("<root>/templates/class.mustache");
+
+        $this->assertSame($result, $filename);
+
+    }
+
+
+    /** @test */
     public function should_return_class_template_filename()
     {
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/class.mustache";
+
         $filename = $this->fs->getTemplateFilename("class");
 
-        $this->assertSame("templates/class.mustache", $filename);
+        $this->assertSame($result, $filename);
     }
 
     /** @test */
     public function should_return_controller_template_filename()
     {
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/controller.mustache";
+
         $filename = $this->fs->getTemplateFilename("controller");
 
-        $this->assertSame("templates/controller.mustache", $filename);
+        $this->assertSame($result, $filename);
     }
 
     /** @test */
     public function should_return_api_controller_filename()
     {
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/api-controller.mustache";
+
         $filename = $this->fs->getTemplateFilename("api-controller");
 
-        $this->assertSame("templates/api-controller.mustache", $filename);
+        $this->assertSame($result, $filename);
     }
 
     /** @test */
     public function should_return_empty_controller_filename()
     {
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/empty-controller.mustache";
+
         $filename = $this->fs->getTemplateFilename("empty-controller");
 
-        $this->assertSame("templates/empty-controller.mustache", $filename);
+        $this->assertSame($result, $filename);
     }
 
     /** @test */
-    public function should_return_views_filename()
+    public function should_return_view_index_filename()
     {
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/view-index.mustache";
+
+        $filename = $this->fs->getTemplateFilename("view-index");
+
+        $this->assertSame($result, $filename);
+    }
+
+    /** @test */
+    public function should_return_view_create_filename()
+    {
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/view-create.mustache";
+
         $filename = $this->fs->getTemplateFilename("view-create");
 
-        $this->assertSame("templates/view-create.mustache", $filename);
+        $this->assertSame($result, $filename);
     }
+
+    /** @test */
+    public function should_return_view_show_filename()
+    {
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/view-show.mustache";
+
+        $filename = $this->fs->getTemplateFilename("view-show");
+
+        $this->assertSame($result, $filename);
+    }
+
+    /** @test */
+    public function should_return_view_edit_filename()
+    {
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/view-edit.mustache";
+
+        $filename = $this->fs->getTemplateFilename("view-edit");
+
+        $this->assertSame($result, $filename);
+    }
+
 
     /** @test */
     public function should_tests_filename()
     {
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/test.mustache";
+
         $filename = $this->fs->getTemplateFilename("test");
 
-        $this->assertSame("templates/test.mustache", $filename);
+        $this->assertSame($result, $filename);
     }
 
     /** @test */
     public function should_return_model_filename()
     {
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/model.mustache";
+
         $filename = $this->fs->getTemplateFilename("model");
 
-        $this->assertSame("templates/model.mustache", $filename);
+        $this->assertSame($result, $filename);
     }
 
     /** @test */
     public function should_return_migration_filename()
     {
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/migration.mustache";
+
         $filename = $this->fs->getTemplateFilename("migration");
 
-        $this->assertSame("templates/migration.mustache", $filename);
+        $this->assertSame($result, $filename);
     }
 
     /** @test */
     public function should_return_factories_filename()
     {
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/factory.mustache";
+
         $filename = $this->fs->getTemplateFilename("factory");
 
-        $this->assertSame("templates/factory.mustache", $filename);
+        $this->assertSame($result, $filename);
     }
 
     /** @test */
@@ -215,18 +281,22 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_seeds_filename()
     {
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/seed.mustache";
+
         $filename = $this->fs->getTemplateFilename("seed");
 
-        $this->assertSame("templates/seed.mustache", $filename);
+        $this->assertSame($result, $filename);
 
     }
 
     /** @test */
     public function should_return_user_template_path()
     {
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/sample.user.mustache";
+
         $path = $this->fs->getUserTemplate("./config.php", "sample");
 
-        $this->assertSame("templates/sample.user.mustache", $path);
+        $this->assertSame($result, $path);
     }
 
     /** @test */
@@ -485,16 +555,16 @@ class CraftsmanFileSystemTest extends TestCase
         $this->assertTrue((int) $result > 0);
     }
 
+    /*
+     * View Option Factory
+     */
+
     /** @test */
     public function should_load_app_config_version_build()
     {
         $result = include "./config/app.php";
         $this->assertArrayHasKey("version", $result);
     }
-
-    /*
-     * View Option Factory
-     */
 
     /** @test */
     public function should_get_version()

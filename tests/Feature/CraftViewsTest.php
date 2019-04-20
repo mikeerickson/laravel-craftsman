@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\CraftsmanFileSystem;
 use Tests\TestCase;
 use Tests\TestHelpersTrait;
+use App\CraftsmanFileSystem;
 
 /**
  * Class CraftViewsTest
@@ -127,20 +127,6 @@ class CraftViewsTest extends TestCase
         $this->assertFileExists($showFilename);
 
         $this->fs->rmdir("resources/views/{$resource}");
-
-    }
-
-    /** @test */
-    public function should_create_merge_file()
-    {
-        $data = [];
-        $src = $this->fs->getTemplateFilename("views");
-
-        echo $src;
-
-//        $result = $this->fs->createMergeFile($src, $dest, $data);
-
-        $this->assertTrue(true);
 
     }
 
