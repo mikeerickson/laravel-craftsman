@@ -77,10 +77,10 @@ class CraftAll extends Command
         $fields = $this->option('fields');
         $extends = $this->option('extends');
         $section = $this->option('section');
-        $overwrite = $this->option('overwrite');
-        if ($overwrite) {
-            $overwrite = "--overwrite";
-        }
+        $overwrite = $this->option('overwrite') ? '--overwrite' : '';
+        $resource = $this->option('resource') ? '--resource' : '';
+        $collection = $this->option('collection') ? '--collection' : '';
+
         // grab any options to skip assets
         $noController = $this->option('no-controller');
         $noFactory = $this->option('no-factory');
@@ -95,7 +95,11 @@ class CraftAll extends Command
         $this->info("\n");
 
         if (!$noController) {
-            Artisan::call("craft:controller {$name}Controller --model {$model} {$overwrite}");
+            if ($resource) {
+                Artisan::call("craft:resource {$name} {$collection} {$overwrite}");
+            } else {
+                Artisan::call("craft:controller {$name}Controller --model {$model} {$overwrite}");
+            }
         } else {
             Messenger::info("▶︎ Controller crafting skipped\n");
         }
