@@ -327,7 +327,7 @@ class CraftsmanFileSystem
         $merged_data = $this->mustache->render($template, $data);
 
         if (file_exists($dest) && !$data["overwrite"]) {
-            Messenger::error("✖︎ {$dest} already exists\n");
+            Messenger::error("{$dest} already exists\n", "ERROR");
             return self::FILE_EXIST;
         }
 
@@ -405,7 +405,7 @@ class CraftsmanFileSystem
         }
 
         if (file_exists($dest) && (!$overwrite)) {
-            Messenger::error("✖︎ {$dest} already exists\n");
+            Messenger::error("'{$dest}' already exists\n", "ERROR");
             return [
                 "status" => self::FILE_EXIST,
                 "message" => "{$dest} already exists",
