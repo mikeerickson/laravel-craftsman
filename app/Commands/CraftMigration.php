@@ -15,11 +15,11 @@ class CraftMigration extends Command
 {
     protected $fs;
 
-    protected $signature = 'craft:migration 
-                                {name : Migration name (timestamp applied at creation)} 
-                                {--m|model= : Path to migration model (required)} 
-                                {--t|tablename= : Desired tablename} 
-                                {--f|fields= : List of fields (optional)} 
+    protected $signature = 'craft:migration
+                                {name : Migration name (timestamp applied at creation)}
+                                {--m|model= : Path to migration model (required)}
+                                {--t|tablename= : Desired tablename}
+                                {--f|fields= : List of fields (optional)}
                                 {--d|down : Include down method in migration}
                                 {--w|overwrite : Overwrite migration (default: true)}
                             ';
@@ -36,6 +36,9 @@ class CraftMigration extends Command
                      --overwrite, -w      Overwrite migration (skipped by default, default: true)
             ';
 
+    /**
+     * CraftMigration constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -80,9 +83,8 @@ class CraftMigration extends Command
 
         // timestamp to be prepended to name
         $dt = Carbon::now()->format('Y_m_d_His');
-        $migrationFilename = $dt."_".$migrationName;
+        $migrationFilename = $dt . "_" . $migrationName;
 
         $this->fs->createFile('migration', $migrationFilename, $data);
-
     }
 }

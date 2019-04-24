@@ -8,6 +8,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [1.3.0] - 2019.04.23
+
+### Added
+
+- Added `craft:resource` command
+- Extended `craft:controller` command
+
+### Fixed
+
+- Fixed issue when creating migrations, created invalid class name ([Issue 005](https://github.com/mikeerickson/laravel-craftsman/issues/5))
+- Fixed issue creating unnecessary use statement for model which is in default namespace (app directory)
+
 ## [1.2.1] - 2019-04-20
 
 ### Added

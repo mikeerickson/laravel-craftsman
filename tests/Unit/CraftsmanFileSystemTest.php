@@ -110,6 +110,16 @@ class CraftsmanFileSystemTest extends TestCase
     }
 
     /** @test */
+    public function should_return_correct_request_path()
+    {
+        $result = $this->fs->path_join(app_path(), "Http", "Requests");
+
+        $path = $this->fs->request_path();
+
+        $this->assertSame($result, $path);
+    }
+
+    /** @test */
     public function should_return_correct_seed_path()
     {
         $result = $this->fs->path_join(database_path(), "seeds");
@@ -309,7 +319,7 @@ class CraftsmanFileSystemTest extends TestCase
 
         $result = $this->fs->createFile("migration", $migrationName, $data);
 
-        $filename = $this->fs->getLastFilename("database/migrations", $migrationName);
+        $filename = $this->fs->tildify($this->fs->getLastFilename("database/migrations", $migrationName));
 
         $this->assertSame($result["filename"], $filename);
 

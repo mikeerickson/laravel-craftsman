@@ -7,7 +7,7 @@ use LaravelZero\Framework\Commands\Command;
 
 class CraftDeveloper extends Command
 {
-    protected $hidden = false;
+    protected $hidden = true;
 
     protected $signature = 'craft:developer';
 

@@ -44,7 +44,7 @@ class CraftModelTest extends TestCase
 
         $this->assertFileContainsString($filename, "class {$model} extends Model");
 
-        unlink("app/{$model}.php");
+        // unlink("app/{$model}.php");
     }
 
     /** @test */

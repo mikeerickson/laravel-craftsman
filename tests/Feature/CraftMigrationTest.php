@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\CraftsmanFileSystem;
 use Carbon\Carbon;
-use PHPUnit\Framework\Assert;
 use Tests\TestCase;
 use Tests\TestHelpersTrait;
+use App\CraftsmanFileSystem;
+use PHPUnit\Framework\Assert;
 
 /**
  * Class CraftMigrationTest
@@ -36,7 +36,7 @@ class CraftMigrationTest extends TestCase
     /** @test */
     public function should_execute_default_craft_migration_command()
     {
-        $class = "CreateTestTable";
+        $class = "CreateTestsTable";
         $model = "App/Models/Test";
         $migrationName = "create_tests_table";
 
@@ -51,6 +51,21 @@ class CraftMigrationTest extends TestCase
         $this->assertFileContainsString($filename, "Schema::create('tests', function (Blueprint \$table) {");
 
         $this->fs->rmdir("database/migrations");
+    }
+
+    /**
+     * @param $migrationName
+     */
+    private function assertMigrationFileExists($migrationName)
+    {
+        foreach (scandir("database/migrations") as $filename) {
+            if (!strpos($filename, $migrationName)) {
+                Assert::assertTrue(true);
+                return;
+            }
+        }
+
+        Assert::assertTrue(false);
     }
 
     /** @test */
@@ -100,7 +115,7 @@ class CraftMigrationTest extends TestCase
 
         $migrationName = "create_test_migration";
         $dt = Carbon::now()->format('Y_m_d_His');
-        $migrationFilename = $dt."_".$migrationName;
+        $migrationFilename = $dt . "_" . $migrationName;
 
         $fields = "first_name:string@20:nullable, last_name:string@60:nullable, email:string@80:nullable:unique";
 
@@ -137,15 +152,18 @@ class CraftMigrationTest extends TestCase
         $this->assertStringContainsString("CreateProductContactsTable", $data);
 
         $this->fs->rmdir("database/migrations");
-
     }
+
+
+    // check to see if migration file was created. Since the filename is changed (adding timestamp)
+    // we can only validate the core migration ($migrationName) is actually created
 
     /** @test */
     public function should_create_migration_without_model()
     {
         $migrationName = "create_product_contacts_table";
 
-        $this->artisan("craft:migration {$migrationName} --tablename product_contacts")
+        $this->artisan("craft:migration {$migrationName} --tablename contacts")
             ->assertExitCode(0);
 
         $this->assertMigrationFileExists($migrationName);
@@ -153,26 +171,8 @@ class CraftMigrationTest extends TestCase
         $migrationFilename = $this->fs->getLastFilename("database/migrations", $migrationName);
         $data = file_get_contents($migrationFilename);
 
-        $this->assertStringContainsString("CreateProductContactsTable", $data);
+        $this->assertStringContainsString("CreateContactsTable", $data);
 
-        $this->fs->rmdir("database/migrations");
-    }
-
-
-    // check to see if migration file was created. Since the filename is changed (adding timestamp)
-    // we can only validate the core migration ($migrationName) is actually created
-    /**
-     * @param $migrationName
-     */
-    private function assertMigrationFileExists($migrationName)
-    {
-        foreach (scandir("database/migrations") as $filename) {
-            if (!strpos($filename, $migrationName)) {
-                Assert::assertTrue(true);
-                return;
-            }
-        }
-
-        Assert::assertTrue(false);
+        //        $this->fs->rmdir("database/migrations");
     }
 }
