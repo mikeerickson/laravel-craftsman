@@ -37,6 +37,8 @@ class CraftResourceTest extends TestCase
     function tearDown(): void
     {
         parent::tearDown();
+
+        $this->fs->rmdir("app/Http");
     }
 
     /** @test */

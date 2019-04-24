@@ -11,15 +11,14 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftFormRequest extends Command
 {
-    protected $signature = 'craft:request 
-                                {name : Class name} 
-                                {--r|rules= : List of rules (optional)} 
+    protected $signature = 'craft:request
+                                {name : Class name}
+                                {--r|rules= : List of rules (optional)}
                                 {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite   : Overwrite existing class}
                             ';
 
-    protected $description = "Craft Form Request";
-
+    protected $description = 'Craft Form Request';
 
     protected $help = 'Craft Form Request
                      <name>               Class Name
@@ -36,17 +35,18 @@ class CraftFormRequest extends Command
         $this->fs = new CraftsmanFileSystem();
 
         $this->setHelp($this->help);
-
     }
 
     public function handle()
     {
         $className = $this->argument('name');
+        $rules     = $this->option('rules');
 
         $data = [
-            "name" => $className,
-            "template" => $this->option("template"),
-            "overwrite" => $this->option("overwrite"),
+            'name'      => $className,
+            'template'  => $this->option('template'),
+            'overwrite' => $this->option('overwrite'),
+            'rules' => $rules
         ];
 
         $this->fs->createFile('request', $className, $data);

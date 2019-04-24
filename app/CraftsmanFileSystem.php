@@ -426,10 +426,12 @@ class CraftsmanFileSystem
         }
 
         if (file_exists($dest) && (!$overwrite)) {
+            $filename = $dest;
             $dest = $this->tildify($dest);
             Messenger::error("'{$dest}' already exists\n", "ERROR");
             return [
                 "status" => self::FILE_EXIST,
+                "filename" => $filename,
                 "message" => "{$dest} already exists",
             ];
         }
@@ -449,7 +451,18 @@ class CraftsmanFileSystem
             $fields = strtolower($data["fields"]);
         }
 
+        $rules = "";
+        if (isset($data["rules"])) {
+            $rules = strtolower($data["rules"]);
+        }
+
         $fieldData = $this->buildFieldData($fields);
+
+        $ruleData = "";
+        if ($type === "request") {
+            $ruleData = $this->buildRuleData($rules);
+        }
+
         $model_path = "";
 
         $model = "";
@@ -467,6 +480,7 @@ class CraftsmanFileSystem
             "model_path" => $model_path,
             "tablename" => $tablename,
             "fields" => $fieldData,
+            "rules" => $ruleData,
             "collection" => isset($data["collection"]) ? $data["collection"] : false,
         ];
 
@@ -625,11 +639,29 @@ class CraftsmanFileSystem
         }
 
         // strip last PHP_EOL so we have clean migration file
-        if (strlen($fieldData) > 0) {
-            $fieldData = substr($fieldData, 0, strlen($fieldData) - 1);
-        }
+        $fieldData = substr($fieldData, 0, -1);
 
         return $fieldData;
+    }
+
+    public function buildRuleData($rules)
+    {
+        if (strlen($rules) === 0) {
+            return "";
+        }
+        $ruleList = preg_split("/,? ?,/", $rules);
+
+        $ruleData = "";
+        foreach ($ruleList as $rule) {
+            $parts = explode("?", trim($rule));
+            $rulename = $parts[0];
+            $ruleItems = $parts[1];
+            $ruleData .= "\"{$rulename}\" => \"{$ruleItems}\",\n";
+        }
+
+        $ruleData = substr($ruleData, 0, -1);
+
+        return $ruleData;
     }
 
     /**
