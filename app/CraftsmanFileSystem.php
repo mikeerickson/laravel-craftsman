@@ -324,13 +324,15 @@ class CraftsmanFileSystem
         try {
             $this->createParentDirectory($dest);
             $this->fs->put($dest, $merged_data);
+            $shortenFilename = $this->shortenFilename($dest);
             $dest = $this->tildify(($dest));
+
             $result = [
                 "filename" => $dest,
                 "status" => "success",
                 "message" => "{$dest} created successfully",
             ];
-            Messenger::success("✓ {$result['message']}\n");
+            Messenger::success("✓ {$shortenFilename} created successfully\n");
         } catch (Exception $e) {
             $result = [
                 "status" => "error",
@@ -518,6 +520,7 @@ class CraftsmanFileSystem
 
         $mustache = new Mustache_Engine();
 
+        // when creation migrations, the class method should be plural
         if ($type === "migration") {
             $vars["model"] = Str::plural($vars["model"]);
         }
@@ -534,6 +537,7 @@ class CraftsmanFileSystem
         try {
             $this->createParentDirectory($dest);
             $this->fs->put($dest, $template_data);
+            $shortenFilename = $this->shortenFilename($dest);
             $dest = $this->tildify($dest);
             $result = [
                 "filename" => $dest,
@@ -550,8 +554,7 @@ class CraftsmanFileSystem
         }
 
         if ($result["status"] === "success") {
-            $dest = $this->shortenFilename($dest);
-            Messenger::success("✔︎ {$dest} created successfully\n");
+            Messenger::success("✔︎ {$shortenFilename} created successfully\n");
         }
 
         return $result;

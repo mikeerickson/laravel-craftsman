@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [1.3.0] - 2019.04.23
+## [1.3.0] - 2019.04.24
 
 ### Added
 
@@ -47,7 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added new `template` option which allows passing a one off template to be used instead of using either default templates, or user defined templates in constants.  
+- Added new `template` option which allows passing a one off template to be used instead of using either default templates, or user defined templates in constants.
 
 ## [1.0.10] - 2019-04-06
 
@@ -62,7 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Refactor tests, cleanup 
+- Refactor tests, cleanup
 
 ## [1.0.8] - 2019-04-04
 
