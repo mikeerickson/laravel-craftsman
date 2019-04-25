@@ -9,19 +9,18 @@ class {{name}} extends Controller
 {
     public function index()
     {
-        $data = {{model}}::all();
-        return view('{{tablename}}.index', compact("data"));
+        return view('{{tablename}}.index', ["data" => {{model}}::all()]);
     }
 
     public function create()
     {
-        return view('{{tablename}}.detail');
+        return view('{{tablename}}.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request, {{binding}})
     {
-        $data = {{model}}::create($request->all());
-        return view('{{tablename}}.show', compact("data"));
+        $newData = $data->create($request->all());
+        return view('{{tablename}}.show', ["data" => $newData]);
     }
 
     public function show({{binding}})
@@ -29,23 +28,20 @@ class {{name}} extends Controller
         return view('{{tablename}}.detail', compact("data"));
     }
 
-    public function edit($id)
+    public function edit({{binding}})
     {
-        $data = {{model}}::findOrFail($id);
         return view('{{tablename}}.detail', compact($data));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, {{binding}})
     {
-        $data = {{model}}::find($id)->update($request->all());
-        return view('{{tablename}}.detail', compact("data"));
+        $updateData = $data->update($request->all());
+        return view('{{tablename}}.detail', ["data" => $updateData]);
     }
 
-    public function destroy($id)
+    public function destroy({{binding}})
     {
-        $row = {{model}}::findOrFail($id);
-        $row->delete();
-        $data = {{model}}::all();
-        return view('{{tablename}}.index', compact("data"));
+        $data->destroy();
+        return view('{{tablename}}.index',["data" => {{model}}::all()]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use App\CraftsmanFileSystem;
 use LaravelZero\Framework\Commands\Command;
+use Codedungeon\PHPMessenger\Facades\Messenger;
 
 /**
  * Class CraftController
@@ -52,6 +53,7 @@ class CraftController extends Command
     {
         $controllerName = $this->argument('name');
         $model = $this->option('model');
+        $binding = $this->option('binding');
 
         $data = [
             "model" => $model,
@@ -71,10 +73,19 @@ class CraftController extends Command
             $data["collection"] = $this->option("collection");
             $this->fs->createFile('resource-controller', $controllerName, $data);
         } else {
-            if (strlen($model) === 0) {
-                $this->fs->createFile('empty-controller', $controllerName, $data);
+            if ($binding) {
+                if (strlen($data["model"]) === 0) {
+                    Messenger::warning("When creating binding controllers, you must supply model", "WARNING");
+                    exit;
+                }
+
+                $this->fs->createFile('binding-controller', $controllerName, $data);
             } else {
-                $this->fs->createFile('controller', $controllerName, $data);
+                if (strlen($model) === 0) {
+                    $this->fs->createFile('empty-controller', $controllerName, $data);
+                } else {
+                    $this->fs->createFile('controller', $controllerName, $data);
+                }
             }
         }
     }

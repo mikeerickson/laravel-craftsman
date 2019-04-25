@@ -40,6 +40,7 @@ return [
     'templates' => [
         'class' => 'templates/class.mustache',
         'api-controller' => 'templates/api-controller.mustache',
+        'binding-controller' => 'templates/binding-controller.mustache',
         'empty-controller' => 'templates/empty-controller.mustache',
         'resource-controller' => 'templates/resource-controller.mustache',
         'controller' => 'templates/controller.mustache',

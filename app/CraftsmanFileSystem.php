@@ -148,6 +148,7 @@ class CraftsmanFileSystem
             case 'class':
                 $path = $this->class_path();
                 break;
+            case 'binding-controller':
             case 'api-controller':
             case 'empty-controller':
             case 'controller':
@@ -465,7 +466,12 @@ class CraftsmanFileSystem
             "fields" => $fieldData,
             "rules" => $ruleData,
             "collection" => isset($data["collection"]) ? $data["collection"] : false,
+            "binding" => ""
         ];
+
+        if (isset($data["binding"]) && $data["binding"]) {
+            $vars["binding"] = "{$model} \$data";
+        }
 
         if (isset($data["namespace"])) {
             $vars["namespace"] = $data["namespace"];
