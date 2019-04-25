@@ -391,11 +391,7 @@ class CraftsmanFileSystem
     public function createFile($type = null, $filename = null, $data = [])
     {
         $namespace = "";
-
-        $overwrite = false;
-        if (isset($data["overwrite"])) {
-            $overwrite = $data["overwrite"];
-        }
+        $overwrite = (isset($data["overwrite"])) ? $data["overwrite"] : false;
 
         $path = $this->getOutputPath($type);
 
@@ -419,11 +415,7 @@ class CraftsmanFileSystem
         }
 
         // if we have supplied a custom path (ie App/Models/Contact) it will be used instead of default path
-        if (Str::contains($filename, "App")) {
-            $dest = $this->path_join($filename . ".php");
-        } else {
-            $dest = $this->path_join($path, $filename . ".php");
-        }
+        $dest = (Str::contains($filename, "App")) ?  $this->path_join($filename . ".php") : $this->path_join($path, $filename . ".php");
 
         if (file_exists($dest) && (!$overwrite)) {
             $filename = $dest;
@@ -437,7 +429,6 @@ class CraftsmanFileSystem
         }
 
         $tablename = "";
-
         if (isset($data["tablename"])) {
             $tablename = strtolower($data["tablename"]);
         } else {
@@ -446,15 +437,8 @@ class CraftsmanFileSystem
             }
         }
 
-        $fields = "";
-        if (isset($data["fields"])) {
-            $fields = strtolower($data["fields"]);
-        }
-
-        $rules = "";
-        if (isset($data["rules"])) {
-            $rules = strtolower($data["rules"]);
-        }
+        $fields = (isset($data["fields"])) ? strtolower($data["fields"]) : "";
+        $rules = (isset($data["rules"])) ? strtolower($data["rules"]) : "";
 
         $fieldData = $this->buildFieldData($fields);
 
@@ -464,7 +448,6 @@ class CraftsmanFileSystem
         }
 
         $model_path = "";
-
         $model = "";
         if (isset($data["model"])) {
             $model = class_basename($data["model"]);
@@ -499,36 +482,14 @@ class CraftsmanFileSystem
         }
 
         // this variable is only used in seed
-        if (isset($data["num_rows"])) {
-            $vars["num_rows"] = (int)$data["num_rows"] ?: 1;
-        }
+        $vars["num_rows"] = (isset($data["num_rows"])) ? (int)$data["num_rows"] : 1;
 
-        // this variable is only used in migration
-        if (isset($data["down"])) {
-            $vars["down"] = $data["down"];
-        }
-
-        // this variable is only used in test
-        if (isset($data["extends"])) {
-            $vars["extends"] = $data["extends"];
-        }
-
-        // this variable is only used in test
-        if (isset($data["setup"])) {
-            $vars["setup"] = $data["setup"];
-        }
-
-        // this variable is only used in test
-        if (isset($data["teardown"])) {
-            $vars["teardown"] = $data["teardown"];
-        }
-
-        // this variable is only used in migration
-        if (isset($data["constructor"])) {
-            $vars["constructor"] = $data["constructor"];
-        } else {
-            $vars["constructor"] = false;
-        }
+        // these variable is only used in test
+        $vars["down"] = (isset($data["down"])) ? $data["down"] : false;
+        $vars["extends"] = (isset($data["extends"])) ? $data["extends"] : false;
+        $vars["setup"] = (isset($data["setup"])) ? $data["setup"] : false;
+        $vars["teardown"] = (isset($data["teardown"])) ? $data["teardown"] : false;
+        $vars["constructor"] = (isset($data["constructor"])) ? $data["constructor"] : false;
 
         $template = $this->fs->get($src);
 
@@ -632,16 +593,12 @@ class CraftsmanFileSystem
                     }
                 }
 
-                // $this->string('first_name',255)->nullable()->unique();
-                // $table->string('name');
                 $fieldData .= "            \$table->{$fieldType}('{$name}'{$fieldSize}){$optional};" . PHP_EOL;
             }
         }
 
         // strip last PHP_EOL so we have clean migration file
-        $fieldData = substr($fieldData, 0, -1);
-
-        return $fieldData;
+        return substr($fieldData, 0, -1);
     }
 
     public function buildRuleData($rules)
@@ -654,14 +611,10 @@ class CraftsmanFileSystem
         $ruleData = "";
         foreach ($ruleList as $rule) {
             $parts = explode("?", trim($rule));
-            $rulename = $parts[0];
-            $ruleItems = $parts[1];
-            $ruleData .= "\"{$rulename}\" => \"{$ruleItems}\",\n";
+            $ruleData .= "\"{$parts[0]}\" => \"{$parts[1]}\",\n";
         }
 
-        $ruleData = substr($ruleData, 0, -1);
-
-        return $ruleData;
+        return substr($ruleData, 0, -1);
     }
 
     /**

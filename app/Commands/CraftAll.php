@@ -16,18 +16,18 @@ class CraftAll extends Command
 {
     protected $fs;
 
-    protected $signature = 'craft:all 
-                                {name : Base Entity used by rest of commands} 
-                                {--m|model= : Associated model} 
-                                {--t|tablename= : Associated tablename} 
-                                {--f|fields= : List of fields used in migration} 
-                                {--r|rows= : Number of rows created by migration command} 
-                                {--x|extends= : Views extend block} 
-                                {--u|resource : Create resource controller} 
-                                {--l|collection : Create resource collection} 
-                                {--i|section= : Views section block} 
-                                {--w|overwrite : Overwrite existing files} 
-                                
+    protected $signature = 'craft:all
+                                {name : Base Entity used by rest of commands}
+                                {--m|model= : Associated model}
+                                {--t|tablename= : Associated tablename}
+                                {--f|fields= : List of fields used in migration}
+                                {--r|rows= : Number of rows created by migration command}
+                                {--x|extends= : Views extend block}
+                                {--u|resource : Create resource controller}
+                                {--l|collection : Create resource collection}
+                                {--i|section= : Views section block}
+                                {--w|overwrite : Overwrite existing files}
+
                                 {--c|no-controller : Skip crafting controller}
                                 {--a|no-factory : Skip crafting factory}
                                 {--g|no-migration : Skip crafting migration}
@@ -50,7 +50,7 @@ class CraftAll extends Command
                      --resource, -o       Create resource controller
                      --collection, -l     Create resource collection
                      --overwrite, -w      Overwrite existing files (WARNING: This can\'t be undone)
-                     
+
                      --no-controller, -c  Do not create controller
                      --no-factory, -f     Do not create factory
                      --no-migration, -g   Do not create migration
