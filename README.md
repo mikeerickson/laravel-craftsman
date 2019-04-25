@@ -1,4 +1,3 @@
-
 # Laravel Craftsman
 
 ## Description
@@ -51,7 +50,7 @@ or
 
 > laravel-craftsman craft:model App/Models/Post --tablename posts
 
-> laravel-craftsman craft:requet CustomerRequest --rules title?required:unique:posts,body:required
+> laravel-craftsman craft:request CustomerRequest --rules title?required|unique|posts,body|required
 
 > laravel-craftsman craft:seed PostTableSeeder --model App/Models/Post --rows 100
 
@@ -61,7 +60,7 @@ or
 
 ## Commands
 
-The following commands are available in any Laravel project.  You can use the individual crafting routines which are similar to the Artisan commands, but the `craft:all` command is the most powerful of the bunch.
+The following commands are available in any Laravel project. You can use the individual crafting routines which are similar to the Artisan commands, but the `craft:all` command is the most powerful of the bunch.
 
 Using `craft:all` you can easily generate all assets (controller, factory, migration, model, and seed) for a given resource (ie Post, Customer, etc)
 
@@ -77,7 +76,7 @@ laravel-craftsman craft:all Contact \
 | -------------------- | ------------------- | ------------------------------------------------------------------------------------ |
 | **craft:all**        | **base name**       | **Creates all assets (Controller, Factory, Migration, Model, Seed)**                 |
 |                      | --model, -m         | Path to model (eg App/Models/Post)                                                   |
-|                      | --tablename, -t     | Tablename used in database (will set $tablename in Model)                            |
+|                      | --tablename, -t     | Tablename used in database (will set \$tablename in Model)                           |
 |                      |                     | _If not supplied, default table will be pluralized model name_                       |
 |                      | --rows, -r          | Number of rows used by seed when using Factory                                       |
 |                      | --extends, -x       | View extends block (optional)                                                        |
@@ -96,6 +95,7 @@ laravel-craftsman craft:all Contact \
 |                      | --model, -m         | Path to model (eg App/Models/Post)                                                   |
 |                      | --validation, -l    | Create validation blocks where appropriate                                           |
 |                      | --api, -a           | Create API controller (skips create and update methods)                              |
+|                      | --binding, -b       | Include route / model binding (requires model property)                              |
 |                      | --empty, -e         | Create empty controller                                                              |
 |                      | --template, -t      | Path to custom template (override config file)                                       |
 |                      | --overwrite, -w     | Overwrite existing class                                                             |
@@ -103,7 +103,7 @@ laravel-craftsman craft:all Contact \
 |                      | --model, -m         | Path to model (eg App/Models/Post)                                                   |
 | **craft:migration**  | **migration name**  | **Creates migration using supplied options**                                         |
 |                      | --model, -m         | Path to model (eg App/Models/Post)                                                   |
-|                      | --tablename, -t     | Tablename used in database (will set $tablename in Model)                            |
+|                      | --tablename, -t     | Tablename used in database (will set \$tablename in Model)                           |
 |                      |                     | _If not supplied, default table will be pluralized model name_                       |
 |                      | --fields, -f        | List of fields (option) _see syntax below_                                           |
 |                      |                     | **🚨 If you have spaces separating fields, you must surround fields list in quotes** |
@@ -112,7 +112,7 @@ laravel-craftsman craft:all Contact \
 |                      | --overwrite, -w     | Overwrite existing class                                                             |
 | **craft:model**      | **model name**      | **Creates model using supplied options**                                             |
 |                      |                     | _See below about defining alternate model path_                                      |
-|                      | --tablename, -t     | Tablename used in database (will set $tablename in Model)                            |
+|                      | --tablename, -t     | Tablename used in database (will set \$tablename in Model)                           |
 |                      |                     | _If not supplied, default table will be pluralized model name_                       |
 |                      | --template, -m      | Path to custom template (override config file)                                       |
 |                      | --overwrite, -w     | Overwrite existing class                                                             |
@@ -146,23 +146,25 @@ When crafting resources which are not automatically created in their assigned di
 This will create a class in the `App/Services` path, with filename `Sync.php`. Directories (including nested directories) will be created if they do not already exists.
 
 ##### Supported Commands:
+
 The following commands support defining class path
 
-- craft:class
-- craft:factory
-- craft:model
-- craft:seed
-- craft:test
+-   craft:class
+-   craft:factory
+-   craft:model
+-   craft:seed
+-   craft:test
 
 #### Single Use Template
 
-In addition to the standard templates, you may also define a single use template which is only used during command execution.  Single use templates are designed to reference project specific templates, and you use the `<projet>` keyword when executing the desire command.
+In addition to the standard templates, you may also define a single use template which is only used during command execution. Single use templates are designed to reference project specific templates, and you use the `<projet>` keyword when executing the desire command.
 
 ```bash
 > laravel-craftsman craft:class App/Services/SyncService --template "<project>/templates/service.mustache" ...
 ```
 
 ##### oh-my-zsh Conflict
+
 If you have `oh-my-zsh` installed, make sure you wrap template value in quotes, otherwise you may receive an error
 
 ```
@@ -171,6 +173,7 @@ zsh: no such file or directory: project
 ```
 
 #### Field Option Syntax
+
 When using the `--fields` option when building migrations, you should use the following syntax:
 
 ```
@@ -195,16 +198,18 @@ email:string@80:nullable:unique
 ```
 
 #### Rules Option Syntax
+
 When using the `--rules` option when building form requests, you should use the following syntax:
 
 ```
 format:
-ruleName?rule1:rule2:rule3,ruleName2?rule1:rule2
+ruleName?rule1|rule2|rule3,ruleName2?rule1|rule2
 ```
 
 ## Tips
 
 ### Boolean Option Shortcut
+
 When executing any of the `laravel-craftsman` commands, if you wish to apply one or more switches (those options which do not require a corresponding value), you can use the standard CLI shorthands (this tip can be used in any CLI based tool, not just `laravel-craftsman` (well assuming the CLI actually supports shorthand).
 
 For example:
@@ -224,6 +229,7 @@ is same as
 ```
 
 ### Defining Nested Paths
+
 Any command can store assets within tested folders within default path by separating `name` argument with forward slash
 For example, the following command will define the path for model asset in the `App/Models/<name>` path
 
@@ -232,9 +238,11 @@ For example, the following command will define the path for model asset in the `
 ```
 
 ## Custom Templates
+
 Laravel Craftsman provides support for creating custom templates if you wish to change the syntax to match your personal style. The default templates use the standard Laravel syntax, but we like to allow ou have your own flair.
 
 ### User Customized Templates
+
 If you wish to create derivatives of the supported templates, you can customize the `config.php` located in the `laravel-craftsman` directory.
 By default, this will be `~/.composer/vendor/codedungeon/laravel-craftsman`, but may be different depending on the method you chose to install laravel-craftsman.
 
@@ -242,6 +250,7 @@ By default, this will be `~/.composer/vendor/codedungeon/laravel-craftsman`, but
     'templates' => [
             'class' => 'user_templates/class.mustache',
             'api-controller' => 'user_templates/api-controller.mustache',
+            'binding-controller' => 'user_templates/binding-controller.mustache',
             'empty-controller' => 'user_templates/empty-controller.mustache',
             'controller' => 'user_templates/controller.mustache',
             'factory' => 'user_templates/factory.mustache',
@@ -268,11 +277,14 @@ For example, if you wish to create a standard class asset, you can use a single 
 
 
 ```
+
 ### Template Variables
+
 The following variables can be used in any of the supported templates (review the `templates` directory for a basis of how to create custom templates)
 
 | Variable Name | Templates which variable is used                                                            |
 | ------------- | ------------------------------------------------------------------------------------------- |
+| `binding`     | Used by `binding controller`                                                                |
 | `fields`      | Used by `migration`                                                                         |
 | `model`       | Used by `api-controller`, `class`, `controller`, `factory`, `migration`, `model` and `seed` |
 | `model_path`  | Used by `api-controller`, `controller`, `factory`, `migration`, `seed`                      |
@@ -283,7 +295,6 @@ The following variables can be used in any of the supported templates (review th
 | `tablename`   | Used by `controller`, `migration`, `model`                                                  |
 | `extends`     | Used by `views`                                                                             |
 | `section`     | Used by `views`                                                                             |
-
 
 ## License
 
