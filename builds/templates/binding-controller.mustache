@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+{{model_path}}
+
+class {{name}} extends Controller
+{
+    public function index()
+    {
+        return view('{{tablename}}.index', ["data" => {{model}}::all()]);
+    }
+
+    public function create()
+    {
+        return view('{{tablename}}.create');
+    }
+
+    public function store(Request $request, {{binding}})
+    {
+        $newData = $data->create($request->all());
+        return view('{{tablename}}.show', ["data" => $newData]);
+    }
+
+    public function show({{binding}})
+    {
+        return view('{{tablename}}.detail', compact("data"));
+    }
+
+    public function edit({{binding}})
+    {
+        return view('{{tablename}}.detail', compact($data));
+    }
+
+    public function update(Request $request, {{binding}})
+    {
+        $updateData = $data->update($request->all());
+        return view('{{tablename}}.detail', ["data" => $updateData]);
+    }
+
+    public function destroy({{binding}})
+    {
+        $data->destroy();
+        return view('{{tablename}}.index',["data" => {{model}}::all()]);
+    }
+}

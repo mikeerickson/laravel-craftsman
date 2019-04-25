@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-{{model_path}};
+{{model_path}}
 
 class {{name}} extends Controller
 {
@@ -15,7 +15,7 @@ class {{name}} extends Controller
 
     public function create()
     {
-        return view('{{tablename}}.detail');
+        return view('{{tablename}}.create');
     }
 
     public function store(Request $request)
@@ -30,9 +30,8 @@ class {{name}} extends Controller
         return view('{{tablename}}.detail', compact("data"));
     }
 
-    public function edit($id)
+    public function edit({{binding}})
     {
-        $data = {{model}}::findOrFail($id);
         return view('{{tablename}}.detail', compact($data));
     }
 
