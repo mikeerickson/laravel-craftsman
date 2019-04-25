@@ -40,7 +40,7 @@ class CraftFormRequest extends Command
     public function handle()
     {
         $className = $this->argument('name');
-        $rules     = $this->option('rules');
+        $rules = $this->option('rules');
 
         $data = [
             'name'      => $className,

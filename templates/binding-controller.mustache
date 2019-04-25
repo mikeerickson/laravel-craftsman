@@ -24,14 +24,14 @@ class {{name}} extends Controller
         return view('{{tablename}}.show', compact("data"));
     }
 
-    public function show($id)
+    public function show({{binding}})
     {
-        $data = {{model}}::findOrFail($id);
         return view('{{tablename}}.detail', compact("data"));
     }
 
-    public function edit({{binding}})
+    public function edit($id)
     {
+        $data = {{model}}::findOrFail($id);
         return view('{{tablename}}.detail', compact($data));
     }
 

@@ -13,13 +13,14 @@ class CraftController extends Command
 {
     protected $fs;
 
-    protected $signature = 'craft:controller {name : Controller Name} 
-                                {--m|model= : Associated model} 
-                                {--w|overwrite : Overwrite existing controller} 
-                                {--u|resource : Create resource controller} 
-                                {--c|collection : Create resource collection} 
-                                {--t|template= : Template path (override configuration file)} 
-                                {--l|validation : Scaffold validation} 
+    protected $signature = 'craft:controller {name : Controller Name}
+                                {--m|model= : Associated model}
+                                {--w|overwrite : Overwrite existing controller}
+                                {--u|resource : Create resource controller}
+                                {--b|binding : Include route / model binding (requires model property)}
+                                {--c|collection : Create resource collection}
+                                {--t|template= : Template path (override configuration file)}
+                                {--l|validation : Scaffold validation}
                                 {--a|api : Create API controller (skips create and update methods)}
                            ';
 
@@ -32,6 +33,7 @@ class CraftController extends Command
                      --api, -a            Create API controller (skips create and update methods)
                      --empty, -e          Create empty controller
                      --resource, -u       Create resource controller
+                     --binding, -b        Include Route Model Biding (requires model option)
                      --collection, -c     Use resource collection
                      --template, -t       Template path (override configuration file)
                      --overwrite, -w      Overwrite existing controller
@@ -57,6 +59,7 @@ class CraftController extends Command
             "template" => $this->option('template'),
             "overwrite" => $this->option('overwrite'),
             "collection" => false,
+            "binding" => $this->option('binding'),
         ];
 
         $api = $this->option('api');
