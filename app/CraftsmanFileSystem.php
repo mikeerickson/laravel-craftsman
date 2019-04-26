@@ -8,6 +8,7 @@ use Mustache_Engine;
 use Illuminate\Support\Str;
 use Illuminate\Config\Repository;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Artisan;
 use Codedungeon\PHPMessenger\Facades\Messenger;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
@@ -399,6 +400,7 @@ class CraftsmanFileSystem
     {
         $namespace = "";
         $overwrite = (isset($data["overwrite"])) ? $data["overwrite"] : false;
+        $all = (isset($data["all"])) ? $data["all"] : false;
 
         $path = $this->getOutputPath($type);
 
@@ -472,6 +474,7 @@ class CraftsmanFileSystem
             "name" => $filename,
             "model" => $model,
             "model_path" => $model_path,
+            "all" => $all,
             "tablename" => $tablename,
             "fields" => $fieldData,
             "rules" => $ruleData,
@@ -546,6 +549,19 @@ class CraftsmanFileSystem
 
         if ($result["status"] === "success") {
             Messenger::success("{$shortenFilename} created successfully\n", "SUCCESS");
+        }
+
+        if ($all) {
+            $overwrite = $overwrite ? "--overwrite" : "";
+
+            if ($data["collection"]) {
+                Artisan::call("craft:resource {$model}sResource --collection {$overwrite}");
+            } else {
+                Artisan::call("craft:resource {$model}Resource {$overwrite}");
+            }
+
+            Artisan::call("craft:factory {$model}Factory --model {$filename} {$overwrite}");
+            Artisan::call("craft:migration create_{$tablename}_table --model {$filename} --tablename {$tablename} {$overwrite}");
         }
 
         return $result;

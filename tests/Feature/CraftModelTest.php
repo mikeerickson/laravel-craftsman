@@ -2,9 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\CraftsmanFileSystem;
 use Tests\TestCase;
 use Tests\TestHelpersTrait;
+use App\CraftsmanFileSystem;
+use Illuminate\Support\Facades\Artisan;
 
 /**
  * Class CraftModelTest
@@ -43,8 +44,6 @@ class CraftModelTest extends TestCase
         $filename = $this->pathJoin($modelPath, "{$model}.php");
 
         $this->assertFileContainsString($filename, "class {$model} extends Model");
-
-        unlink("app/{$model}.php");
     }
 
     /** @test */
@@ -77,5 +76,31 @@ class CraftModelTest extends TestCase
         $this->assertFileContainsString($filename, "class {$model} extends Model");
 
         $this->fs->rmdir("app/Models");
+    }
+
+    /** @test  */
+    public function should_create_all_assets_when_creating_model(): void
+    {
+        $model = "Customer";
+
+        Artisan::call("craft:model {$model} --tablename posts --all --overwrite");
+
+        // verify model
+        $modelPath = $this->fs->model_path();
+        $filename = $this->pathJoin("$modelPath", "{$model}.php");
+        $this->assertFileExists($filename);
+
+        // verify factory
+        $factoryPath = $this->fs->factory_path();
+        $filename = $this->pathJoin($factoryPath, "{$model}Factory.php");
+        $this->assertFileExists($filename);
+
+        // verify resource
+        $resourcePath = $this->fs->resource_path();
+        $filename = $this->pathJoin($resourcePath, "{$model}Resource.php");
+        $this->assertFileExists($filename);
+
+        unlink("app/{$model}.php");
+        $this->fs->rmdir("database/factories");
     }
 }
