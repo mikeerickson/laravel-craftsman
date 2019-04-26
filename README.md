@@ -50,7 +50,7 @@ or
 
 > laravel-craftsman craft:model App/Models/Post --tablename posts
 
-> laravel-craftsman craft:request CustomerRequest --rules title?required|unique|posts,body?required
+> laravel-craftsman craft:request CustomerRequest --rules "title?required|unique|posts,body?required"
 
 > laravel-craftsman craft:seed PostTableSeeder --model App/Models/Post --rows 100
 
@@ -69,7 +69,7 @@ laravel-craftsman craft:all Contact \
   --model App/Models/Contact \
   --tablename contacts \
   --rows 50 \
-  --fields first_name:string@30:nullable,last_name:string@50:nullable,email:string@80:nullable:unique
+  --fields "first_name:string@30:nullable,last_name:string@50:nullable,email:string@80:nullable:unique"
 ```
 
 | Command              | Name / Option       | Description                                                                          |
@@ -183,7 +183,7 @@ fieldName:fieldType@fieldSize:option1:option2:option3
 example:
 email:string@80:nullable:unique
 
---fields fname:string@25:nullable,lname:string@50:nullable,email:string@80:nullable:unique,dob:datetime,notes:text,deleted_at:timezone
+--fields "fname:string@25:nullable,lname:string@50:nullable,email:string@80:nullable:unique,dob:datetime,notes:text,deleted_at:timezone"
 
     Schema::create('contacts', function (Blueprint $table) {
         $table->bigIncrements('id');
