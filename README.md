@@ -50,7 +50,7 @@ or
 
 > laravel-craftsman craft:model App/Models/Post --tablename posts
 
-> laravel-craftsman craft:request CustomerRequest --rules title?required|unique|posts,body|required
+> laravel-craftsman craft:request CustomerRequest --rules title?required|unique|posts,body?required
 
 > laravel-craftsman craft:seed PostTableSeeder --model App/Models/Post --rows 100
 
