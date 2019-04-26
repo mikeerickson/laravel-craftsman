@@ -310,6 +310,8 @@ class CraftsmanFileSystem
      */
     private function createMergeFile($src, $dest, $data)
     {
+        $shortFilename = $this->shortenFilename($dest);
+
         $template = $this->fs->get($src);
 
         $data["useExtends"] = $data["extends"];
@@ -318,7 +320,7 @@ class CraftsmanFileSystem
         $merged_data = $this->mustache->render($template, $data);
 
         if (file_exists($dest) && !$data["overwrite"]) {
-            Messenger::error("{$dest} already exists\n", "ERROR");
+            Messenger::error("{$shortFilename} already exists\n", "ERROR");
             return self::FILE_EXIST;
         }
 
@@ -333,7 +335,7 @@ class CraftsmanFileSystem
                 "status" => "success",
                 "message" => "{$dest} created successfully",
             ];
-            Messenger::success("✓ {$shortenFilename} created successfully\n");
+            Messenger::success("{$shortenFilename} created successfully\n", "SUCCESS");
         } catch (Exception $e) {
             $result = [
                 "status" => "error",
@@ -361,7 +363,11 @@ class CraftsmanFileSystem
 
     public function shortenFilename($filename)
     {
-        return str_replace(getcwd(), ".", $filename);
+        $newFilename = str_replace(getcwd(), ".", $filename);
+        if (!Str::startsWith($newFilename, ".")) {
+            $newFilename = "./" . $newFilename;
+        }
+        return $newFilename;
     }
 
     public function getUserHome()
@@ -416,12 +422,16 @@ class CraftsmanFileSystem
         }
 
         // if we have supplied a custom path (ie App/Models/Contact) it will be used instead of default path
-        $dest = (Str::contains($filename, "App")) ?  $this->path_join($filename . ".php") : $this->path_join($path, $filename . ".php");
+        $dest = (Str::startsWith($filename, "App") || Str::startsWith($filename, "app")) ?  $this->path_join($filename . ".php") : $this->path_join($path, $filename . ".php");
 
         if (file_exists($dest) && (!$overwrite)) {
-            $filename = $dest;
+            $filename = $this->shortenFilename($dest);
+            if ((Str::startsWith($filename, "./App") || Str::startsWith($filename, "./app"))) {
+                $filename = str_replace("App", "app", $filename);
+            }
+
             $dest = $this->tildify($dest);
-            Messenger::error("'{$dest}' already exists\n", "ERROR");
+            Messenger::error("{$filename} already exists\n", "ERROR");
             return [
                 "status" => self::FILE_EXIST,
                 "filename" => $filename,
@@ -535,7 +545,7 @@ class CraftsmanFileSystem
         }
 
         if ($result["status"] === "success") {
-            Messenger::success("✔︎ {$shortenFilename} created successfully\n");
+            Messenger::success("{$shortenFilename} created successfully\n", "SUCCESS");
         }
 
         return $result;

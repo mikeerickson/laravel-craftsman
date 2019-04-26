@@ -158,12 +158,12 @@ class CraftAll extends Command
             Messenger::warning("       ⚈  Run 'composer dump-autoload' after you have completed above steps");
         }
 
-        Messenger::success("\n================================================================================\n");
+        Messenger::info("\n================================================================================\n");
 
         if ($skipAll) {
             Messenger::warning("You skipped all assets, nothing created", "WARNING");
         } else {
-            Messenger::success("Asset Crafting Complete", "COMPLETE");
+            Messenger::info("Asset Crafting Complete", "COMPLETE");
         }
     }
 }
