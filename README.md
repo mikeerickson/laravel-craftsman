@@ -4,7 +4,7 @@
 
 Laravel Craftsman (written using the awesome [Laravel-Zero](https://www.laravel-zero.com) CLI builder) provides a suite of crafting assets using a project agnostic CLI.
 
-You can quickly create `class`, `controller`, `factory`, `migration`, `model`, `seed` and `view` assets.
+You can quickly create `class`, `controller`, `factory`, `migration`, `model`, `form-request`, `resource`, `seed` and `view` assets.
 In addition, you can create all assets with a single command, allowing you to quickly craft a new resource in seconds!
 
 📝 [Laravel News Article](https://laravel-news.com/laravel-craftsman-cli)
@@ -14,6 +14,16 @@ In addition, you can create all assets with a single command, allowing you to qu
 <h1 align="center">
 	<img src="docs/images/laravel-craftsman.png" alt="Laravel Craftsman">
 </h1>
+
+## Table Of Conents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Commands](#commands)
+- [Tips](#tips)
+- [Custom Templates](#custom-templates)
+- [License](#license)
+- [Credits](#credits)
 
 ## Installation
 
@@ -135,7 +145,7 @@ laravel-craftsman craft:all Contact \
 |                      | --no-index, -i      | Exclude index view                                                                   |
 |                      | --no-show, -w       | Exclude show view                                                                    |
 
-#### Defining Class Path
+### Defining Class Path
 
 When crafting resources which are not automatically created in their assigned directories, you can define the location to the path where asset is created as follows:
 
@@ -145,7 +155,7 @@ When crafting resources which are not automatically created in their assigned di
 
 This will create a class in the `App/Services` path, with filename `Sync.php`. Directories (including nested directories) will be created if they do not already exists.
 
-##### Supported Commands:
+#### Supported Commands:
 
 The following commands support defining class path
 
@@ -155,7 +165,7 @@ The following commands support defining class path
 -   craft:seed
 -   craft:test
 
-#### Single Use Template
+### Single Use Template
 
 In addition to the standard templates, you may also define a single use template which is only used during command execution. Single use templates are designed to reference project specific templates, and you use the `<projet>` keyword when executing the desire command.
 
@@ -163,16 +173,16 @@ In addition to the standard templates, you may also define a single use template
 > laravel-craftsman craft:class App/Services/SyncService --template "<project>/templates/service.mustache" ...
 ```
 
-##### oh-my-zsh Conflict
+### oh-my-zsh Conflict
 
 If you have `oh-my-zsh` installed, make sure you wrap template value in quotes, otherwise you may receive an error
 
-```
+```bash
 laravel-craftsman craft:class TestService --template <project>/templates/custom.mustache --overwrite
 zsh: no such file or directory: project
 ```
 
-#### Field Option Syntax
+### Field Option Syntax
 
 When using the `--fields` option when building migrations, you should use the following syntax:
 
@@ -197,13 +207,29 @@ email:string@80:nullable:unique
     });
 ```
 
-#### Rules Option Syntax
+### Rules Option Syntax
 
 When using the `--rules` option when building form requests, you should use the following syntax:
 
 ```
 format:
 ruleName?rule1|rule2|rule3,ruleName2?rule1|rule2
+```
+
+```bash
+> laravel-craftsman craft:request CustomerRequest --rules "title?required|unique|posts,body?required"
+```
+
+Produces the following
+
+```php
+public function rules()
+{
+    return [
+        "title" => "required|unique|posts",
+        "body" => "required",
+    ];
+}
 ```
 
 ## Tips

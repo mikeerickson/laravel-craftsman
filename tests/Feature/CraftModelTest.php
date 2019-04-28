@@ -44,6 +44,8 @@ class CraftModelTest extends TestCase
         $filename = $this->pathJoin($modelPath, "{$model}.php");
 
         $this->assertFileContainsString($filename, "class {$model} extends Model");
+
+        unlink($filename);
     }
 
     /** @test */
@@ -54,12 +56,12 @@ class CraftModelTest extends TestCase
         $this->artisan('craft:model App/Models/Post')
             ->assertExitCode(0);
 
-        $modelPath = $this->fs->model_path();
-        $filename = $this->pathJoin($modelPath, "Models", "{$model}.php");
+        $modelPath = $this->fs->model_path("Models");
+        $filename = $this->pathJoin($modelPath, "{$model}.php");
 
         $this->assertFileContainsString($filename, "class {$model} extends Model");
 
-        $this->fs->rmdir("app/Models");
+        unlink("{$modelPath}/{$model}.php");
     }
 
     /** @test */
@@ -70,11 +72,12 @@ class CraftModelTest extends TestCase
         $this->artisan('craft:model App/Models/Post --template <project>/templates/custom.mustache --overwrite')
             ->assertExitCode(0);
 
-        $modelPath = $this->fs->model_path();
-        $filename = $this->pathJoin($modelPath, "Models", "{$model}.php");
+        $modelPath = $this->fs->model_path("Models");
+        $filename = $this->pathJoin($modelPath, "{$model}.php");
 
         $this->assertFileContainsString($filename, "class {$model} extends Model");
 
+        unlink("{$modelPath}/{$model}.php");
         $this->fs->rmdir("app/Models");
     }
 
@@ -83,11 +86,11 @@ class CraftModelTest extends TestCase
     {
         $model = "Customer";
 
-        Artisan::call("craft:model {$model} --tablename posts --all --overwrite");
+        Artisan::call("craft:model App/Models/{$model} --tablename customers --all --overwrite");
 
         // verify model
-        $modelPath = $this->fs->model_path();
-        $filename = $this->pathJoin("$modelPath", "{$model}.php");
+        $modelPath = $this->fs->model_path("Models");
+        $filename = $this->pathJoin($modelPath, "{$model}.php");
         $this->assertFileExists($filename);
 
         // verify factory
@@ -100,7 +103,7 @@ class CraftModelTest extends TestCase
         $filename = $this->pathJoin($resourcePath, "{$model}Resource.php");
         $this->assertFileExists($filename);
 
-        unlink("app/{$model}.php");
+        unlink("{$modelPath}/{$model}.php");
         $this->fs->rmdir("database/factories");
     }
 }
