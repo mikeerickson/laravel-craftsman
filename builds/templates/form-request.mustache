@@ -27,4 +27,16 @@ class {{model}} extends FormRequest
             {{{rules}}}
         ];
     }
+
+         /**
+     * Custom message for validation
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            //
+        ];
+    }
 }

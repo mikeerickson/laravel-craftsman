@@ -643,9 +643,11 @@ class CraftsmanFileSystem
         $ruleData = "";
         foreach ($ruleList as $rule) {
             $parts = explode("?", trim($rule));
-            $ruleName = $parts[0];
-            $rules = $parts[1];
-            $ruleData .= "\"{$ruleName}\" => \"{$rules}\",\n";
+            if (count($parts) === 2) {
+                $ruleName = $parts[0];
+                $rules = $parts[1];
+                $ruleData .= "\"{$ruleName}\" => \"{$rules}\",\n";
+            }
         }
 
         return substr($ruleData, 0, -1);
