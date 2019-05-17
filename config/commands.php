@@ -1,5 +1,7 @@
 <?php
 
+use App\Commands\CraftInteractive;
+
 
 return [
 
@@ -15,6 +17,7 @@ return [
     */
 
     'default' => NunoMaduro\LaravelConsoleSummary\SummaryCommand::class,
+    // 'default' => CraftInteractive::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -63,8 +66,8 @@ return [
         Illuminate\Foundation\Console\VendorPublishCommand::class,
 
         // this is only enabled during development
-//        App\Commands\CraftDeveloper::class, // this is handled in command class `$hidden` property
-    
+        //        App\Commands\CraftDeveloper::class, // this is handled in command class `$hidden` property
+
     ],
 
     /*
@@ -78,8 +81,6 @@ return [
     |
     */
 
-    'remove' => [
-
-    ],
+    'remove' => [],
 
 ];
