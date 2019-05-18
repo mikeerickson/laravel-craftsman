@@ -78,7 +78,5 @@ class CraftClassTest extends TestCase
         $this->assertFileContainsString($filename, "testMethod");
 
         $this->fs->rmdir("app/Test");
-
     }
-
 }

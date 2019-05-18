@@ -9,15 +9,14 @@ use Codedungeon\PHPMessenger\Facades\Messenger;
 
 class CraftInteractive extends Command
 {
-
-    protected $hidden = true;
+    protected $hidden = false;
 
     /**
      * The signature of the command.
      *
      * @var string
      */
-    protected $signature = 'craft:interactive';
+    protected $signature = 'interactive';
 
     /**
      * The description of the command.
@@ -30,6 +29,7 @@ class CraftInteractive extends Command
     {
         parent::__construct();
     }
+
     /**
      * Execute the console command.
      *
@@ -51,56 +51,143 @@ class CraftInteractive extends Command
             "Views"
         ];
 
+        /**
+         *   ->setForegroundColour('yellow')
+         *   ->setBackgroundColour('black')
+         */
         $command = $this->menu('Choose Command', $commandList)
-            ->setForegroundColour('black')
-            ->setBackgroundColour('250')
-            ->setWidth(40)
+            ->setWidth(60)
             ->open();
 
-        $commandName = Str::lower($commandList[$command]);
+        $commandName = (!is_null($command)) ? Str::lower($commandList[$command]) : exit;
 
+        $craftCommand = $this->buildCraftCommand($commandName);
+
+        if (is_null($craftCommand)) {
+            Messenger::warning("craft:{$commandName} incomplete", "STATUS");
+        } else {
+            if (strlen($craftCommand) > 1) {
+                echo "\n";
+                Messenger::info("{$craftCommand}\n", "READY");
+                echo "\n";
+
+                if ($this->confirm("Would you like to execute command now?", true)) {
+                    Artisan::call($craftCommand);
+                }
+            } else {
+                Messenger::error("Invalid `craft:{$commandName}` Command", "ERROR");
+            }
+        }
+    }
+
+    private function buildCraftCommand($commandName = "")
+    {
         $craftCommand = "";
+
         switch ($commandName) {
+            case "all":
+                $craftCommand = $this->buildAllCommand();
+                break;
+            case "class":
+                $craftCommand = $this->buildClassCommand();
+                break;
+            case "controller":
+                $craftCommand = $this->buildControllerCommand();
+                break;
+            case "factory":
+                $craftCommand = $this->buildFactoryCommand();
+                break;
+            case "form request":
+                $craftCommand = $this->buildFormatRequestCommand();
+                break;
+            case "migration":
+                $craftCommand = $this->buildMigrationCommand();
+                break;
             case "model":
                 $craftCommand = $this->buildModelCommand();
                 break;
-            case "class":
-                $craftCommand = $this->buildClassCommand()();
+            case "resource":
+                $craftCommand = $this->buildResourceCommand();
+                break;
+            case "seed":
+                $craftCommand = $this->buildSeedCommand();
+                break;
+            case "test":
+                $craftCommand = $this->buildTestCommand();
+                break;
+            case "views":
+                $craftCommand = $this->buildViewsCommand();
                 break;
             default:
                 $craftCommand = "";
                 break;
         }
 
-        if (strlen($command) > 1) {
-            Messenger::info("{$craftCommand}\n", "COMMAND");
+        return $craftCommand;
+    }
+    private function buildAllCommand()
+    {
+        return null;
+    }
 
-            if ($this->confirm("Would you like to execute command now")) {
-                Artisan::call($craftCommand);
-            }
-        } else {
-            Messenger::error("Invalid `craft:{$commandName}` Command", "ERROR");
+    private function buildClassCommand()
+    {
+        $commandName = "craft:class";
+
+        $resource = $this->ask("Class Name [You may use alternate path eg. `App/Services/MyService`]");
+
+        $constructor = $this->confirm("Would you like to include constructor method") ? '--constructor' : '';
+
+        $overwrite = $this->confirm("Would you like to overwrite resource if it exists") ? '--overwrite' : '';
+
+        $template = $this->ask("Template path (override configuration file)");
+        if (strlen($template) > 0) {
+            $template = "--template " . $template;
         }
+
+        $craftCommand = "{$commandName} {$resource} {$constructor} {$template} {$overwrite}";
+
+        return str_replace("  ", " ", $craftCommand);
+    }
+
+    private function buildControllerCommand()
+    {
+        return null;
+    }
+
+    private function buildFactoryCommand()
+    {
+        return null;
+    }
+
+    private function buildFormatRequestCommand()
+    {
+        return null;
+    }
+
+    private function buildMigrationCommand()
+    {
+        return null;
     }
 
     private function buildModelCommand()
     {
+        // model options
+        $collection = "";
+
         $commandName = "craft:model";
 
-        $resource = $this->ask("{$commandName} Resource Name");
+        $resource = $this->ask("Model Name [You may use alternate path eg. `App/Models/Contact`]");
 
-        $tablename = $this->ask("Desired tablename");
+        $tablename = $this->ask("Desired tablename", $this->getTablename($resource));
 
         $overwrite = $this->confirm("Would you like to overwrite resource if it exists") ? '--overwrite' : '';
 
         $all = $this->confirm("Generate a migration, factory, and resource controller for the model");
-        $collection = "";
+
         if ($all) {
             $all = "--all";
-            $collection = $this->confirm("Use collections (only used when --all supplied)");
-            if ($collection) {
-                $collection = "--collection";
-            }
+            $collection = $this->confirm("Use collections") ? "--collection" : "";
         }
 
         $template = $this->ask("Template path (override configuration file)");
@@ -110,11 +197,31 @@ class CraftInteractive extends Command
 
         $craftCommand = "{$commandName} {$resource} --tablename {$tablename} {$all} {$collection} {$template} {$overwrite}";
 
-        return $craftCommand;
+        return str_replace("  ", " ", $craftCommand);
     }
 
-    private function buildClassCommand()
+    private function buildResourceCommand()
     {
-        $commandName = "craft:class";
+        return null;
+    }
+
+    private function buildSeedCommand()
+    {
+        return null;
+    }
+
+    private function buildTestCommand()
+    {
+        return null;
+    }
+
+    private function buildViewsCommand()
+    {
+        return null;
+    }
+
+    private function getTablename($model)
+    {
+        return Str::plural(strtolower(class_basename($model)));
     }
 }
