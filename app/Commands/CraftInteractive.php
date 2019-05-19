@@ -153,7 +153,35 @@ class CraftInteractive extends Command
 
     private function buildControllerCommand()
     {
-        return null;
+        $commandName = "craft:controller";
+
+        $name = $this->ask("Controller Name");
+
+        $model = $this->ask("Use <model> when creating controller");
+        if (strlen($model) > 0) {
+            $model = "--model " . $model;
+        }
+
+        $api = $this->confirm("Create API controller (skips create and update methods") ? '--api' : '';
+
+        $empty = $this->confirm("Create empty controller") ? '--empty' : '';
+
+        $resource = $this->confirm("Create resource controller") ? '--resource' : '';
+
+        $binding = $this->confirm("Include Route Model Binding") ? '--binding' : '';
+
+        $collection = $this->confirm("Use Resource Collection") ? '--collection' : '';
+
+        $template = $this->ask("Template path (override configuration file)");
+        if (strlen($template) > 0) {
+            $template = "--template " . $template;
+        }
+
+        $overwrite = $this->confirm("Would you like to overwrite resource if it exists") ? '--overwrite' : '';
+
+        $craftCommand = "{$commandName} {$name} {$model} {$api} {$empty} {$collection} {$binding} {$template} {$overwrite}";
+
+        return str_replace("  ", " ", $craftCommand);
     }
 
     private function buildFactoryCommand()
