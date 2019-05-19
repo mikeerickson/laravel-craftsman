@@ -11,8 +11,8 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftClass extends Command
 {
-    protected $signature = 'craft:class 
-                                {name : Class name} 
+    protected $signature = 'craft:class
+                                {name : Class name}
                                 {--c|constructor : Include constructor method}
                                 {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite   : Overwrite existing class}
@@ -34,7 +34,6 @@ class CraftClass extends Command
         $this->fs = new CraftsmanFileSystem();
 
         $this->setHelp($this->help);
-
     }
 
     public function handle()

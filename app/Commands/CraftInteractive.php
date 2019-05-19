@@ -37,6 +37,7 @@ class CraftInteractive extends Command
      */
     public function handle()
     {
+        // list of avaiable craftsman commands
         $commandList = [
             "All",
             "Class",

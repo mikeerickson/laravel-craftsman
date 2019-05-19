@@ -736,7 +736,7 @@
         },
         {
             "name": "illuminate/log",
-            "version": "v5.8.9",
+            "version": "v5.8.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/log.git",
