@@ -14,9 +14,9 @@ class CraftSeed extends Command
 {
     protected $fs;
 
-    protected $signature = 'craft:seed 
-                                {name : Seed name} 
-                                {--m|model= : Associated model} 
+    protected $signature = 'craft:seed
+                                {name : Seed name}
+                                {--m|model= : Associated model}
                                 {--r|rows= : Alternate number of rows to use in factory call}
                                 {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite : Overwrite existing seed}
@@ -51,7 +51,7 @@ class CraftSeed extends Command
             if (strlen($model) === 0) {
                 $this->error("Must supply model name");
             } else {
-                $num_rows = (int) $this->option('rows') ?: 1;
+                $num_rows = (int)$this->option('rows') ?: 1;
                 $data = [
                     "model" => $model,
                     "name" => $seedName,
@@ -65,6 +65,5 @@ class CraftSeed extends Command
         } catch (Exception $e) {
             $this->error($e->getMessage());
         }
-
     }
 }

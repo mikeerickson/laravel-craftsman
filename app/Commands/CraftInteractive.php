@@ -16,7 +16,10 @@ class CraftInteractive extends Command
      *
      * @var string
      */
-    protected $signature = 'interactive';
+    protected $signature = 'interactive
+                                {--s|skip : Skip instructions}
+
+    ';
 
     /**
      * The description of the command.
@@ -25,9 +28,15 @@ class CraftInteractive extends Command
      */
     protected $description = 'Craft Interactive (build command using interactive interface)';
 
+    protected $help = 'Craft Seed
+                     --skip, -s          Skip instructions
+                ';
+
     function __construct()
     {
         parent::__construct();
+
+        $this->setHelp($this->help);
     }
 
     /**
@@ -37,6 +46,15 @@ class CraftInteractive extends Command
      */
     public function handle()
     {
+        $skip = $this->option('skip');
+        if (!$skip) {
+            Messenger::note("The interactive wizard will prompt you for various options and parameters to guide you through crafting process. At any time, you can press ctrl-c to abort.");
+            $result = $this->confirm("Would you like to continue?");
+            if (!$result) {
+                exit;
+            }
+        }
+
         // list of avaiable craftsman commands
         $commandList = [
             "All",
@@ -56,13 +74,15 @@ class CraftInteractive extends Command
          *   ->setForegroundColour('yellow')
          *   ->setBackgroundColour('black')
          */
-        $command = $this->menu('Choose Command', $commandList)
-            ->setWidth(60)
+        $command = $this->menu('Select the type of resource you would like to create', $commandList)
+            ->setWidth(70)
+            ->setBackgroundColour('240')
+            ->setForegroundColour('cyan')
             ->open();
 
         $commandName = (!is_null($command)) ? Str::lower($commandList[$command]) : exit;
 
-        $craftCommand = $this->buildCraftCommand($commandName);
+        $craftCommand = trim($this->buildCraftCommand($commandName));
 
         if (is_null($craftCommand)) {
             Messenger::warning("craft:{$commandName} incomplete", "STATUS");
@@ -141,7 +161,7 @@ class CraftInteractive extends Command
 
         $overwrite = $this->confirm("Would you like to overwrite resource if it exists") ? '--overwrite' : '';
 
-        $template = $this->ask("Template path (override configuration file)");
+        $template = trim($this->ask("Template path (override configuration file)"));
         if (strlen($template) > 0) {
             $template = "--template " . $template;
         }
@@ -157,7 +177,7 @@ class CraftInteractive extends Command
 
         $name = $this->ask("Controller Name");
 
-        $model = $this->ask("Use <model> when creating controller");
+        $model = trim($this->ask("Model path when creating controller (eg App/Models/Customer)"));
         if (strlen($model) > 0) {
             $model = "--model " . $model;
         }
@@ -172,7 +192,7 @@ class CraftInteractive extends Command
 
         $collection = $this->confirm("Use Resource Collection") ? '--collection' : '';
 
-        $template = $this->ask("Template path (override configuration file)");
+        $template = trim($this->ask("Template path (override configuration file)"));
         if (strlen($template) > 0) {
             $template = "--template " . $template;
         }
@@ -219,7 +239,7 @@ class CraftInteractive extends Command
             $collection = $this->confirm("Use collections") ? "--collection" : "";
         }
 
-        $template = $this->ask("Template path (override configuration file)");
+        $template = trim($this->ask("Template path (override configuration file)"));
         if (strlen($template) > 0) {
             $template = "--template " . $template;
         }
