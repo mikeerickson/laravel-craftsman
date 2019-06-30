@@ -47,7 +47,23 @@ class CraftInteractive extends Command
     {
         $skip = $this->option('skip');
         if (!$skip) {
-            Messenger::note("The interactive wizard will prompt you for various options and parameters to guide you through crafting process. At any time, you can press ctrl-c to abort.");
+            echo "\n";
+            Messenger::success("Laravel Craftsman Wizard");
+            Messenger::success("v" . config('app.version'));
+
+            echo "\n";
+            Messenger::note("The interactive wizard will prompt you for various options and parameters to guide you through crafting process.\nAt any time, you can press ctrl-c to abort.");
+
+            echo "\n";
+            Messenger::status('First you will select the type of resource you would like to craft', 'STEP 1:');
+            echo "\n";
+            Messenger::status('After selecting resource, you will be presented with a series of prompts to guide you through crafting process', 'STEP 2:');
+            echo "\n";
+            Messenger::status('After all parameters have been selected for desired resource, you will be shown the command to be executed', 'STEP 3:');
+            echo "\n";
+            Messenger::status('If the command is as you wish, you can the choose to execute the command and desired resource(s) will be created', 'STEP 4:');
+            echo "\n";
+
             $result = $this->confirm("Would you like to continue?");
             if (!$result) {
                 exit;
