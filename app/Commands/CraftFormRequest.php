@@ -24,6 +24,7 @@ class CraftFormRequest extends Command
                      <name>               Class Name
                      --rules, -r          List of rules (optional)
                        eg. --rules title?required|unique:posts|max:255,body?required
+
                      --template, -t       Path to custom template (override config file)
                      --overwrite, -w      Overwrite existing class
             ';

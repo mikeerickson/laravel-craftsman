@@ -561,7 +561,7 @@ class CraftsmanFileSystem
             }
 
             Artisan::call("craft:factory {$model}Factory --model {$filename} {$overwrite}");
-            Artisan::call("craft:migration create_{$tablename}_table --model {$filename} --tablename {$tablename} {$overwrite}");
+            Artisan::call("craft:migration create_{$tablename}_table --model {$filename} --tablename {$tablename}");
         }
 
         return $result;

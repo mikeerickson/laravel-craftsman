@@ -23,6 +23,7 @@ class CraftClass extends Command
     protected $help = 'Craft Class
                      <name>               Class Name
                      --constructor, -c    Include constructor method
+
                      --template, -t       Path to custom template (override config file)
                      --overwrite, -w      Overwrite existing class
             ';

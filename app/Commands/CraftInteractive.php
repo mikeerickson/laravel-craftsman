@@ -18,7 +18,6 @@ class CraftInteractive extends Command
      */
     protected $signature = 'interactive
                                 {--s|skip : Skip instructions}
-
     ';
 
     /**
@@ -28,7 +27,7 @@ class CraftInteractive extends Command
      */
     protected $description = 'Craft Interactive (build command using interactive interface)';
 
-    protected $help = 'Craft Seed
+    protected $help = 'Craft Interactive
                      --skip, -s          Skip instructions
                 ';
 
@@ -57,7 +56,6 @@ class CraftInteractive extends Command
 
         // list of avaiable craftsman commands
         $commandList = [
-            "All",
             "Class",
             "Controller",
             "Factory",
@@ -106,9 +104,6 @@ class CraftInteractive extends Command
         $craftCommand = "";
 
         switch ($commandName) {
-            case "all":
-                $craftCommand = $this->buildAllCommand();
-                break;
             case "class":
                 $craftCommand = $this->buildClassCommand();
                 break;
@@ -119,7 +114,7 @@ class CraftInteractive extends Command
                 $craftCommand = $this->buildFactoryCommand();
                 break;
             case "form request":
-                $craftCommand = $this->buildFormatRequestCommand();
+                $craftCommand = $this->buildFormRequestCommand();
                 break;
             case "migration":
                 $craftCommand = $this->buildMigrationCommand();
@@ -146,10 +141,6 @@ class CraftInteractive extends Command
 
         return $craftCommand;
     }
-    private function buildAllCommand()
-    {
-        return null;
-    }
 
     private function buildClassCommand()
     {
@@ -159,12 +150,12 @@ class CraftInteractive extends Command
 
         $constructor = $this->confirm("Would you like to include constructor method") ? '--constructor' : '';
 
-        $overwrite = $this->confirm("Would you like to overwrite resource if it exists") ? '--overwrite' : '';
-
         $template = trim($this->ask("Template path (override configuration file)"));
         if (strlen($template) > 0) {
             $template = "--template " . $template;
         }
+
+        $overwrite = $this->confirm("Would you like to overwrite class if it exists") ? '--overwrite' : '';
 
         $craftCommand = "{$commandName} {$resource} {$constructor} {$template} {$overwrite}";
 
@@ -197,26 +188,90 @@ class CraftInteractive extends Command
             $template = "--template " . $template;
         }
 
-        $overwrite = $this->confirm("Would you like to overwrite resource if it exists") ? '--overwrite' : '';
+        $overwrite = $this->confirm("Would you like to overwrite controller if it exists") ? '--overwrite' : '';
 
-        $craftCommand = "{$commandName} {$name} {$model} {$api} {$empty} {$collection} {$binding} {$template} {$overwrite}";
+        $craftCommand = "{$commandName} {$name} {$model} {$api} {$empty} {$resource} {$collection} {$binding} {$template} {$overwrite}";
 
         return str_replace("  ", " ", $craftCommand);
     }
 
     private function buildFactoryCommand()
     {
-        return null;
+        $commandName = "craft:factory";
+
+        $resource = $this->ask("Factory Name");
+
+        $model = trim($this->ask("Model path when creating controller (eg App/Models/Customer)"));
+        if (strlen($model) > 0) {
+            $model = "--model " . $model;
+        }
+
+        $template = trim($this->ask("Template path (override configuration file)"));
+        if (strlen($template) > 0) {
+            $template = "--template " . $template;
+        }
+
+        $overwrite = $this->confirm("Would you like to overwrite factory if it exists") ? '--overwrite' : '';
+
+        $craftCommand = "{$commandName} {$resource} {$model} {$template} {$overwrite}";
+
+        return str_replace("  ", " ", $craftCommand);
     }
 
-    private function buildFormatRequestCommand()
+    private function buildFormRequestCommand()
     {
-        return null;
+        $commandName = "craft:request";
+
+        $resource = $this->ask("Request Class Name");
+
+        $rules = trim($this->ask("List of rules (eg. title?required|unique:posts|max:255,body?required)"));
+        if (strlen($rules) > 0) {
+            $rules = "--rules " . $rules;
+        }
+
+        $template = trim($this->ask("Template path (override configuration file)"));
+        if (strlen($template) > 0) {
+            $template = "--template " . $template;
+        }
+
+        $overwrite = $this->confirm("Would you like to overwrite form request if it exists") ? '--overwrite' : '';
+
+        $craftCommand = "{$commandName} {$resource} {$rules} {$template} {$overwrite}";
+
+        return str_replace("  ", " ", $craftCommand);
     }
 
     private function buildMigrationCommand()
     {
-        return null;
+        $commandName = "craft:migration";
+
+        $resource = $this->ask("Migration Name (timestamp applied at creation)");
+
+        $model = trim($this->ask("Model path when creating controller (eg App/Models/Customer)"));
+        if (strlen($model) > 0) {
+            $model = "--model " . $model;
+        }
+
+        $tablename = $this->ask("Desired tablename", $this->getTablename($resource));
+        if (strlen($tablename) > 0) {
+            $tablename = "--tablename " . $tablename;
+        }
+
+        $fields = trim($this->ask("List of fields (eg. first_name:string@20:nullable, email:string@80:nullable:unique)"));
+        if (strlen($fields) > 0) {
+            $fields = "--fields " . $fields;
+        }
+
+        $down = $this->confirm("Include down method in migration") ? '--down' : '';
+
+        $template = trim($this->ask("Template path (override configuration file)"));
+        if (strlen($template) > 0) {
+            $template = "--template " . $template;
+        }
+
+        $craftCommand = "{$commandName} {$resource} {$model} {$tablename} {$down} {$template}";
+
+        return str_replace("  ", " ", $craftCommand);
     }
 
     private function buildModelCommand()
@@ -230,7 +285,7 @@ class CraftInteractive extends Command
 
         $tablename = $this->ask("Desired tablename", $this->getTablename($resource));
 
-        $overwrite = $this->confirm("Would you like to overwrite resource if it exists") ? '--overwrite' : '';
+        $overwrite = $this->confirm("Would you like to overwrite model if it exists") ? '--overwrite' : '';
 
         $all = $this->confirm("Generate a migration, factory, and resource controller for the model");
 
@@ -244,6 +299,8 @@ class CraftInteractive extends Command
             $template = "--template " . $template;
         }
 
+        $overwrite = $this->confirm("Would you like to overwrite class if it exists") ? '--overwrite' : '';
+
         $craftCommand = "{$commandName} {$resource} --tablename {$tablename} {$all} {$collection} {$template} {$overwrite}";
 
         return str_replace("  ", " ", $craftCommand);
@@ -251,22 +308,113 @@ class CraftInteractive extends Command
 
     private function buildResourceCommand()
     {
-        return null;
+        $commandName = "craft:resource";
+
+        $resource = $this->ask("Resource Name");
+
+        $collection = $this->confirm("Create resource collection") ? '--collection' : '';
+
+        $template = trim($this->ask("Template path (override configuration file)"));
+        if (strlen($template) > 0) {
+            $template = "--template " . $template;
+        }
+
+        $overwrite = $this->confirm("Would you like to overwrite resource if it exists") ? '--overwrite' : '';
+
+        $craftCommand = "{$commandName} {$resource} {$collection} {$template} {$overwrite}";
+
+        return str_replace("  ", " ", $craftCommand);
     }
 
     private function buildSeedCommand()
     {
-        return null;
+        $commandName = "craft:seed";
+
+        $resource = $this->ask("Seed Name (eg ContactTableSeeder)");
+
+        $defaultModel = str_replace("TableSeeder", "", $resource);
+        $defaultModel = str_replace("Seeder", "", $defaultModel);
+
+        $model = trim($this->ask("Model path when creating controller (eg App/Models/{$defaultModel})"));
+        if (strlen($model) > 0) {
+            $model = "--model " . $model;
+        }
+
+        $rows = trim($this->ask("Alternate number of rows to use in factory call"));
+        if (strlen($rows) > 0) {
+            $rows = "--rows " . $rows;
+        }
+
+        $template = trim($this->ask("Template path (override configuration file)"));
+        if (strlen($template) > 0) {
+            $template = "--template " . $template;
+        }
+
+        $overwrite = $this->confirm("Would you like to overwrite seed if it exists") ? '--overwrite' : '';
+
+        $craftCommand = "{$commandName} {$resource} {$model} {$rows} {$template} {$overwrite}";
+
+        return str_replace("  ", " ", $craftCommand);
     }
 
     private function buildTestCommand()
     {
-        return null;
+        $commandName = "craft:test";
+
+        $resource = $this->ask("Test Class Name (eg ExampleTest)");
+
+        $setupBlock = $this->confirm("Include `setUp` Block") ? '--setup' : '';
+
+        $tearDownBlock = $this->confirm("Include `tearDown` Block") ? '--teardown' : '';
+
+        $unit = $this->confirm("Create unit test (default Feature)") ? '--unit' : '';
+
+        $template = trim($this->ask("Template path (override configuration file)"));
+        if (strlen($template) > 0) {
+            $template = "--template " . $template;
+        }
+
+        $overwrite = $this->confirm("Would you like to overwrite test if it exists") ? '--overwrite' : '';
+
+        $craftCommand = "{$commandName} {$resource} {$setupBlock} {$tearDownBlock} {$unit} {$template} {$overwrite}";
+
+        return str_replace("  ", " ", $craftCommand);
     }
 
     private function buildViewsCommand()
     {
-        return null;
+        $commandName = "craft:views";
+
+        $resource = $this->ask("Resource name (resources/views/<name>)");
+
+        $extends = $this->ask("Include `extends` block using supplied layout");
+        if (strlen($extends) > 0) {
+            $extends = "--extends " . $extends;
+        }
+
+        $section = $this->ask("Include `section` block using supplied name");
+        if (strlen($section) > 0) {
+            $section = "--section " . $section;
+        }
+
+        $noCreate = $this->confirm("Craft create view", "yes") ? '' : '--no-create';
+
+        $noEdit = $this->confirm("Craft edit view", "yes") ? '' : '--no-edit';
+
+        $noIndex = $this->confirm("Craft index view", "yes") ? '' : '--no-index';
+
+        $noShow = $this->confirm("Craft show view", "yes") ? '' : '--no-show';
+
+        $template = trim($this->ask("Template path (override configuration file)"));
+        if (strlen($template) > 0) {
+            $template = "--template " . $template;
+        }
+
+        $overwrite = $this->confirm("Would you like to overwrite test if it exists") ? '--overwrite' : '';
+
+        $craftCommand = "{$commandName} {$resource} {$extends} {$section} {$noCreate} {$noEdit} {$noIndex} {$noShow} {$template} {$overwrite}";
+
+        return str_replace("  ", " ", $craftCommand);
     }
 
     private function getTablename($model)

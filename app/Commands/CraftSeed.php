@@ -28,6 +28,7 @@ class CraftSeed extends Command
                      <name>               Seed Name
                      --model, -m          Path to model
                      --rows, -r           Number of rows to use in factory call (Optional)
+
                      --template, -t       Template path (override configuration file)
                      --overwrite, -w      Overwrite existing seed
             ';

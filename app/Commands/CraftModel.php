@@ -23,7 +23,6 @@ class CraftModel extends Command
                                 {--w|overwrite : Overwrite existing model}
                             ';
 
-
     protected $description = "Craft Model";
 
     protected $help = 'Craft Model
@@ -31,6 +30,7 @@ class CraftModel extends Command
                      --all, -a            Generate a migration, factory, and resource controller for the model
                      --collection, -c     Use collections (only used when --all supplied)
                      --tablename, -t      Desired tablename
+
                      --template, -m       Template path (override configuration file)
                      --overwrite, -w      Overwrite existing model
             ';

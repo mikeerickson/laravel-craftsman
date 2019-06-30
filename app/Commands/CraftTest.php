@@ -12,11 +12,12 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftTest extends Command
 {
-    protected $signature = 'craft:test 
-                                {name : Class name} 
+    protected $signature = 'craft:test
+                                {name : Class name}
                                 {--s|setup : Include setUp block}
                                 {--d|teardown : Include tearDown block}
                                 {--u|unit : Create unit test}
+                                {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite : Overwrite existing test}
                             ';
 
@@ -27,7 +28,9 @@ class CraftTest extends Command
                      --setup, -s          Include setUp block
                      --teardown, -d       Include tearDown block
                      --unit, -u           Create unit test
-                     --overwrite, -w      Overwrite existing test
+
+                    --template, -t       Template path (override configuration file)
+                    --overwrite, -w      Overwrite existing test
             ';
 
     public function __construct()

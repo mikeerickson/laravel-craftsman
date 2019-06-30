@@ -13,10 +13,10 @@ class CraftResource extends Command
 {
     protected $fs;
 
-    protected $signature = 'craft:resource {name : Resource Name} 
-                                {--w|overwrite : Overwrite existing controller} 
-                                {--c|collection : Create resource collection} 
-                                {--t|template= : Template path (override configuration file)} 
+    protected $signature = 'craft:resource {name : Resource Name}
+                                {--c|collection : Create resource collection}
+                                {--t|template= : Template path (override configuration file)}
+                                {--w|overwrite : Overwrite existing controller}
                            ';
 
     protected $description = "Craft Resource";
@@ -24,6 +24,7 @@ class CraftResource extends Command
     protected $help = 'Craft Resource
                      <name>               Controller Name
                      --collection, -c     Use resource collection
+
                      --template, -t       Template path (override configuration file)
                      --overwrite, -w      Overwrite existing controller
             ';

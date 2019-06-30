@@ -16,13 +16,13 @@ class CraftController extends Command
 
     protected $signature = 'craft:controller {name : Controller Name}
                                 {--m|model= : Associated model}
-                                {--w|overwrite : Overwrite existing controller}
                                 {--u|resource : Create resource controller}
                                 {--b|binding : Include route / model binding (requires model property)}
                                 {--c|collection : Create resource collection}
-                                {--t|template= : Template path (override configuration file)}
                                 {--l|validation : Scaffold validation}
                                 {--a|api : Create API controller (skips create and update methods)}
+                                {--t|template= : Template path (override configuration file)}
+                                {--w|overwrite : Overwrite existing controller}
                            ';
 
     protected $description = "Craft Controller (standard, api, empty, resource)";
@@ -36,6 +36,7 @@ class CraftController extends Command
                      --resource, -u       Create resource controller
                      --binding, -b        Include Route Model Biding (requires model option)
                      --collection, -c     Use resource collection
+
                      --template, -t       Template path (override configuration file)
                      --overwrite, -w      Overwrite existing controller
             ';

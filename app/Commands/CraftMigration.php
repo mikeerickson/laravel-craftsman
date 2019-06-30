@@ -21,7 +21,7 @@ class CraftMigration extends Command
                                 {--t|tablename= : Desired tablename}
                                 {--f|fields= : List of fields (optional)}
                                 {--d|down : Include down method in migration}
-                                {--w|overwrite : Overwrite migration (default: true)}
+                                {--p|template= : Template path (override configuration file)}
                             ';
 
     protected $description = "Craft Database Migration";
@@ -33,7 +33,8 @@ class CraftMigration extends Command
                      --fields, -f         List of fields (optional)
                                            eg. --fields first_name:string@20:nullable, email:string@80:nullable:unique
                      --down, -d           Include down methods (skipped by default)
-                     --overwrite, -w      Overwrite migration (skipped by default, default: true)
+
+                     --template, -p       Template path (override configuration file)
             ';
 
     /**
@@ -78,7 +79,6 @@ class CraftMigration extends Command
             "tablename" => $tablename,
             "fields" => $fields,
             "down" => $this->option('down'),
-            "overwrite" => $this->option('overwrite'),
         ];
 
         // timestamp to be prepended to name

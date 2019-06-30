@@ -11,10 +11,10 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftFactory extends Command
 {
-    protected $signature = 'craft:factory 
-                                {name : Factory Name} 
+    protected $signature = 'craft:factory
+                                {name : Factory Name}
                                 {--m|model= : Associated model}
-                                {--t|template= : Template path (override configuration file)} 
+                                {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite : Overwrite existing factory}
                             ';
 
@@ -23,6 +23,7 @@ class CraftFactory extends Command
     protected $help = 'Craft Factory
                      <name>               Factory Name
                      --model, -m          Use <model> when creating controller
+
                      --template, -t       Template path (override configuration file)
                      --overwrite, -w      Overwrite existing factory
             ';

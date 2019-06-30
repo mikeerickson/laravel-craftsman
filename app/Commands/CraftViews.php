@@ -11,16 +11,17 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftViews extends Command
 {
-    protected $signature = 'craft:views 
-                                {name : Resource name (resources/views/<name>)} 
+    protected $signature = 'craft:views
+                                {name : Resource name (resources/views/<name>)}
                                 {--x|extends= : Include extends block using supplied layout}
                                 {--s|section= : Include section block using supplied name}
-                                {--w|overwrite : Overwrite existing views}
-                                
+
                                 {--c|no-create : Don\'t craft create view}
                                 {--d|no-edit : Don\'t craft edit view}
                                 {--i|no-index : Don\'t craft index view}
                                 {--o|no-show : Don\'t craft show view}
+
+                                {--w|overwrite : Overwrite existing views}
                             ';
 
     protected $description = "Craft Views (create, edit, index, show)";
@@ -34,6 +35,8 @@ class CraftViews extends Command
                      --no-edit, -d        Exclude edit view
                      --no-index, -i       Exclude index view
                      --no-show, -w        Exclude show view
+
+                     --overwrite, -w      Overwrite existing model
             ';
 
     public function __construct()

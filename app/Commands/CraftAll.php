@@ -26,7 +26,6 @@ class CraftAll extends Command
                                 {--u|resource : Create resource controller}
                                 {--l|collection : Create resource collection}
                                 {--i|section= : Views section block}
-                                {--w|overwrite : Overwrite existing files}
 
                                 {--c|no-controller : Skip crafting controller}
                                 {--a|no-factory : Skip crafting factory}
@@ -34,6 +33,8 @@ class CraftAll extends Command
                                 {--o|no-model : Skip crafting model}
                                 {--s|no-seed : Skip crafting seed}
                                 {--e|no-views : Skip crafting resource views}
+
+                                {--w|overwrite : Overwrite existing files}
                             ';
 
     protected $description = 'Craft All Assets (controller, factory, migration, model, seed, test, views)';
@@ -49,7 +50,6 @@ class CraftAll extends Command
                      --section, -i        View section block (optional)
                      --resource, -o       Create resource controller
                      --collection, -l     Create resource collection
-                     --overwrite, -w      Overwrite existing files (WARNING: This can\'t be undone)
 
                      --no-controller, -c  Do not create controller
                      --no-factory, -f     Do not create factory
@@ -57,6 +57,8 @@ class CraftAll extends Command
                      --no-model, -o       Do not create model
                      --no-seed, -s        Do not create seed
                      --no-views, -e       Do not create resource views
+
+                     --overwrite, -w      Overwrite existing files (WARNING: This can\'t be undone)
             ';
 
     public function __construct()
