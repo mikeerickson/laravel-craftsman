@@ -239,7 +239,7 @@ public function rules()
 
 ## Tips
 
-### Boolean Option Shortcut
+💡 **Boolean Option Shortcut**
 
 When executing any of the `laravel-craftsman` commands, if you wish to apply one or more switches (those options which do not require a corresponding value), you can use the standard CLI shorthands (this tip can be used in any CLI based tool, not just `laravel-craftsman` (well assuming the CLI actually supports shorthand).
 
@@ -259,7 +259,7 @@ is same as
 > laravel-craftsman craft:views --extends layouts.app --section content -c -d -w
 ```
 
-### Defining Nested Paths
+💡 **Defining Nested Paths**
 
 Any command can store assets within tested folders within default path by separating `name` argument with forward slash
 For example, the following command will define the path for model asset in the `App/Models/<name>` path
@@ -272,7 +272,7 @@ For example, the following command will define the path for model asset in the `
 
 Laravel Craftsman provides support for creating custom templates if you wish to change the syntax to match your personal style. The default templates use the standard Laravel syntax, but we like to allow ou have your own flair.
 
-### User Customized Templates
+📝 **User Customized Templates**
 
 If you wish to create derivatives of the supported templates, you can customize the `config.php` located in the `laravel-craftsman` directory.
 By default, this will be `~/.composer/vendor/codedungeon/laravel-craftsman`, but may be different depending on the method you chose to install laravel-craftsman.
@@ -296,7 +296,7 @@ By default, this will be `~/.composer/vendor/codedungeon/laravel-craftsman`, but
         ],
 ```
 
-### Single Use Template
+📝 **Single Use Template**
 
 In addition to creating templates and configuring the `config.php` file, you may optionally supply a template to be used as single use (not stored) from all command execution
 For example, if you wish to create a standard class asset, you can use a single use template as follows:
@@ -309,7 +309,7 @@ For example, if you wish to create a standard class asset, you can use a single 
 
 ```
 
-### Template Variables
+📝 **Template Variables**
 
 The following variables can be used in any of the supported templates (review the `templates` directory for a basis of how to create custom templates)
 
