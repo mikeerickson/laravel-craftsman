@@ -7,6 +7,7 @@ use Exception;
 use Mustache_Engine;
 use Illuminate\Support\Str;
 use Illuminate\Config\Repository;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
 use Codedungeon\PHPMessenger\Facades\Messenger;
@@ -398,8 +399,11 @@ class CraftsmanFileSystem
      */
     public function createFile($type = null, $filename = null, $data = [])
     {
+        dlog("*** start createFile {$filename} ***");
+
         $namespace = "";
         $overwrite = (isset($data["overwrite"])) ? $data["overwrite"] : false;
+        $factory = (isset($data["factory"])) ? $data["factory"] : false;
         $all = (isset($data["all"])) ? $data["all"] : false;
 
         $path = $this->getOutputPath($type);
@@ -434,6 +438,9 @@ class CraftsmanFileSystem
 
             $dest = $this->tildify($dest);
             Messenger::error("{$filename} already exists\n", "ERROR");
+
+            dlog("exit createFile {$filename}");
+
             return [
                 "status" => self::FILE_EXIST,
                 "filename" => $filename,
@@ -501,7 +508,7 @@ class CraftsmanFileSystem
         }
 
         // this variable is only used in seed
-        $vars["num_rows"] = (isset($data["num_rows"])) ? (int)$data["num_rows"] : 1;
+        $vars["num_rows"] = (isset($data["num_rows"])) ? (int) $data["num_rows"] : 1;
 
         // these variable is only used in test
         $vars["down"] = (isset($data["down"])) ? $data["down"] : false;
@@ -551,9 +558,13 @@ class CraftsmanFileSystem
             Messenger::success("{$shortenFilename} created successfully\n", "SUCCESS");
         }
 
-        if ($all) {
-            $overwrite = $overwrite ? "--overwrite" : "";
+        $overwrite = $overwrite ? "--overwrite" : "";
 
+        if ($factory && !$all) {
+            Artisan::call("craft:factory {$model}Factory --model {$filename} {$overwrite}");
+        }
+
+        if ($all) {
             if ($data["collection"]) {
                 Artisan::call("craft:resource {$model}sResource --collection {$overwrite}");
             } else {
@@ -561,8 +572,11 @@ class CraftsmanFileSystem
             }
 
             Artisan::call("craft:factory {$model}Factory --model {$filename} {$overwrite}");
+
             Artisan::call("craft:migration create_{$tablename}_table --model {$filename} --tablename {$tablename}");
         }
+
+        dlog("end createFile {$filename}");
 
         return $result;
     }

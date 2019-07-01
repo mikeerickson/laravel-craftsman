@@ -19,6 +19,7 @@ class CraftModel extends Command
                                 {--a|all : Generate a migration, factory, and resource controller for the model}
                                 {--c|collection : Use collections (only used when --all supplied)}
                                 {--t|tablename= : Tablename if different than model name}
+                                {--f|factory : Create a new factory for the model}
                                 {--m|template= : Template path (override configuration file)}
                                 {--w|overwrite : Overwrite existing model}
                             ';
@@ -30,6 +31,7 @@ class CraftModel extends Command
                      --all, -a            Generate a migration, factory, and resource controller for the model
                      --collection, -c     Use collections (only used when --all supplied)
                      --tablename, -t      Desired tablename
+                     --factory, -f        Create a new factory for the mode
 
                      --template, -m       Template path (override configuration file)
                      --overwrite, -w      Overwrite existing model
@@ -48,6 +50,7 @@ class CraftModel extends Command
     {
         $modelName = $this->argument('name');
         $overwrite = $this->option('overwrite');
+        $factory = $this->option('factory');
 
         $parts = explode("/", $modelName);
         $model = array_pop($parts);
@@ -62,6 +65,7 @@ class CraftModel extends Command
             "name" => $modelName,
             "all" => $this->option('all'),
             "tablename" => $tablename,
+            "factory" => $factory,
             "namespace" => $namespace,
             "overwrite" => $overwrite,
             "collection" => $this->option('collection'),

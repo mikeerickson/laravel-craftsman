@@ -130,6 +130,7 @@ laravel-craftsman craft:all Contact \
 |                      | --tablename, -t     | Tablename used in database (will set \$tablename in Model)                           |
 |                      |                     | _If not supplied, default table will be pluralized model name_                       |
 |                      | --template, -m      | Path to custom template (override config file)                                       |
+|                      | --factory, -f       | Create factory                                                                       |
 |                      | --overwrite, -w     | Overwrite existing class                                                             |
 | **craft:request**    | **request name**    | **Creates form request using supplied options**                                      |
 |                      |                     | _See below about defining alternate model path_                                      |

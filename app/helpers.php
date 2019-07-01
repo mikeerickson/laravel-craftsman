@@ -24,7 +24,7 @@ if (!function_exists("rmdir")) {
      */
     function rmdir($dirname)
     {
-        system("rm -rf ".escapeshellarg($dirname));
+        system("rm -rf " . escapeshellarg($dirname));
     }
 }
 
@@ -33,15 +33,19 @@ if (!function_exists("valid_path")) {
      * @param $path
      * @return bool
      */
-    function valid_path($path)
+    function valid_path($inPath = "")
     {
+        $path = $inPath;
+
         // whether $path is unix or not
-        $unipath = strlen($path) == 0 || $path{0} != '/';
+        $unipath = strlen($path) == 0 || $path{
+            0} != '/';
         $unc = substr($path, 0, 2) == '\\\\' ? true : false;
         // attempts to detect if path is relative in which case, add cwd
         if (strpos($path, ':') === false && $unipath && !$unc) {
-            $path = getcwd().DIRECTORY_SEPARATOR.$path;
-            if ($path{0} == '/') {
+            $path = getcwd() . DIRECTORY_SEPARATOR . $path;
+            if ($path{
+                0} == '/') {
                 $unipath = false;
             }
         }
@@ -66,8 +70,8 @@ if (!function_exists("valid_path")) {
             $path = readlink($path);
         }
         // put initial separator that could have been lost
-        $path = !$unipath ? '/'.$path : $path;
-        $path = $unc ? '\\\\'.$path : $path;
+        $path = !$unipath ? '/' . $path : $path;
+        $path = $unc ? '\\\\' . $path : $path;
         return is_dir($path);
     }
 }
@@ -96,7 +100,7 @@ if (!function_exists("valid_path")) {
         $unc = substr($path, 0, 2) == '\\\\' ? true : false;
         // attempts to detect if path is relative in which case, add cwd
         if (strpos($path, ':') === false && $unipath && !$unc) {
-            $path = getcwd().DIRECTORY_SEPARATOR.$path;
+            $path = getcwd() . DIRECTORY_SEPARATOR . $path;
             if ($path[0] == '/') {
                 $unipath = false;
             }
@@ -126,8 +130,8 @@ if (!function_exists("valid_path")) {
             $path = readlink($path);
         }
         // put initial separator that could have been lost
-        $path = !$unipath ? '/'.$path : $path;
-        $path = $unc ? '\\\\'.$path : $path;
+        $path = !$unipath ? '/' . $path : $path;
+        $path = $unc ? '\\\\' . $path : $path;
         return $path;
     }
 }
@@ -138,7 +142,7 @@ if (!function_exists("get_build")) {
      */
     function get_build()
     {
-        $data = file_get_contents(getcwd().DIRECTORY_SEPARATOR."package.json");
+        $data = file_get_contents(getcwd() . DIRECTORY_SEPARATOR . "package.json");
         $json = json_decode($data, true, 512);
         return $json["build"];
     }
@@ -150,7 +154,7 @@ if (!function_exists("get_version")) {
      */
     function get_version()
     {
-        $data = file_get_contents(getcwd().DIRECTORY_SEPARATOR."package.json");
+        $data = file_get_contents(getcwd() . DIRECTORY_SEPARATOR . "package.json");
         $json = json_decode($data, true, 512);
         return $json["version"];
     }
@@ -164,5 +168,17 @@ if (!function_exists("is_phar")) {
     {
         $path = Phar::running(false);
         return strlen($path) > 0;
+    }
+}
+
+if (!function_exists("dlog")) {
+    /**
+     * @return bool
+     */
+    function dlog($msg = "")
+    {
+        if (!is_phar()) {
+            Log::info($msg);
+        }
     }
 }
