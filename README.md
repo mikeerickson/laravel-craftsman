@@ -51,6 +51,9 @@ or
 > laravel-craftsman interactive
 > laravel-craftsman interactive --silent
 
+> laravel-craftsman publish
+> laravel-craftsman publish --overwrite
+
 > laravel-craftsman craft:all Post --model App/Models/Post --tablename posts --rows 50 --extends layouts.app --section content
 
 > laravel-craftsman craft:class App/TestClass --constructor
@@ -89,6 +92,9 @@ laravel-craftsman craft:all Contact \
 | -------------------- | ------------------- | ------------------------------------------------------------------------------------ |
 | **interactive**      |                     | **Run Interactive Mode (uses wizard to craft resources**                             |
 |                      | --silent, -s        | Skips Wizard Instructions                                                            |
+| **publish**          |                     | **Publish templates to project diretory**                                            |
+|                      |                     | *==> all craft:xxx commands will use project template if it exists*                  |
+|                      | --overwrite, -o     | Overwrites published templates directory                                             |
 | **craft:all**        | **base name**       | **Creates all assets (Controller, Factory, Migration, Model, Seed)**                 |
 |                      | --model, -m         | Path to model (eg App/Models/Post)                                                   |
 |                      | --tablename, -t     | Tablename used in database (will set \$tablename in Model)                           |
@@ -171,7 +177,13 @@ The following commands support defining class path
 -   craft:seed
 -   craft:test
 
-### Single Use Template
+### Template Access
+
+Laravel Craftsman will use sensible default templates which are located in the `laravel-craftsman` installation location. If you wish to have greater control over templates, you can publish (see `laravel-craftsman publish` command) default templates into the project directory (`<project>/templates`).
+
+Subsequent `laravel-craftsman craft:xxx` commands will first look in the project templates directory, if template not found, then it will use the application templates.
+
+#### Single Use Templates
 
 In addition to the standard templates, you may also define a single use template which is only used during command execution. Single use templates are designed to reference project specific templates, and you use the `<projet>` keyword when executing the desire command.
 
@@ -271,7 +283,7 @@ For example, the following command will define the path for model asset in the `
 
 ## Custom Templates
 
-Laravel Craftsman provides support for creating custom templates if you wish to change the syntax to match your personal style. The default templates use the standard Laravel syntax, but we like to allow ou have your own flair.
+Laravel Craftsman provides support for creating custom templates if you wish to change the syntax to match your personal style. The default templates use the standard Laravel syntax, but we like to allow ou have your own flair (see `laravel-craftsman publish` for greater template control).
 
 📝 **User Customized Templates**
 

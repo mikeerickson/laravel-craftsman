@@ -178,6 +178,9 @@ class CraftsmanFileSystem
             case 'seed':
                 $path = $this->seed_path();
                 break;
+            case 'templates':
+                $path = $this->templates_path();
+                break;
             case 'tests':
             case 'test':
                 $path = $this->test_path();
@@ -191,6 +194,14 @@ class CraftsmanFileSystem
         }
 
         return $path;
+    }
+
+    /**
+     * @return Repository|mixed
+     */
+    public function templates_path()
+    {
+        return config('craftsman.paths.templates');
     }
 
     /**
@@ -224,8 +235,6 @@ class CraftsmanFileSystem
     {
         return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.migrations');
     }
-
-    // TODO: This method needs refactoring
 
     public function model_path($model_path = null)
     {
@@ -275,6 +284,11 @@ class CraftsmanFileSystem
         return ""; // we didnt find the entry, return null string
     }
 
+    public function getTemplatesDirectory()
+    {
+        return $this->getPharPath() . "templates";
+    }
+
     /**
      * @return string
      */
@@ -301,6 +315,11 @@ class CraftsmanFileSystem
         }
 
         return preg_replace('#/+#', '/', join('/', $paths));
+    }
+
+    public function getProjectTemplatesDiretory()
+    {
+        return $this->path_join(getcwd(), "templates");
     }
 
     /**
@@ -358,6 +377,22 @@ class CraftsmanFileSystem
         }
     }
 
+    public function copy_directory($src, $dst)
+    {
+        $dir = opendir($src);
+        @mkdir($dst);
+        while (($file = readdir($dir))) {
+            if (($file != '.') && ($file != '..')) {
+                if (is_dir($src . '/' . $file)) {
+                    $this->copy_directory($src . '/' . $file, $dst . '/' . $file);
+                } else {
+                    copy($src . '/' . $file, $dst . '/' . $file);
+                }
+            }
+        }
+        closedir($dir);
+    }
+
     public function tildify($filename)
     {
         return str_replace($this->getUserHome(), "~", $filename);
@@ -399,8 +434,6 @@ class CraftsmanFileSystem
      */
     public function createFile($type = null, $filename = null, $data = [])
     {
-        dlog("*** start createFile {$filename} ***");
-
         $namespace = "";
         $overwrite = (isset($data["overwrite"])) ? $data["overwrite"] : false;
         $factory = (isset($data["factory"])) ? $data["factory"] : false;
@@ -411,13 +444,20 @@ class CraftsmanFileSystem
         if (isset($data["template"])) {
             $src = $this->getTemplateFilename($data["template"]);
         } else {
-            $src = $this->getUserTemplate("./config.php", $type);
-            if (!file_exists($src)) {
-                $src = config("craftsman.templates.{$type}");
-            }
 
-            $src = $this->getPharPath() . $src;
-            $src = str_replace("//", "/", $src);
+            $templateFilename = $this->path_join($this->getProjectTemplatesDiretory(), "{$type}.mustache");
+            if (file_exists($templateFilename)) {
+                $src = $templateFilename;
+            } else {
+                $src = $this->getUserTemplate("./config.php", $type);
+
+                if (!file_exists($src)) {
+                    $src = config("craftsman.templates.{$type}");
+                }
+
+                $src = $this->getPharPath() . $src;
+                $src = str_replace("//", "/", $src);
+            }
         }
 
         if (!file_exists($src)) {
@@ -428,7 +468,9 @@ class CraftsmanFileSystem
         }
 
         // if we have supplied a custom path (ie App/Models/Contact) it will be used instead of default path
-        $dest = (Str::startsWith($filename, "App") || Str::startsWith($filename, "app")) ?  $this->path_join($filename . ".php") : $this->path_join($path, $filename . ".php");
+        $dest = (Str::startsWith($filename, "App") || Str::startsWith($filename, "app"))
+            ?  $this->path_join($filename . ".php")
+            : $this->path_join($path, $filename . ".php");
 
         if (file_exists($dest) && (!$overwrite)) {
             $filename = $this->shortenFilename($dest);
@@ -439,7 +481,6 @@ class CraftsmanFileSystem
             $dest = $this->tildify($dest);
             Messenger::error("{$filename} already exists\n", "ERROR");
 
-            dlog("exit createFile {$filename}");
 
             return [
                 "status" => self::FILE_EXIST,
@@ -575,8 +616,6 @@ class CraftsmanFileSystem
 
             Artisan::call("craft:migration create_{$tablename}_table --model {$filename} --tablename {$tablename}");
         }
-
-        dlog("end createFile {$filename}");
 
         return $result;
     }

@@ -11,8 +11,8 @@ class Create{{model}}Table extends Migration
     {
         Schema::create('{{tablename}}', function (Blueprint $table) {
             $table->bigIncrements('id');
-{{{fields}}}
-$table->timestamps();
+            {{{fields}}}
+            $table->timestamps();
 });
 }
 
@@ -24,7 +24,7 @@ $table->timestamps();
     */
     public function down()
     {
-    Schema::dropIfExists('{{tablename}}');
+        Schema::dropIfExists('{{tablename}}');
     }
 {{/down}}
 }

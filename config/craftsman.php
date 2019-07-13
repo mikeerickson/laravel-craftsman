@@ -21,6 +21,7 @@ return [
         'models' => 'app',
         'requests' => 'app/Http/Requests',
         'seeds' => 'database/seeds',
+        'templates' => 'templates',
         'tests' => 'tests',
         'views' => 'resources/views',
     ],
@@ -38,6 +39,7 @@ return [
      */
 
     'templates' => [
+        'base' => 'templates',
         'class' => 'templates/class.mustache',
         'api-controller' => 'templates/api-controller.mustache',
         'binding-controller' => 'templates/binding-controller.mustache',

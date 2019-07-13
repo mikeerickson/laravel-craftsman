@@ -15,21 +15,21 @@ class {{name}} extends Controller
     public function store(Request $request)
     {
         $data = {{model}}::insert($request->all());
-}
+    }
 
-public function show($id)
-{
-return {{model}}::findOrFail($id);
-}
+    public function show($id)
+    {
+        return {{model}}::findOrFail($id);
+    }
 
-public function update(Request $request, $id)
-{
-$data = {{model}}::findOrFail($id)->update($request->all());
-}
+    public function update(Request $request, $id)
+    {
+        $data = {{model}}::findOrFail($id)->update($request->all());
+    }
 
-public function destroy($id)
-{
-$row = {{model}}::findOrFail($id);
-$row->delete();
-}
+    public function destroy($id)
+    {
+        $row = {{model}}::findOrFail($id);
+        $row->delete();
+    }
 }
