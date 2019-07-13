@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added `craft:publish` command to publish craftsman templates to current project
+- Removed extraneous master templates (those ending in .php)
 
 ## [1.4.0] - 2019.06.24
 
@@ -46,7 +47,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Fixed
-
 
 ## [1.2.0] - 2019-04-19
 
@@ -91,19 +91,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added view creation
 - Added check to error if file exists
-    - Use --overwrite option to force creation
+  - Use --overwrite option to force creation
 - Refactored messages to work with file existence check
 
 ### Modified
 
 - Refactor asset creation to not automatically overwrite files
 
-
 ## [1.0.0] - 2019-03-28
 
 ### Added
 
 -   Initial Release
-
 
 [keep a changelog](https://keepachangelog.com/en/1.0.0/)

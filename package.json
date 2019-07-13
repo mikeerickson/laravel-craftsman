@@ -1,7 +1,7 @@
 {
   "name": "laravel-craftsman",
   "version": "1.5.0",
-  "build": "200",
+  "build": "201",
   "description": "Laravel Craftsman",
   "main": "index.js",
   "directories": {
