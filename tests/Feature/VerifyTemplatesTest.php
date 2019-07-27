@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\CraftsmanFileSystem;
 use Tests\TestCase;
+use App\CraftsmanFileSystem;
 
 /**
  * Class VerifyTemplatesTest
@@ -155,5 +155,4 @@ class VerifyTemplatesTest extends TestCase
 
         $this->fs->rmdir("App/Services");
     }
-
 }

@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\CraftsmanFileSystem;
 use Tests\TestCase;
 use Tests\TestHelpersTrait;
+use App\CraftsmanFileSystem;
 
 /**
  * Class CraftSeedTest
@@ -61,8 +61,8 @@ class CraftSeedTest extends TestCase
         $filename = $this->pathJoin($seedPath, "{$class}.php");
         var_dump($filename);
 
-//        $this->assertFileContainsString($filename, "testMethod");
+        //        $this->assertFileContainsString($filename, "testMethod");
 
-//        $this->fs->rmdir("database/seeds");
+        //        $this->fs->rmdir("database/seeds");
     }
 }

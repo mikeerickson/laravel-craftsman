@@ -1,7 +1,7 @@
 {
   "name": "laravel-craftsman",
-  "version": "1.5.0",
-  "build": "201",
+  "version": "1.6.0",
+  "build": "211",
   "description": "Laravel Craftsman",
   "main": "index.js",
   "directories": {
@@ -22,7 +22,8 @@
     "test:stress": "vendor/bin/phpunit --repeat 10 --configuration phpunit.ci.xml",
     "pre-commit": "npm run test:ci",
     "todo": "./tasks/todo.js",
-    "todo:file": "./tasks/todo.js > TODO.md"
+    "todo:file": "./tasks/todo.js > TODO.md",
+    "todo:out": "./tasks/todo.js > TODO.md"
   },
   "repository": {
     "type": "git",

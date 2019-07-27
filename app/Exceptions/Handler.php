@@ -27,11 +27,25 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
-        // parent::report($exception);
-        // dd($exception->getTrace()[2]["args"][0]);
-        echo "\n";
-        $msg = $exception->getMessage() . " Please review laravel-craftsman <command> --help for details.";
-        Messenger::error($msg, "ERROR");
+        $msg = $exception->getMessage() . " \n\nPlease review laravel-craftsman <command> --help for details.";
+
+        $ret = preg_match('/"([^"]+)"/', $msg, $matches);
+        if ($ret > 0) {
+            $command = $matches[$ret];
+            $st = $exception->getTrace()[2]["args"][0];
+
+            $str = (string) $st;
+            $str = str_replace("craft:", "php artisan make:", $str);
+            $str = str_replace("'", "", $str);
+            $makeComand = str_replace("craft:", "make:", $command);
+            echo "\n";
+            Messenger::info("${command} does not exist, using artisan {$makeComand}...", "INFO");
+            shell_exec($str);
+        } else {
+            echo "\n";
+            Messenger::error($msg, "ERROR");
+        }
+
         exit;
     }
 }

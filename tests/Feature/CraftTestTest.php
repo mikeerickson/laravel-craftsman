@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\CraftsmanFileSystem;
 use Tests\TestCase;
 use Tests\TestHelpersTrait;
+use App\CraftsmanFileSystem;
 
 /**
  * Class CraftTestTest
@@ -26,7 +26,7 @@ class CraftTestTest extends TestCase
     {
         parent::setUp();
         $this->fs = new CraftsmanFileSystem();
-//        $this->withoutExceptionHandling();
+        //        $this->withoutExceptionHandling();
     }
 
     /**
