@@ -12,7 +12,22 @@ class Create{{model}}Table extends Migration
         Schema::create('{{tablename}}', function (Blueprint $table) {
             $table->bigIncrements('id');
             {{{fields}}}
-            $table->timestamps();
+
+            {{#current}}
+            $table->timestamps()
+            {{/current}}
+            {{^current}}
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()
+            {{/current}}
+
+            {{#foreign}}
+            $table->foreign('{{fk}}'')
+            ->references('{{pkid}}'')->on('{{pktable}}'')
+            {{#delete}}->onDelete('cascade'){{/delete}}
+            {{#update}}->onUpdate('cascade'){{/update}};
+            {{/foreign}}
+            ;
 });
 }
 
