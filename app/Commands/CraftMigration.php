@@ -20,6 +20,8 @@ class CraftMigration extends Command
                                 {--m|model= : Path to migration model (required)}
                                 {--t|tablename= : Desired tablename}
                                 {--f|fields= : List of fields (optional)}
+                                {--c|foreign= :     Add constraint (optional)}
+                                {--u|current :        Use --useCurrent for timestamps}
                                 {--d|down : Include down method in migration}
                                 {--p|template= : Template path (override configuration file)}
                             ';
@@ -32,9 +34,15 @@ class CraftMigration extends Command
                      --tablename, -t      Desired tablename
                      --fields, -f         List of fields (optional)
                                            eg. --fields first_name:string@20:nullable, email:string@80:nullable:unique
+                     --foreign, -c        Add constraint (skipped by default)
+                     --current, -u        Use --useCurrent for timestamps (skipped by default)
                      --down, -d           Include down methods (skipped by default)
 
                      --template, -p       Template path (override configuration file)
+
+                     ============================================================================================
+                     Note: --overwrite flag is not supported as all migrations have current timestamp in filename
+                     ============================================================================================
             ';
 
     /**
@@ -55,6 +63,7 @@ class CraftMigration extends Command
         $model = $this->option('model');
         $tablename = $this->option('tablename');
         $fields = $this->option('fields');
+        $foreign = $this->option('foreign');
 
         if (strlen($tablename) === 0 || (is_null($tablename))) {
             if (strlen($model) === 0) {
@@ -78,7 +87,9 @@ class CraftMigration extends Command
             "name" => $migrationName,
             "tablename" => $tablename,
             "fields" => $fields,
+            "foreign" => $foreign,
             "down" => $this->option('down'),
+            "current" => $this->option('current')
         ];
 
         // timestamp to be prepended to name

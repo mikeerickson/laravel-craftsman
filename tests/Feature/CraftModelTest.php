@@ -49,6 +49,23 @@ class CraftModelTest extends TestCase
     }
 
     /** @test */
+    public function should_create_model_and_migration()
+    {
+        $migrationName = "create_tests_table";
+
+        $this->artisan("craft:model App/Models/Test --migration --overwrite")
+            ->assertExitCode(0);
+
+        $filename = $this->fs->getLastFilename("database/migrations", $migrationName);
+        $this->assertFileExists($filename);
+
+        $this->assertFileContainsString($filename, "Schema::create('tests', function (Blueprint \$table) {");
+
+        $this->fs->rmdir("database/migrations");
+        $this->fs->rmdir("app/models");
+    }
+
+    /** @test */
     public function should_execute_custom_craft_model_command()
     {
         $model = "Post";

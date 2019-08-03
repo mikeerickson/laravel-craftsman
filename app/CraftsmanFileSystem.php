@@ -557,7 +557,23 @@ class CraftsmanFileSystem
         $vars["setup"] = (isset($data["setup"])) ? $data["setup"] : false;
         $vars["teardown"] = (isset($data["teardown"])) ? $data["teardown"] : false;
         $vars["constructor"] = (isset($data["constructor"])) ? $data["constructor"] : false;
+        $vars["foreign"] = (isset($data["foreign"])) ? $data["foreign"] : false;
+        $vars["current"] = (isset($data["current"])) ? $data["current"] : false;
 
+        if (isset($data["foreign"])) {
+            $parts = explode(":", trim($data["foreign"]));
+            if (sizeof($parts) >= 2) {
+                $fk = $parts[0];
+                $primaryInfo = explode(",", $parts[1]);
+                list($pkid, $pktable) = $primaryInfo;
+                $vars["foreign"] = true;
+                $vars["fk"] = $fk;
+                $vars["pkid"] = $pkid;
+                $vars["pktable"] = $pktable;
+            } else {
+                $vars["foreign"] = false;
+            }
+        }
         $template = $this->fs->get($src);
 
         $mustache = new Mustache_Engine();
