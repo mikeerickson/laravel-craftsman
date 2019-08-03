@@ -12,7 +12,7 @@ In addition, you can create all assets with a single command, allowing you to qu
 📦 [Packagist](https://packagist.org/packages/codedungeon/laravel-craftsman)
 
 <h1 align="center">
-	<img src="docs/images/laravel-craftsman.png" alt="Laravel Craftsman">
+    <img src="docs/images/laravel-craftsman.png" alt="Laravel Craftsman">
 </h1>
 
 ## Table Of Conents
@@ -62,9 +62,10 @@ or
 
 > laravel-craftsman craft:factory PostFactory --model App/Models/Post
 
-> laravel-craftsman craft:migration create_posts_table --model App/Models/Post --tablename posts
+> laravel-craftsman craft:migration create_posts_table --tablename posts
 
 > laravel-craftsman craft:model App/Models/Post --tablename posts
+> laravel-craftsman craft:model App/Models/Post --tablename posts --migration
 
 > laravel-craftsman craft:request CustomerRequest --rules "title?required|unique|posts,body?required"
 
@@ -123,11 +124,12 @@ laravel-craftsman craft:all Contact \
 | **craft:factory**    | **factory name**    | **Creates factory using supplied options**                                           |
 |                      | --model, -m         | Path to model (eg App/Models/Post)                                                   |
 | **craft:migration**  | **migration name**  | **Creates migration using supplied options**                                         |
-|                      | --model, -m         | Path to model (eg App/Models/Post)                                                   |
 |                      | --tablename, -t     | Tablename used in database (will set \$tablename in Model)                           |
 |                      |                     | _If not supplied, default table will be pluralized model name_                       |
 |                      | --fields, -f        | List of fields (option) _see syntax below_                                           |
 |                      |                     | **🚨 If you have spaces separating fields, you must surround fields list in quotes** |
+|                      | --foreign, -c       | Add foreign key constraint (foreign info) _see syntax below_                         |
+|                      | --current, -u       | Use --useCurrent for timestamps (skipped by default)                                 |
 |                      | --down, -d          | Include down methods (skipped by default)                                            |
 |                      | --template, -t      | Path to custom template (override config file)                                       |
 |                      | --overwrite, -w     | Overwrite existing class                                                             |
@@ -137,6 +139,7 @@ laravel-craftsman craft:all Contact \
 |                      |                     | _If not supplied, default table will be pluralized model name_                       |
 |                      | --template, -m      | Path to custom template (override config file)                                       |
 |                      | --factory, -f       | Create factory                                                                       |
+|                      | --migration, -m     | Create a new migration file file                                                     |
 |                      | --overwrite, -w     | Overwrite existing class                                                             |
 | **craft:request**    | **request name**    | **Creates form request using supplied options**                                      |
 |                      |                     | _See below about defining alternate model path_                                      |
@@ -167,7 +170,7 @@ When crafting resources which are not automatically created in their assigned di
 
 This will create a class in the `App/Services` path, with filename `Sync.php`. Directories (including nested directories) will be created if they do not already exists.
 
-#### Supported Commands:
+#### Supported Commands
 
 The following commands support defining class path
 
@@ -200,11 +203,24 @@ laravel-craftsman craft:class TestService --template <project>/templates/custom.
 zsh: no such file or directory: project
 ```
 
+### Foreign Key Syntax
+
+When using the `--fields` option when building migrations, you should use the following syntax:
+
+```bash
+format:
+foreignKey:primaryId,primaryTable
+
+example:
+--foreign=post_id:id,posts
+-c=post_id:id,posts
+```
+
 ### Field Option Syntax
 
 When using the `--fields` option when building migrations, you should use the following syntax:
 
-```
+```bash
 format:
 fieldName:fieldType@fieldSize:option1:option2:option3
 
@@ -229,7 +245,7 @@ email:string@80:nullable:unique
 
 When using the `--rules` option when building form requests, you should use the following syntax:
 
-```
+```bash
 format:
 ruleName?rule1|rule2|rule3,ruleName2?rule1|rule2
 ```
@@ -339,6 +355,8 @@ The following variables can be used in any of the supported templates (review th
 | `tablename`   | Used by `controller`, `migration`, `model`                                                  |
 | `extends`     | Used by `views`                                                                             |
 | `section`     | Used by `views`                                                                             |
+| `foreign`     | Used by `migration`                                                                         |
+| `current`     | Used by `migration`                                                                         |
 
 ## License
 

@@ -1,6 +1,6 @@
 {
   "name": "laravel-craftsman",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "build": "211",
   "description": "Laravel Craftsman",
   "main": "index.js",
@@ -20,6 +20,7 @@
     "test:unit": "vendor/bin/phpunit --testsuite Unit --stop-on-failure",
     "test:watch": "vendor/bin/phpunit-watcher watch",
     "test:stress": "vendor/bin/phpunit --repeat 10 --configuration phpunit.ci.xml",
+    "test:docker": "docker run -v $(pwd):/app -w /app --rm php:7.3-alpine vendor/bin/phpunit -c phpunit.ci.xml --colors=always",
     "pre-commit": "npm run test:ci",
     "todo": "./tasks/todo.js",
     "todo:file": "./tasks/todo.js > TODO.md",

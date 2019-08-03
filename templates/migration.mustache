@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-{{model_path}}
 
 class Create{{model}}Table extends Migration
 {
@@ -12,7 +11,17 @@ class Create{{model}}Table extends Migration
         Schema::create('{{tablename}}', function (Blueprint $table) {
             $table->bigIncrements('id');
             {{{fields}}}
+            {{#current}}
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
+            {{/current}}
+            {{^current}}
             $table->timestamps();
+            {{/current}}
+            {{#foreign}}
+
+            $table->foreign('{{{fk}}}')->references('{{{pkid}}}')->on('{{{pktable}}}');
+            {{/foreign}}
 });
 }
 
