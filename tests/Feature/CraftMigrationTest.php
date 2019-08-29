@@ -132,19 +132,46 @@ class CraftMigrationTest extends TestCase
     }
 
     /** @test */
+    public function should_update_migration_with_fields()
+    {
+        $model = "App/Models/Contacts";
+        $tablename = "contacts";
+        $migrationName = "update_contacts_table";
+        $fieldList = "--fields fname:string@25:nullable,lname:string@50:nullable,email:string@80:nullable:unique,dob:datetime,notes:text,deleted_at:timezone";
+
+        $this->artisan("craft:migration {$migrationName} --tablename {$tablename} --fields {$fieldList}")
+            ->assertExitCode(0);
+
+        $this->assertMigrationFileExists($migrationName);
+
+        $migrationFilename = $this->fs->getLastFilename("database/migrations", $migrationName);
+        $data = file_get_contents($migrationFilename);
+
+        $this->assertStringContainsString("\$table->string('fname',25)->nullable();", $data);
+        $this->assertStringContainsString("\$table->string('lname',50)->nullable();", $data);
+        $this->assertStringContainsString("\$table->string('email',80)->nullable()->unique();", $data);
+        $this->assertStringContainsString("\$table->datetime('dob');", $data);
+        $this->assertStringContainsString("\$table->text('notes');", $data);
+        $this->assertStringContainsString("\$table->timezone('deleted_at');", $data);
+
+        // $this->fs->rmdir("database/migrations");
+    }
+
+    /** @test */
     public function should_build_complex_field_data()
     {
-
-        $migrationName = "create_test_migration";
+        $migrationName = "create_contacts_table";
         $dt = Carbon::now()->format('Y_m_d_His');
         $migrationFilename = $dt . "_" . $migrationName;
 
         $fields = "first_name:string@20:nullable, last_name:string@60:nullable, email:string@80:nullable:unique";
 
         $data = [
-            "model" => "App/Models/Test",
-            "tablename" => "tests",
+            "model" => "App/Models/Contact",
+            "tablename" => "contacts",
             "fields" => $fields,
+            "create" => true,
+            "update" => false,
         ];
 
         $this->fs->createFile("migration", $migrationFilename, $data);
@@ -153,6 +180,7 @@ class CraftMigrationTest extends TestCase
 
         $this->assertFileExists($lastFilename);
 
+        // this is not working correctly
         $this->assertFileContainsString($lastFilename, "\$table->string('first_name',20)->nullable();");
 
         $this->fs->rmdir("database/migrations");
@@ -194,7 +222,25 @@ class CraftMigrationTest extends TestCase
 
         $this->assertStringContainsString("CreateContactsTable", $data);
 
-        //        $this->fs->rmdir("database/migrations");
+        $this->fs->rmdir("database/migrations");
+    }
+
+    /** @test */
+    public function should_create_update_migration()
+    {
+        $migrationName = "update_contacts_table";
+
+        $this->artisan("craft:migration {$migrationName}")
+            ->assertExitCode(0);
+
+        $this->assertMigrationFileExists($migrationName);
+
+        $migrationFilename = $this->fs->getLastFilename("database/migrations", $migrationName);
+        $data = file_get_contents($migrationFilename);
+
+        $this->assertStringContainsString("Schema::table('contacts', function (Blueprint \$table)", $data);
+
+        $this->fs->rmdir("database/migrations");
     }
 
     /**

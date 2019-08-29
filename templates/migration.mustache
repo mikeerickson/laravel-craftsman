@@ -8,6 +8,12 @@ class Create{{model}}Table extends Migration
 {
     public function up()
     {
+        {{#update}}
+        Schema::table('{{tablename}}', function (Blueprint $table) {
+            {{{fields}}}
+        });
+        {{/update}}
+        {{#create}}
         Schema::create('{{tablename}}', function (Blueprint $table) {
             $table->bigIncrements('id');
             {{{fields}}}
@@ -22,7 +28,8 @@ class Create{{model}}Table extends Migration
 
             $table->foreign('{{{fk}}}')->references('{{{pkid}}}')->on('{{{pktable}}}');
             {{/foreign}}
-});
+        });
+        {{/create}}
 }
 
 {{#down}}

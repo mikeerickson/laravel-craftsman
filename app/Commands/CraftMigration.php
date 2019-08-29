@@ -70,7 +70,7 @@ class CraftMigration extends Command
                 $parts = explode("_", $migrationName);
                 array_shift($parts);
                 array_pop($parts);
-                $tablename = implode($parts, "_");
+                $tablename = implode("_", $parts);
                 $model = str_replace("_", "", Str::title($tablename));
             } else {
                 $parts = explode("/", $model);
@@ -82,6 +82,16 @@ class CraftMigration extends Command
             }
         }
 
+        $create = true;
+        $update = false;
+        $resourceParts = explode("_", $migrationName);
+        if (sizeof($resourceParts) >= 1) {
+            if ($resourceParts[0] === 'update') {
+                $update = true;
+                $create = false;
+            }
+        }
+
         $data = [
             "model" => $model,
             "name" => $migrationName,
@@ -89,7 +99,9 @@ class CraftMigration extends Command
             "fields" => $fields,
             "foreign" => $foreign,
             "down" => $this->option('down'),
-            "current" => $this->option('current')
+            "current" => $this->option('current'),
+            "create" => $create,
+            "update" => $update
         ];
 
         // timestamp to be prepended to name

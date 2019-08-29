@@ -7,29 +7,57 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.3] - 2019-08-28
+
+### Fixed
+
+- Fixed `craft:controller` to craft new controller in `App/Http/Controllers` directory when using `resource` flag
+- Fixed test case to `CraftControllerTest::should_create_resource_controller` to cover correct resource creation related to `resource` flag (see above)
+
+### Modified
+
+- Modified `craft:controller` shortcut for `resource` controller from `-u` to `-r`
+- Modified npm tasks for running test, adding `test:all` task
+- Modified `task:stress` to call `stress-test.sh` task so it will properly handle stress retries
+
+## [1.6.2] - 2019-08-14
+
+### Added
+
+- `craft` command alias for `interactive`
+  - `$ laravel-craftsman craft`
+
 ## [1.6.1] - 2019-08-03
 
 ### Added
 
-- feature: add `foreign` constraint support when crafting migrations
-- feature: add `current` option when crafting migrations
-- feature: add `migration` option when crafting models
-- admin: updated tests
-- admin: updated readme
+-   feature: add `foreign` constraint support when crafting migrations
+-   feature: add `current` option when crafting migrations
+-   feature: add `migration` option when crafting models
+-   admin: updated tests
+-   admin: updated readme
 -
+
+## [1.6.2] - 2019-08-07
+
+### Added
+
+-   Added new `craft:migration` options to interactive interface
+-   Updated tests to support new `craft:migration` and `craft:model` features
+
 ## [1.6.0] - 2019-07-27
 
 ### Added
 
 - Added artisan fallback when executing commands which dont exist in `craftsman`
-  - For example, call `laravel-craftsman craft:observer TestObserver` the artiasn command `make:observer` will be executed
+    o For example, call `laravel-craftsman craft:observer TestObserver` the artiasn command `make:observer` will be executed
 
 ## [1.5.0] - 2019-07-12
 
 ### Added
 
-- Added `craft:publish` command to publish craftsman templates to current project
-- Removed extraneous master templates (those ending in .php)
+-   Added `craft:publish` command to publish craftsman templates to current project
+-   Removed extraneous master templates (those ending in .php)
 
 ## [1.4.0] - 2019.06.24
 
@@ -37,7 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fixed rule parsing offset
+-   Fixed rule parsing offset
 
 ## [1.3.2] - 2019.04.28
 
@@ -45,19 +73,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Adjust rules (form request) and fields (migration) processing
+-   Adjust rules (form request) and fields (migration) processing
 
 ## [1.3.0] - 2019.04.24
 
 ### Added
 
-- Added `craft:resource` command
-- Extended `craft:controller` command
+-   Added `craft:resource` command
+-   Extended `craft:controller` command
 
 ### Fixed
 
-- Fixed issue when creating migrations, created invalid class name ([Issue 005](https://github.com/mikeerickson/laravel-craftsman/issues/5))
-- Fixed issue creating unnecessary use statement for model which is in default namespace (app directory)
+-   Fixed issue when creating migrations, created invalid class name ([Issue 005](https://github.com/mikeerickson/laravel-craftsman/issues/5))
+-   Fixed issue creating unnecessary use statement for model which is in default namespace (app directory)
 
 ## [1.2.1] - 2019-04-20
 
@@ -69,51 +97,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added `resource` controller
-- Added `craft:resource`
-- Added `resource` tests
+-   Added `resource` controller
+-   Added `craft:resource`
+-   Added `resource` tests
 
 ## [1.1.2] - 2019-04-18
 
 ### Fixed
 
-- Fix issue when creating migrations and tablename is not supplied
-- Added migration name parsing to determine migration class name when --model or --tablename not supplied
-- Added more tests to cover migration adjustments
+-   Fix issue when creating migrations and tablename is not supplied
+-   Added migration name parsing to determine migration class name when --model or --tablename not supplied
+-   Added more tests to cover migration adjustments
 
 ## [1.1.0] - 2019-04-17
 
 ### Added
 
-- Added new `template` option which allows passing a one off template to be used instead of using either default templates, or user defined templates in constants.
+-   Added new `template` option which allows passing a one off template to be used instead of using either default templates, or user defined templates in constants.
 
 ## [1.0.10] - 2019-04-06
 
 ### Added
 
-- Added view crafting to craft:all
-- Added --extends and --section options (for views)
-- Added --no-views to craft:all command
+-   Added view crafting to craft:all
+-   Added --extends and --section options (for views)
+-   Added --no-views to craft:all command
     Note: When using craft:all, the --no-create, --no-edit, --no-index and --no-show options are not used
 
 ## [1.0.9] - 2019-04-05
 
 ### Fixed
 
-- Refactor tests, cleanup
+-   Refactor tests, cleanup
 
 ## [1.0.8] - 2019-04-04
 
 ### Added
 
-- Added view creation
-- Added check to error if file exists
-  - Use --overwrite option to force creation
-- Refactored messages to work with file existence check
+-   Added view creation
+-   Added check to error if file exists
+    o Use --overwrite option to force creation
+    o Refactored messages to work with file existence check
 
 ### Modified
 
-- Refactor asset creation to not automatically overwrite files
+-   Refactor asset creation to not automatically overwrite files
 
 ## [1.0.0] - 2019-03-28
 

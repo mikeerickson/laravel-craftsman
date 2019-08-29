@@ -119,6 +119,7 @@ laravel-craftsman craft:all Contact \
 |                      | --api, -a           | Create API controller (skips create and update methods)                              |
 |                      | --binding, -b       | Include route / model binding (requires model property)                              |
 |                      | --empty, -e         | Create empty controller                                                              |
+|                      | --resource, -r      | Create resource controller                                                           |
 |                      | --template, -t      | Path to custom template (override config file)                                       |
 |                      | --overwrite, -w     | Overwrite existing class                                                             |
 | **craft:factory**    | **factory name**    | **Creates factory using supplied options**                                           |

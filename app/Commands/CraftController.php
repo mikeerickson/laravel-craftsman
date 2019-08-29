@@ -16,7 +16,7 @@ class CraftController extends Command
 
     protected $signature = 'craft:controller {name : Controller Name}
                                 {--m|model= : Associated model}
-                                {--u|resource : Create resource controller}
+                                {--r|resource : Create resource controller}
                                 {--b|binding : Include route / model binding (requires model property)}
                                 {--c|collection : Create resource collection}
                                 {--l|validation : Scaffold validation}
@@ -33,7 +33,7 @@ class CraftController extends Command
                      --validation, -l     Create validation blocks
                      --api, -a            Create API controller (skips create and update methods)
                      --empty, -e          Create empty controller
-                     --resource, -u       Create resource controller
+                     --resource, -r       Create resource controller
                      --binding, -b        Include Route Model Biding (requires model option)
                      --collection, -c     Use resource collection
 

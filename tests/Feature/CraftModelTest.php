@@ -32,7 +32,7 @@ class CraftModelTest extends TestCase
         $this->withoutExceptionHandling();
     }
 
-    /** @test */
+    /** @test  */
     public function should_execute_default_craft_model_command()
     {
         $model = "Post";
@@ -48,7 +48,7 @@ class CraftModelTest extends TestCase
         unlink($filename);
     }
 
-    /** @test */
+    /** @test  */
     public function should_create_model_and_migration()
     {
         $migrationName = "create_tests_table";
@@ -65,7 +65,7 @@ class CraftModelTest extends TestCase
         $this->fs->rmdir("app/models");
     }
 
-    /** @test */
+    /** @test  */
     public function should_execute_custom_craft_model_command()
     {
         $model = "Post";

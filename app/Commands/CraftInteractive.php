@@ -64,6 +64,8 @@ class CraftInteractive extends Command
             Messenger::status('If the command is as you wish, you can the choose to execute the command and desired resource(s) will be created', 'STEP 4:');
             echo "\n";
 
+            Messenger::info('At any time during process, you can exit process by pressing ctrl-c', 'NOTE');
+
             $result = $this->confirm("Would you like to continue?");
             if (!$result) {
                 exit;
@@ -261,14 +263,14 @@ class CraftInteractive extends Command
     {
         $commandName = "craft:migration";
 
-        $resource = $this->ask("Migration Name (timestamp applied at creation)");
+        $resource = $this->ask("Migration Name (eg. create_posts_table *timestamp applied at creation)");
 
-        $model = trim($this->ask("Model path when creating controller (eg App/Models/Customer)"));
-        if (strlen($model) > 0) {
-            $model = "--model " . $model;
-        }
+        // $model = trim($this->ask("Model path when creating migration (eg App/Models/Customer)"));
+        // if (strlen($model) > 0) {
+        //     $model = "--model " . $model;
+        // }
 
-        $tablename = $this->ask("Desired tablename", $this->getTablename($resource));
+        $tablename = $this->ask("Desired tablename", $this->getMigrationTablename($resource));
         if (strlen($tablename) > 0) {
             $tablename = "--tablename " . $tablename;
         }
@@ -278,6 +280,11 @@ class CraftInteractive extends Command
             $fields = "--fields " . $fields;
         }
 
+        $foreign = trim($this->ask("Foreign Key Constraint (eg. post_id:posts,id)"));
+        if (strlen($foreign) > 0) {
+            $foreign = "--foreign " . $foreign;
+        }
+
         $down = $this->confirm("Include down method in migration") ? '--down' : '';
 
         $template = trim($this->ask("Template path (override configuration file)"));
@@ -285,7 +292,7 @@ class CraftInteractive extends Command
             $template = "--template " . $template;
         }
 
-        $craftCommand = "{$commandName} {$resource} {$model} {$tablename} {$down} {$template}";
+        $craftCommand = "{$commandName} {$resource} {$tablename} {$fields} {$foreign} {$down} {$template}";
 
         return str_replace("  ", " ", $craftCommand);
     }
@@ -431,6 +438,16 @@ class CraftInteractive extends Command
         $craftCommand = "{$commandName} {$resource} {$extends} {$section} {$noCreate} {$noEdit} {$noIndex} {$noShow} {$template} {$overwrite}";
 
         return str_replace("  ", " ", $craftCommand);
+    }
+
+    private function getMigrationTablename($migrationName)
+    {
+        $parts = explode("_", $migrationName);
+        if (sizeof($parts) >= 2) {
+            return $parts[1];
+        }
+
+        return $migrationName;
     }
 
     private function getTablename($model)

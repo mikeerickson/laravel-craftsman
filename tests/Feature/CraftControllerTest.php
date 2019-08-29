@@ -130,17 +130,17 @@ class CraftControllerTest extends TestCase
     /** @test */
     public function should_create_resource_controller()
     {
-        $this->artisan("craft:controller CustomResource --resource --overwrite")
+        $this->artisan("craft:controller ResourceController --resource --overwrite")
             ->assertExitCode(0);
 
-        $controllerPath = $this->fs->resource_path();
-        $filename = $this->fs->path_join($controllerPath, "CustomResource.php");
+        $controllerPath = $this->fs->controller_path();
+        $filename = $this->fs->path_join($controllerPath, "ResourceController.php");
         $this->assertFileExists($filename);
 
         // spot check merged data
         $data = file_get_contents($filename);
 
-        $this->assertStringContainsString("CustomResource", $data);
+        $this->assertStringContainsString("ResourceController", $data);
         $this->assertStringNotContainsString("use Illuminate\Http\Resources\Json\ResourceCollection;", $data);
     }
 
@@ -150,14 +150,19 @@ class CraftControllerTest extends TestCase
         $this->artisan("craft:controller CustomResource --resource --collection --overwrite")
             ->assertExitCode(0);
 
-        $resourcePath = $this->fs->resource_path();
+        $resourcePath = $this->fs->controller_path();
         $filename = $this->fs->path_join($resourcePath, "CustomResource.php");
         $this->assertFileExists($filename);
 
         // spot check merged data
         $data = file_get_contents($filename);
 
-        $this->assertStringContainsString("use Illuminate\Http\Resources\Json\ResourceCollection;", $data);
-
+        $this->assertStringContainsString("public function index()", $data);
+        $this->assertStringContainsString("public function create()", $data);
+        $this->assertStringContainsString("public function store(Request \$request)", $data);
+        $this->assertStringContainsString("public function show(\$id)", $data);
+        $this->assertStringContainsString("public function edit(\$id)", $data);
+        $this->assertStringContainsString("public function update(Request \$request, \$id)", $data);
+        $this->assertStringContainsString("public function destroy(\$id)", $data);
     }
 }

@@ -171,6 +171,8 @@ class CraftsmanFileSystem
                 $path = $this->request_path();
                 break;
             case 'resource-controller':
+                $path = $this->controller_path();
+                break;
             case 'resource':
                 $path = $this->resource_path();
                 break;
@@ -446,6 +448,7 @@ class CraftsmanFileSystem
         } else {
 
             $templateFilename = $this->path_join($this->getProjectTemplatesDiretory(), "{$type}.mustache");
+
             if (file_exists($templateFilename)) {
                 $src = $templateFilename;
             } else {
@@ -480,7 +483,6 @@ class CraftsmanFileSystem
 
             $dest = $this->tildify($dest);
             Messenger::error("{$filename} already exists\n", "ERROR");
-
 
             return [
                 "status" => self::FILE_EXIST,
@@ -559,6 +561,8 @@ class CraftsmanFileSystem
         $vars["constructor"] = (isset($data["constructor"])) ? $data["constructor"] : false;
         $vars["foreign"] = (isset($data["foreign"])) ? $data["foreign"] : false;
         $vars["current"] = (isset($data["current"])) ? $data["current"] : false;
+        $vars["create"] = (isset($data["create"])) ? $data["create"] : true;
+        $vars["update"] = (isset($data["update"])) ? $data["update"] : false;
 
         if (isset($data["foreign"])) {
             $parts = explode(":", trim($data["foreign"]));
