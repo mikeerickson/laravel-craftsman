@@ -3,6 +3,9 @@
 source ./tasks/messenger.sh
 
 BUILD=$(./tasks/bumpBuild.js)
+VERSION=$(./tasks/getVersion.js)
+BUILD_INFO="v$VERSION build $BUILD"
+
 info "Build number bumped to $BUILD ..." " INFO "
 
 php laravel-craftsman app:build
@@ -14,7 +17,7 @@ printf "\n"
 success "Build Completed Successfully" " SUCCESS "
 
 if [[ "$@" == "--deploy" ]]; then
-    ./tasks/deploy.sh
+    ./tasks/deploy.sh "$BUILD_INFO"
 fi
 
 

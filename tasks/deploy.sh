@@ -11,4 +11,5 @@ cp -r builds/ ~/laravel-craftsman/
 printf "\n"
 printf "==> deploying to: ~/laravel-craftsman\n"
 printf "\n"
-success "Deployed Successfully" " SUCCESS "
+
+success "Laravel Craftsman $@ Deployed Successfully" " SUCCESS "
