@@ -74,6 +74,7 @@ class CraftInteractive extends Command
 
         // list of avaiable craftsman commands
         $commandList = [
+            "API",
             "Class",
             "Controller",
             "Factory",
@@ -122,6 +123,9 @@ class CraftInteractive extends Command
         $craftCommand = "";
 
         switch ($commandName) {
+            case "api":
+                $craftCommand = $this->buildApiCommand();
+                break;
             case "class":
                 $craftCommand = $this->buildClassCommand();
                 break;
@@ -160,6 +164,46 @@ class CraftInteractive extends Command
         return $craftCommand;
     }
 
+    private function buildApiCommand()
+    {
+        $commandName = "craft:api";
+
+        $resource = $this->ask("esource Name (ie Contact, Post, Comment)");
+
+        $model = trim($this->ask("Path to model [default: app/]"));
+        if (strlen($model) > 0) {
+            $model = "--model " . $model;
+        }
+
+        $tablename = $this->ask("Desired tablename [default to pluarlized resource name]", strtolower($this->getMigrationTablename($resource)));
+        if (strlen($tablename) > 0) {
+            $tablename = "--tablename " . $tablename;
+        }
+
+        $rows = trim($this->ask("Alternate number of rows to use in factory call"));
+        if (strlen($rows) > 0) {
+            $rows = "--rows " . $rows;
+        }
+
+        $current = $this->confirm("Use `--useCurrent` when creating migration ", "yes") ? '--current' : '';
+
+        $noModel = $this->confirm("Craft model", "yes") ? '' : '--no-model';
+
+        $noController = $this->confirm("Craft controller", "yes") ? '' : '--no-controller';
+
+        $noFactory = $this->confirm("Craft factory", "yes") ? '' : '--no-fatory';
+
+        $noMigration = $this->confirm("Craft migration", "yes") ? '' : '--no-migration';
+
+        $noSeed = $this->confirm("Craft seed", "yes") ? '' : '--no-seed';
+
+        $overwrite = $this->confirm("Would you like to overwrite api resources if they exists") ? '--overwrite' : '';
+
+        $craftCommand = "{$commandName} {$resource} {$model} {$tablename} {$rows} {$current} {$noModel} {$noController} {$noFactory} {$noMigration} {$noSeed} {$overwrite}";
+
+        return preg_replace('!\s+!', ' ', $craftCommand);
+    }
+
     private function buildClassCommand()
     {
         $commandName = "craft:class";
@@ -177,7 +221,7 @@ class CraftInteractive extends Command
 
         $craftCommand = "{$commandName} {$resource} {$constructor} {$template} {$overwrite}";
 
-        return str_replace("  ", " ", $craftCommand);
+        return preg_replace('!\s+!', ' ', $craftCommand);
     }
 
     private function buildControllerCommand()
@@ -210,7 +254,7 @@ class CraftInteractive extends Command
 
         $craftCommand = "{$commandName} {$name} {$model} {$api} {$empty} {$resource} {$collection} {$binding} {$template} {$overwrite}";
 
-        return str_replace("  ", " ", $craftCommand);
+        return preg_replace('!\s+!', ' ', $craftCommand);
     }
 
     private function buildFactoryCommand()
@@ -233,7 +277,7 @@ class CraftInteractive extends Command
 
         $craftCommand = "{$commandName} {$resource} {$model} {$template} {$overwrite}";
 
-        return str_replace("  ", " ", $craftCommand);
+        return preg_replace('!\s+!', ' ', $craftCommand);
     }
 
     private function buildFormRequestCommand()
@@ -256,7 +300,7 @@ class CraftInteractive extends Command
 
         $craftCommand = "{$commandName} {$resource} {$rules} {$template} {$overwrite}";
 
-        return str_replace("  ", " ", $craftCommand);
+        return preg_replace('!\s+!', ' ', $craftCommand);
     }
 
     private function buildMigrationCommand()
@@ -294,7 +338,7 @@ class CraftInteractive extends Command
 
         $craftCommand = "{$commandName} {$resource} {$tablename} {$fields} {$foreign} {$down} {$template}";
 
-        return str_replace("  ", " ", $craftCommand);
+        return preg_replace('!\s+!', ' ', $craftCommand);
     }
 
     private function buildModelCommand()
@@ -326,7 +370,7 @@ class CraftInteractive extends Command
 
         $craftCommand = "{$commandName} {$resource} --tablename {$tablename} {$all} {$collection} {$template} {$overwrite}";
 
-        return str_replace("  ", " ", $craftCommand);
+        return preg_replace('!\s+!', ' ', $craftCommand);
     }
 
     private function buildResourceCommand()
@@ -346,7 +390,7 @@ class CraftInteractive extends Command
 
         $craftCommand = "{$commandName} {$resource} {$collection} {$template} {$overwrite}";
 
-        return str_replace("  ", " ", $craftCommand);
+        return preg_replace('!\s+!', ' ', $craftCommand);
     }
 
     private function buildSeedCommand()
@@ -377,7 +421,7 @@ class CraftInteractive extends Command
 
         $craftCommand = "{$commandName} {$resource} {$model} {$rows} {$template} {$overwrite}";
 
-        return str_replace("  ", " ", $craftCommand);
+        return preg_replace('!\s+!', ' ', $craftCommand);
     }
 
     private function buildTestCommand()
@@ -401,7 +445,7 @@ class CraftInteractive extends Command
 
         $craftCommand = "{$commandName} {$resource} {$setupBlock} {$tearDownBlock} {$unit} {$template} {$overwrite}";
 
-        return str_replace("  ", " ", $craftCommand);
+        return preg_replace('!\s+!', ' ', $craftCommand);
     }
 
     private function buildViewsCommand()
@@ -437,7 +481,7 @@ class CraftInteractive extends Command
 
         $craftCommand = "{$commandName} {$resource} {$extends} {$section} {$noCreate} {$noEdit} {$noIndex} {$noShow} {$template} {$overwrite}";
 
-        return str_replace("  ", " ", $craftCommand);
+        return preg_replace('!\s+!', ' ', $craftCommand);
     }
 
     private function getMigrationTablename($migrationName)
@@ -447,7 +491,7 @@ class CraftInteractive extends Command
             return $parts[1];
         }
 
-        return $migrationName;
+        return Str::plural($migrationName);
     }
 
     private function getTablename($model)
