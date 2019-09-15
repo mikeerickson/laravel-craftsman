@@ -88,11 +88,11 @@ class CraftControllerTest extends TestCase
         $model = "App/Models/Contact";
         $model_path = "App\\Models\\Contact";
 
-        $this->artisan("craft:controller ContactAPIController --model {$model} --api")
+        $this->artisan("craft:controller Api/ContactAPIController --model {$model} --api")
             ->assertExitCode(0);
 
         $controllerPath = $this->fs->controller_path();
-        $filename = $this->fs->path_join($controllerPath, "ContactAPIController.php");
+        $filename = $this->fs->path_join($controllerPath, "API", "ContactAPIController.php");
         $this->assertFileExists($filename);
 
         $parts = explode("/", $model);

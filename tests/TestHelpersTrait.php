@@ -70,5 +70,19 @@ trait TestHelpersTrait
         return preg_replace('#/+#', '/', join('/', $paths));
     }
 
-}
+    /**
+     * @param $migrationName
+     */
+    public function assertMigrationFileExists($migrationName)
+    {
+        $migrationPath = database_path() . "/migrations";
+        foreach (scandir($migrationPath) as $filename) {
+            if (strpos($filename, $migrationName)) {
+                Assert::assertTrue(true);
+                return $filename;
+            }
+        }
 
+        Assert::assertTrue(false);
+    }
+}

@@ -56,6 +56,8 @@ or
 
 > laravel-craftsman craft:all Post --model App/Models/Post --tablename posts --rows 50 --extends layouts.app --section content
 
+> laravel-craftsman craft:api --model App/TestClass --overwrite
+
 > laravel-craftsman craft:class App/TestClass --constructor
 
 > laravel-craftsman craft:controller PostController --model App/Models/Post

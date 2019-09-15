@@ -55,6 +55,8 @@ class CraftController extends Command
         $controllerName = $this->argument('name');
         $model = $this->option('model');
         $binding = $this->option('binding');
+        $api = $this->option('api');
+        $resource = $this->option('resource');
 
         $data = [
             "model" => $model,
@@ -65,10 +67,11 @@ class CraftController extends Command
             "binding" => $this->option('binding'),
         ];
 
-        $api = $this->option('api');
-        $resource = $this->option('resource');
-
         if ($api) {
+            if (!$model) {
+                Messenger::error("When creating an API controller, you must supply model", "ERROR");
+                exit;
+            }
             $this->fs->createFile('api-controller', $controllerName, $data);
         } elseif ($resource) {
             $data["collection"] = $this->option("collection");

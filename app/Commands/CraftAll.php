@@ -8,10 +8,6 @@ use Illuminate\Support\Facades\Artisan;
 use LaravelZero\Framework\Commands\Command;
 use Codedungeon\PHPMessenger\Facades\Messenger;
 
-/**
- * Class CraftAll
- * @package App\Commands
- */
 class CraftAll extends Command
 {
     protected $fs;
@@ -41,11 +37,11 @@ class CraftAll extends Command
 
     protected $help = 'Craft All Assets
                      <name>               Base Asset Name
-                     --model, -m          Model Name
-                     --tablename, -t      Tablename
+                     --model, -m          Path to model [default: app/]
+ß                     --tablename, -t      Tablename
                      --fields, -f         Field List (passed to migration)
                                            eg. --fields first_name:string,20^nullable^unique, last_name:string,20
-                     --rows, -r           Number of rows for migration (passed to factory)
+                     --rows, -r           Number of rows for migration [default: 1] (passed to seeder)
                      --extends, -x        View extends block (optional)
                      --section, -i        View section block (optional)
                      --resource, -o       Create resource controller
@@ -64,6 +60,7 @@ class CraftAll extends Command
     public function __construct()
     {
         parent::__construct();
+
         $this->setHelp($this->help);
 
         $this->fs = new CraftsmanFileSystem();

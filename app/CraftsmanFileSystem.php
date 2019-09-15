@@ -594,6 +594,7 @@ class CraftsmanFileSystem
             $vars["model_path"] = "";
         }
 
+        $vars["name"] = $this->getClassName($vars["name"]);
         $template_data = $mustache->render($template, $vars);
 
         try {
@@ -661,6 +662,12 @@ class CraftsmanFileSystem
         }
 
         return getcwd() . DIRECTORY_SEPARATOR . config("craftsman.templates.{$type}");
+    }
+
+    public function getClassName($name)
+    {
+        $parts = explode("/", $name);
+        return end($parts);
     }
 
     /**
@@ -749,7 +756,12 @@ class CraftsmanFileSystem
      */
     public function getLastFilename($dirname = "", $partial = "")
     {
+        if (!file_exists($dirname)) {
+            return null;
+        }
+
         $files = array_reverse(scandir($dirname));
+
         $filename = $files[0];
 
         foreach ($files as $file) {
