@@ -38,7 +38,7 @@ class CraftApi extends Command
                      --current, -u        Use --useCurrent for timestamps when creating migration
                      --no-model, -o       Skip crafting model
                      --no-controller, -c  Skip crafting controller
-                     --no-factory, -f     Skip crafting facctory
+                     --no-factory, -f     Skip crafting factory
                      --no-migration, -g   Skip crafting migration
                      --no-seed, -s        Skip crafting seed
 

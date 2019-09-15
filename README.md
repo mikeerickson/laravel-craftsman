@@ -98,6 +98,18 @@ laravel-craftsman craft:all Contact \
 | **publish**          |                     | **Publish templates to project diretory**                                            |
 |                      |                     | *==> all craft:xxx commands will use project template if it exists*                  |
 |                      | --overwrite, -o     | Overwrites published templates directory                                             |
+| **craft:api**        | **base name**       | **Craft API Resources (create model, controller, factory, migration)**               |
+|                      | --model, -m         | Path to model (eg App/Models/Post)                                                   |
+|                      | --tablename, -t     | Tablename used in database (will set \$tablename in Model)                           |
+|                      |                     | _If not supplied, default table will be pluralized model name_                       |
+|                      | --rows, -r          | Number of rows used by seed when using Factory                                       |
+|                      | --current, -u       | Use --useCurrent for timestamps when creating migration                              |
+|                      | --no-model, -o      | Do not create model                                                                  |
+|                      | --no-controller, -c | Do not create controller                                                             |
+|                      | --no-factory, -f    | Do not create factory                                                                |
+|                      | --no-migration, -g  | Do not create migration                                                              |
+|                      | --no-seed, -s       | Do not create seed                                                                   |
+|                      | --overwrite, -w     | Overwrite existing class                                                             |
 | **craft:all**        | **base name**       | **Creates all assets (Controller, Factory, Migration, Model, Seed)**                 |
 |                      | --model, -m         | Path to model (eg App/Models/Post)                                                   |
 |                      | --tablename, -t     | Tablename used in database (will set \$tablename in Model)                           |
