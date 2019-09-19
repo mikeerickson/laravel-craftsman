@@ -5,6 +5,7 @@ namespace App;
 use Phar;
 use Exception;
 use Mustache_Engine;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Facades\Log;
@@ -56,6 +57,26 @@ class CraftsmanFileSystem
         if (is_dir($dirname)) {
             system("rm -rf " . escapeshellarg($dirname));
         }
+    }
+
+    public function getLocalConfigFilename()
+    {
+        $localConfigFilename = getcwd() . DIRECTORY_SEPARATOR . "sandbox" . DIRECTORY_SEPARATOR . "config.php";
+        if (!file_exists($localConfigFilename)) {
+            return null;
+        }
+        return $localConfigFilename;
+    }
+    public function getConfigValue($key)
+    {
+        if ($this->getLocalConfigFilename()) {
+            $data = require($this->getLocalConfigFilename());
+            if (Arr::has($data, $key)) {
+                return Arr::get($data, $key);
+            }
+            return config($key);
+        }
+        return config($key);
     }
 
     /**

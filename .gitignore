@@ -28,3 +28,4 @@ app/Test.php
 templates/custom.mustache
 templates/custom-request.mustache
 config.codekit3
+sandbox/
