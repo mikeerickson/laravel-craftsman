@@ -15,11 +15,13 @@ class CraftPublish extends Command
 {
     protected $signature = 'publish
                                 {--o|overwrite : Overwite existing templates}
+                                {--c|no-config : Skip Publishing Configuration File}
                             ';
 
     protected $description = "Copy Craftsman Templates to Project Directory";
 
     protected $help = 'Copy Craftsman Templates to Project Directory
+                     --no-config, -c    Skip Publishing Configuration File
                      --overwrite, -o    Overwite existing templates
             ';
 
@@ -35,6 +37,7 @@ class CraftPublish extends Command
     public function handle()
     {
         $overwrite = $this->option('overwrite');
+        $noConfig = $this->option('no-config');
 
         $src = $this->fs->getTemplatesDirectory();
         $dest = $this->fs->path_join(getcwd(), "templates");
@@ -50,13 +53,15 @@ class CraftPublish extends Command
         }
 
         // copy config/craftsman
-        $src = $this->fs->getAppConfigFilename();
-        $dest = $this->fs->path_join(getcwd(), "config", "craftsman.php");
-        if (file_exists($dest) && !$overwrite) {
-            Messenger::error("{$dest} already exists", "ERROR");
-        } else {
-            if ($src !== $dest) {
-                copy($src, $dest);
+        if (!$noConfig) {
+            $src = $this->fs->getAppConfigFilename();
+            $dest = $this->fs->path_join(getcwd(), "config", "craftsman.php");
+            if (file_exists($dest) && !$overwrite) {
+                Messenger::error("{$dest} already exists", "ERROR");
+            } else {
+                if ($src !== $dest) {
+                    copy($src, $dest);
+                }
             }
         }
     }

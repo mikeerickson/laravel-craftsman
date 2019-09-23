@@ -99,6 +99,7 @@ laravel-craftsman craft:all Contact \
 |                      | --silent, -s           | Skips Wizard Instructions                                                            |
 | **publish**          |                        | **Publish templates to project diretory**                                            |
 |                      |                        | *==> all craft:xxx commands will use project template if it exists*                  |
+|                      | --skip-config, -c      | Skip publishing craftsman configuration file                                         |
 |                      | --overwrite, -o        | Overwrites published templates directory                                             |
 | **craft:api**        |                        | **Craft API Resources (create model, controller, factory, migration, seed)**         |
 |                      | **🚩 base name**       | Based resource name for all assets (example Contact)                                 |
