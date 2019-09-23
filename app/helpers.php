@@ -1,5 +1,7 @@
 <?php
 
+use Codedungeon\PHPMessenger\Facades\Messenger;
+
 if (!function_exists('path_join')) {
     /**
      * @return string|string[]|null
@@ -180,5 +182,26 @@ if (!function_exists("dlog")) {
         if (!is_phar()) {
             Log::info($msg);
         }
+    }
+}
+
+if (!function_exists("msg_info")) {
+    function msg_info($msg = "")
+    {
+        Messenger::info($msg);
+    }
+}
+
+if (!function_exists("msg_debug")) {
+    function msg_debug($msg = "")
+    {
+        Messenger::debug($msg);
+    }
+}
+
+if (!function_exists("debug")) {
+    function debug($msg = "")
+    {
+        Messenger::debug($msg);
     }
 }

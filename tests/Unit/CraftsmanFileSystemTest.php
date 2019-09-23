@@ -157,7 +157,6 @@ class CraftsmanFileSystemTest extends TestCase
         $this->assertSame($result, $filename);
     }
 
-
     /** @test */
     public function should_return_class_template_filename()
     {
@@ -295,16 +294,6 @@ class CraftsmanFileSystemTest extends TestCase
         $filename = $this->fs->getTemplateFilename("seed");
 
         $this->assertSame($result, $filename);
-    }
-
-    /** @test */
-    public function should_return_user_template_path()
-    {
-        $result = getcwd() . DIRECTORY_SEPARATOR . "templates/sample.user.mustache";
-
-        $path = $this->fs->getUserTemplate("./config.php", "sample");
-
-        $this->assertSame($result, $path);
     }
 
     /** @test */
@@ -577,5 +566,19 @@ class CraftsmanFileSystemTest extends TestCase
         $parts = explode(".", $result);
 
         $this->assertTrue(count($parts) === 3);
+    }
+
+    /** @test  */
+    public function it_should_use_custom_configuration_access(): void
+    {
+        $configValue = $this->fs->getConfigValue("templates.model");
+        $this->AssertEquals("templates/model.mustache", $configValue);
+    }
+
+    /** @test  */
+    public function it_should_use_custom_configuration_value(): void
+    {
+        $configValue = $this->fs->getConfigValue("migrations.useCurrentDefault");
+        $this->AssertEquals(true, $configValue);
     }
 }

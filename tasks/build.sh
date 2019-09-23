@@ -10,8 +10,10 @@ info "Build number bumped to $BUILD ..." " INFO "
 
 php laravel-craftsman app:build
 rm -rf builds/templates
+rm -rf builds/config
 cp -r templates builds/templates
-cp config.php builds
+mkdir builds/config
+cp config/craftsman.php builds/config
 
 printf "\n"
 success "Build Completed Successfully" " SUCCESS "

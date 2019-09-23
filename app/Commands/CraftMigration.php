@@ -99,7 +99,7 @@ class CraftMigration extends Command
             "fields" => $fields,
             "foreign" => $foreign,
             "down" => $this->option('down'),
-            "current" => $this->option('current'),
+            "current" => $this->option('current') || config('craftsman.miscellaneous.useCurrentDefault'),
             "create" => $create,
             "update" => $update
         ];

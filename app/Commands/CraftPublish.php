@@ -48,5 +48,16 @@ class CraftPublish extends Command
             (new Filesystem)->copyDirectory($src, $dest);
             Messenger::success("Templates Published Successfully", "SUCCESS");
         }
+
+        // copy config/craftsman
+        $src = $this->fs->getAppConfigFilename();
+        $dest = $this->fs->path_join(getcwd(), "config", "craftsman.php");
+        if (file_exists($dest) && !$overwrite) {
+            Messenger::error("{$dest} already exists", "ERROR");
+        } else {
+            if ($src !== $dest) {
+                copy($src, $dest);
+            }
+        }
     }
 }

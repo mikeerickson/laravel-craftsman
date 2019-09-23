@@ -61,22 +61,51 @@ class CraftsmanFileSystem
 
     public function getLocalConfigFilename()
     {
-        $localConfigFilename = getcwd() . DIRECTORY_SEPARATOR . "sandbox" . DIRECTORY_SEPARATOR . "config.php";
+        if ($this->isPhar()) {
+            $localConfigFilename = $this->path_join(getcwd(), "config", "craftsman.php");
+        } else {
+            $localConfigFilename = $this->path_join(getcwd(), "sandbox", "craftsman.php");
+        }
+
         if (!file_exists($localConfigFilename)) {
             return null;
         }
         return $localConfigFilename;
     }
+
+    public function getAppPath()
+    {
+        return $this->pharPath();
+    }
+
+    public function getAppConfigFilename()
+    {
+        if (strlen($this->getPharPath()) > 0) {
+            return $this->path_join($this->getPharPath(), "config", "craftsman.php");
+        }
+        return $this->path_join(getcwd(), "config", "craftsman.php");
+    }
+
     public function getConfigValue($key)
     {
-        if ($this->getLocalConfigFilename()) {
-            $data = require($this->getLocalConfigFilename());
-            if (Arr::has($data, $key)) {
-                return Arr::get($data, $key);
-            }
-            return config($key);
+        $localConfigFilename = $this->getLocalConfigFilename();
+        $appConfigFilename = $this->getAppConfigFilename();
+
+        if (file_exists($localConfigFilename)) {
+            $configData = array_replace_recursive(
+                require($appConfigFilename),
+                require($localConfigFilename)
+            );
+            return Arr::get($configData, $key);
         }
         return config($key);
+    }
+
+    public function mergeConfigFrom($path, $key)
+    {
+        $config = $this->app['config']->get($key, []);
+
+        $this->app['config']->set($key, array_replace_recursive(require $path, $config));
     }
 
     /**
@@ -311,6 +340,12 @@ class CraftsmanFileSystem
     {
         return $this->getPharPath() . "templates";
     }
+
+    public function isPhar()
+    {
+        return strlen(Phar::running(false)) > 0;
+    }
+
 
     /**
      * @return string
@@ -581,7 +616,7 @@ class CraftsmanFileSystem
         $vars["teardown"] = (isset($data["teardown"])) ? $data["teardown"] : false;
         $vars["constructor"] = (isset($data["constructor"])) ? $data["constructor"] : false;
         $vars["foreign"] = (isset($data["foreign"])) ? $data["foreign"] : false;
-        $vars["current"] = (isset($data["current"])) ? $data["current"] : false;
+        $vars["current"] = (isset($data["current"])) ? $data["current"] : config("craftsman.miscellaneous.useCurrentDefault");
         $vars["create"] = (isset($data["create"])) ? $data["create"] : true;
         $vars["update"] = (isset($data["update"])) ? $data["update"] : false;
 
