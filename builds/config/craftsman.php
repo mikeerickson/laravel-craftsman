@@ -57,4 +57,17 @@ return [
         'view-index' => 'templates/view-index.mustache',
         'view-show' => 'templates/view-show.mustache',
     ],
+
+    /*
+     |-----------------------------------------------------------------------------
+     | Miscellaneous
+     |------------------------------------------------------------------------------
+     |
+     | Various crafting options
+     | useCurrentDefault - determines how migrations define timestamps
+     */
+
+    "miscellaneous" => [
+        "useCurrentDefault" => true,
+    ]
 ];
