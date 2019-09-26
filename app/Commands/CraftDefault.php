@@ -83,7 +83,7 @@ class CraftDefault extends Command
             "Resource",
             "Seed",
             "Test",
-            "Views"
+            "Views",
         ];
 
         /**

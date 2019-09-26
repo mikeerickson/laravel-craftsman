@@ -52,7 +52,7 @@ class CraftSeed extends Command
             if (strlen($model) === 0) {
                 $this->error("Must supply model name");
             } else {
-                $num_rows = (int)$this->option('rows') ?: 1;
+                $num_rows = (int) $this->option('rows') ?: 1;
                 $data = [
                     "model" => $model,
                     "name" => $seedName,

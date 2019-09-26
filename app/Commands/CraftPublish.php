@@ -52,7 +52,7 @@ class CraftPublish extends Command
                 $dest = $this->fs->tildify($dest);
                 Messenger::error("{$dest} already exists", "ERROR");
             } else {
-                (new Filesystem)->copyDirectory($src, $dest);
+                (new Filesystem())->copyDirectory($src, $dest);
                 Messenger::success("Templates Published Successfully", "SUCCESS");
             }
         }

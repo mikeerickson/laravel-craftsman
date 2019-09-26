@@ -84,7 +84,7 @@ class CraftInteractive extends Command
             "Resource",
             "Seed",
             "Test",
-            "Views"
+            "Views",
         ];
 
         /**

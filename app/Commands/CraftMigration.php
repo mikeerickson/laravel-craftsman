@@ -101,7 +101,7 @@ class CraftMigration extends Command
             "down" => $this->option('down'),
             "current" => $this->option('current') || config('craftsman.miscellaneous.useCurrentDefault'),
             "create" => $create,
-            "update" => $update
+            "update" => $update,
         ];
 
         // timestamp to be prepended to name

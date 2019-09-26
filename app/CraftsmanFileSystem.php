@@ -8,12 +8,10 @@ use Mustache_Engine;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Config\Repository;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
 use Codedungeon\PHPMessenger\Facades\Messenger;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-
 
 /**
  * Class CraftsmanFileSystem
@@ -21,13 +19,7 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
  */
 class CraftsmanFileSystem
 {
-    /**
-     *
-     */
     const SUCCESS = 0;
-    /**
-     *
-     */
     const FILE_EXIST = -43;
 
     /**
@@ -192,7 +184,7 @@ class CraftsmanFileSystem
 
     /**
      * @param $type
-     * @return Repository|mixed|string|string[]|null
+     * @return Repository|mixed|string|null
      */
     public function getOutputPath($type)
     {
@@ -359,12 +351,9 @@ class CraftsmanFileSystem
         return $path;
     }
 
-    /**
-     * @return string|string[]|null
-     */
     public function path_join()
     {
-        $paths = array();
+        $paths = [];
 
         foreach (func_get_args() as $arg) {
             if ($arg !== '') {
@@ -440,7 +429,7 @@ class CraftsmanFileSystem
         $dir = opendir($src);
         @mkdir($dst);
         while (($file = readdir($dir))) {
-            if (($file != '.') && ($file != '..')) {
+            if (($file !== '.') && ($file !== '..')) {
                 if (is_dir($src . '/' . $file)) {
                     $this->copy_directory($src . '/' . $file, $dst . '/' . $file);
                 } else {
@@ -472,7 +461,7 @@ class CraftsmanFileSystem
 
     /**
      * @param  null  $model_path
-     * @return Repository|mixed|string|string[]|null
+     * @return Repository|mixed|string|null
      */
     public function model_request($model_path = null)
     {
@@ -585,7 +574,7 @@ class CraftsmanFileSystem
             "fields" => $fieldData,
             "rules" => $ruleData,
             "collection" => isset($data["collection"]) ? $data["collection"] : false,
-            "binding" => ""
+            "binding" => "",
         ];
 
         if (isset($data["binding"]) && $data["binding"]) {
@@ -625,7 +614,8 @@ class CraftsmanFileSystem
             if (sizeof($parts) >= 2) {
                 $fk = $parts[0];
                 $primaryInfo = explode(",", $parts[1]);
-                list($pkid, $pktable) = $primaryInfo;
+                // list($pkid, $pktable) = $primaryInfo;
+                [$pkid, $pktable] = $primaryInfo;
                 $vars["foreign"] = true;
                 $vars["fk"] = $fk;
                 $vars["pkid"] = $pkid;
@@ -790,11 +780,11 @@ class CraftsmanFileSystem
     }
 
     /**
-     * @return string|string[]|null
+     * @return string|null
      */
     public function pathJoin()
     {
-        $paths = array();
+        $paths = [];
 
         foreach (func_get_args() as $arg) {
             if ($arg !== '') {
@@ -810,7 +800,7 @@ class CraftsmanFileSystem
      * @param  string  $partial
      * @return string
      */
-    public function getLastFilename($dirname = "", $partial = "")
+    public function getLastFilename($dirname = "", $partial = ""): ?string
     {
         if (!file_exists($dirname)) {
             return null;

@@ -29,6 +29,7 @@
         "laravel-zero/framework": "5.8.*",
         "mustache/mustache": "^2.12",
         "nunomaduro/laravel-console-menu": "^2.1",
+        "nunomaduro/phpinsights": "^1.9",
         "padraic/phar-updater": "^1.0.6",
         "phpunit/phpunit": "^8.1"
     },

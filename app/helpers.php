@@ -90,59 +90,11 @@ if (!function_exists("create_parent_dir")) {
     }
 }
 
-if (!function_exists("valid_path")) {
-    /**
-     * @param $path
-     * @return mixed|string
-     */
-    function valid_path($path)
-    {
-        // whether $path is unix or not
-        $unipath = strlen($path) == 0 || $path[0] != '/';
-        $unc = substr($path, 0, 2) == '\\\\' ? true : false;
-        // attempts to detect if path is relative in which case, add cwd
-        if (strpos($path, ':') === false && $unipath && !$unc) {
-            $path = getcwd() . DIRECTORY_SEPARATOR . $path;
-            if ($path[0] == '/') {
-                $unipath = false;
-            }
-        }
-
-        // resolve path parts (single dot, double dot and double delimiters)
-        $path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
-        $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
-        $absolutes = array();
-        foreach ($parts as $part) {
-            if ('.' == $part) {
-                continue;
-            }
-            if ('..' == $part) {
-                array_pop($absolutes);
-            } else {
-                $absolutes[] = $part;
-            }
-        }
-        $path = implode(DIRECTORY_SEPARATOR, $absolutes);
-        // resolve any symlinks
-        if (
-            function_exists('readlink') &&
-            file_exists($path) &&
-            linkinfo($path) > 0
-        ) {
-            $path = readlink($path);
-        }
-        // put initial separator that could have been lost
-        $path = !$unipath ? '/' . $path : $path;
-        $path = $unc ? '\\\\' . $path : $path;
-        return $path;
-    }
-}
-
 if (!function_exists("get_build")) {
     /**
-     * @return mixed
+     * @return string
      */
-    function get_build()
+    function get_build(): string
     {
         $data = file_get_contents(getcwd() . DIRECTORY_SEPARATOR . "package.json");
         $json = json_decode($data, true, 512);
@@ -152,9 +104,9 @@ if (!function_exists("get_build")) {
 
 if (!function_exists("get_version")) {
     /**
-     * @return mixed
+     * @return string
      */
-    function get_version()
+    function get_version(): string
     {
         $data = file_get_contents(getcwd() . DIRECTORY_SEPARATOR . "package.json");
         $json = json_decode($data, true, 512);
@@ -174,9 +126,6 @@ if (!function_exists("is_phar")) {
 }
 
 if (!function_exists("dlog")) {
-    /**
-     * @return bool
-     */
     function dlog($msg = "")
     {
         if (!is_phar()) {
@@ -186,21 +135,21 @@ if (!function_exists("dlog")) {
 }
 
 if (!function_exists("msg_info")) {
-    function msg_info($msg = "")
+    function msg_info($msg = ""): void
     {
         Messenger::info($msg);
     }
 }
 
 if (!function_exists("msg_debug")) {
-    function msg_debug($msg = "")
+    function msg_debug($msg = ""): void
     {
         Messenger::debug($msg);
     }
 }
 
 if (!function_exists("debug")) {
-    function debug($msg = "")
+    function debug($msg = ""): void
     {
         Messenger::debug($msg);
     }

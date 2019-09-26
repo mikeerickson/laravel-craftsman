@@ -63,7 +63,7 @@ return [
      | Miscellaneous
      |------------------------------------------------------------------------------
      |
-     | Various crafting options
+     | Miscellaneous crafting options:
      | useCurrentDefault - determines how migrations define timestamps
      */
 
