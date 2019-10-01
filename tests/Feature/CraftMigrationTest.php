@@ -44,14 +44,29 @@ class CraftMigrationTest extends TestCase
 
         $this->assertMigrationFileExists($migrationName);
 
-        $filename = $this->fs->getLastFilename("database/migrations", $migrationName);
+        $filename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
 
         $this->assertFileContainsString($filename, "Schema::create('tests', function (Blueprint \$table) {");
 
         $this->fs->rmdir("database/migrations");
     }
 
-    /** @test  */
+    /**
+     * @param $migrationName
+     */
+    private function assertMigrationFileExists($migrationName)
+    {
+        foreach (scandir("database/migrations") as $filename) {
+            if (!strpos($filename, $migrationName)) {
+                Assert::assertTrue(true);
+                return;
+            }
+        }
+
+        Assert::assertTrue(false);
+    }
+
+    /** @test */
     public function should_create_migration_with_current_timestamp(): void
     {
         $class = "CreateTestsTable";
@@ -62,7 +77,7 @@ class CraftMigrationTest extends TestCase
 
         $this->assertMigrationFileExists($migrationName);
 
-        $filename = $this->fs->getLastFilename("database/migrations", $migrationName);
+        $filename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
 
         $this->assertFileContainsString($filename, $class);
         $this->assertFileContainsString($filename, "\$table->timestamp('created_at')->useCurrent();");
@@ -70,7 +85,7 @@ class CraftMigrationTest extends TestCase
         $this->fs->rmdir("database/migrations");
     }
 
-    /** @test  */
+    /** @test */
     public function should_create_migration_with_foreign_constraint(): void
     {
         $migrationName = "create_tests_table";
@@ -83,7 +98,7 @@ class CraftMigrationTest extends TestCase
 
         $this->assertMigrationFileExists($migrationName);
 
-        $filename = $this->fs->getLastFilename("database/migrations", $migrationName);
+        $filename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
 
         $this->assertFileContainsString($filename, "\$table->foreign('post_id')->references('posts')->on('id');");
 
@@ -118,7 +133,7 @@ class CraftMigrationTest extends TestCase
 
         $this->assertMigrationFileExists($migrationName);
 
-        $migrationFilename = $this->fs->getLastFilename("database/migrations", $migrationName);
+        $migrationFilename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
         $data = file_get_contents($migrationFilename);
 
         $this->assertStringContainsString("\$table->string('fname',25)->nullable();", $data);
@@ -144,7 +159,7 @@ class CraftMigrationTest extends TestCase
 
         $this->assertMigrationFileExists($migrationName);
 
-        $migrationFilename = $this->fs->getLastFilename("database/migrations", $migrationName);
+        $migrationFilename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
         $data = file_get_contents($migrationFilename);
 
         $this->assertStringContainsString("\$table->string('fname',25)->nullable();", $data);
@@ -162,7 +177,7 @@ class CraftMigrationTest extends TestCase
     {
         $migrationName = "create_contacts_table";
         $dt = Carbon::now()->format('Y_m_d_His');
-        $migrationFilename = $dt . "_" . $migrationName;
+        $migrationFilename = $dt."_".$migrationName;
 
         $fields = "first_name:string@20:nullable, last_name:string@60:nullable, email:string@80:nullable:unique";
 
@@ -176,7 +191,7 @@ class CraftMigrationTest extends TestCase
 
         $this->fs->createFile("migration", $migrationFilename, $data);
 
-        $lastFilename = $this->fs->getLastFilename("database/migrations", $migrationName);
+        $lastFilename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
 
         $this->assertFileExists($lastFilename);
 
@@ -185,6 +200,9 @@ class CraftMigrationTest extends TestCase
 
         $this->fs->rmdir("database/migrations");
     }
+
+    // check to see if migration file was created. Since the filename is changed (adding timestamp)
+    // we can only validate the core migration ($migrationName) is actually created
 
     /** @test */
     public function should_create_migration_without_tablename()
@@ -196,16 +214,13 @@ class CraftMigrationTest extends TestCase
 
         $this->assertMigrationFileExists($migrationName);
 
-        $migrationFilename = $this->fs->getLastFilename("database/migrations", $migrationName);
+        $migrationFilename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
         $data = file_get_contents($migrationFilename);
 
         $this->assertStringContainsString("CreateProductContactsTable", $data);
 
         $this->fs->rmdir("database/migrations");
     }
-
-    // check to see if migration file was created. Since the filename is changed (adding timestamp)
-    // we can only validate the core migration ($migrationName) is actually created
 
     /** @test */
     public function should_create_migration_without_model()
@@ -217,13 +232,19 @@ class CraftMigrationTest extends TestCase
 
         $this->assertMigrationFileExists($migrationName);
 
-        $migrationFilename = $this->fs->getLastFilename("database/migrations", $migrationName);
+        $migrationFilename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
         $data = file_get_contents($migrationFilename);
 
         $this->assertStringContainsString("CreateContactsTable", $data);
 
         $this->fs->rmdir("database/migrations");
     }
+
+    /**
+     * ===============================================================================================
+     *  Migration Helpers and special asserts for migration testing only
+     * ===============================================================================================
+     */
 
     /** @test */
     public function should_create_update_migration()
@@ -235,32 +256,11 @@ class CraftMigrationTest extends TestCase
 
         $this->assertMigrationFileExists($migrationName);
 
-        $migrationFilename = $this->fs->getLastFilename("database/migrations", $migrationName);
+        $migrationFilename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
         $data = file_get_contents($migrationFilename);
 
         $this->assertStringContainsString("Schema::table('contacts', function (Blueprint \$table)", $data);
 
         $this->fs->rmdir("database/migrations");
-    }
-
-    /**
-     * ===============================================================================================
-     *  Migration Helpers and special asserts for migration testing only
-     * ===============================================================================================
-     */
-
-    /**
-     * @param $migrationName
-     */
-    private function assertMigrationFileExists($migrationName)
-    {
-        foreach (scandir("database/migrations") as $filename) {
-            if (!strpos($filename, $migrationName)) {
-                Assert::assertTrue(true);
-                return;
-            }
-        }
-
-        Assert::assertTrue(false);
     }
 }

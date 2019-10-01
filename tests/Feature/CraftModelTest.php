@@ -32,7 +32,7 @@ class CraftModelTest extends TestCase
         $this->withoutExceptionHandling();
     }
 
-    /** @test  */
+    /** @test */
     public function should_execute_default_craft_model_command()
     {
         $model = "Post";
@@ -48,7 +48,7 @@ class CraftModelTest extends TestCase
         unlink($filename);
     }
 
-    /** @test  */
+    /** @test */
     public function should_create_model_and_migration()
     {
         $migrationName = "create_tests_table";
@@ -56,7 +56,7 @@ class CraftModelTest extends TestCase
         $this->artisan("craft:model App/Models/Test --migration --overwrite")
             ->assertExitCode(0);
 
-        $filename = $this->fs->getLastFilename("database/migrations", $migrationName);
+        $filename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
         $this->assertFileExists($filename);
 
         $this->assertFileContainsString($filename, "Schema::create('tests', function (Blueprint \$table) {");
@@ -65,7 +65,7 @@ class CraftModelTest extends TestCase
         $this->fs->rmdir("app/models");
     }
 
-    /** @test  */
+    /** @test */
     public function should_execute_custom_craft_model_command()
     {
         $model = "Post";
@@ -98,7 +98,7 @@ class CraftModelTest extends TestCase
         $this->fs->rmdir("app/Models");
     }
 
-    /** @test  */
+    /** @test */
     public function should_create_all_assets_when_creating_model(): void
     {
         $model = "Customer";

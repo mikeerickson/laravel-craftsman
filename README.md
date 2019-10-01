@@ -152,7 +152,7 @@ laravel-craftsman craft:all Contact \
 |                      |                        | _If not supplied, default table will be pluralized model name_                       |
 |                      | --fields, -f           | List of fields (option) _see syntax below_                                           |
 |                      |                        | **🚨 If you have spaces separating fields, you must surround fields list in quotes** |
-|                      | --foreign, -c          | Add foreign key constraint (foreign info) _see syntax below_                         |
+|                      | --foreign, -r          | Add foreign key constraint (foreign info) _see syntax below_                         |
 |                      | --current, -u          | Use --useCurrent for timestamps (skipped by default)                                 |
 |                      | --down, -d             | Include down methods (skipped by default)                                            |
 |                      | --template, -t         | Path to custom template (override config file)                                       |
@@ -232,7 +232,7 @@ zsh: no such file or directory: project
 
 ### Foreign Key Syntax
 
-When using the `--fields` option when building migrations, you should use the following syntax:
+When using the `--foreign` option when building migrations, you should use the following syntax:
 
 ```bash
 format:
@@ -240,7 +240,20 @@ foreignKey:primaryId,primaryTable
 
 example:
 --foreign=post_id:id,posts
--c=post_id:id,posts
+-r=post_id:id,posts
+```
+
+Alternatively, you can supply just the foreign key part (using table_key format) and it will be used to extract the primary table and key.
+The primary table will be a plural version of the first part, followed by the primary key id.
+
+```bash
+--foreign=post_id
+```
+
+will be translated internally to use the full `--foreign` format
+
+```bash
+--foreign=post_id:id,posts
 ```
 
 ### Field Option Syntax

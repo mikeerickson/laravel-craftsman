@@ -7,11 +7,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.7.0] - 2019-pending
+## [1.8.0] - 2019-10-01
+
+### Added
+
+- Added support for crafting migrations based on `--foreign` short format
+    - `laravel-craftsman craft:migration create_members_table --foreign=member_id` will populate `ftable` and `fkey`
+        ```php
+        $table->foreign('member_id')->references('id')->on('members');
+        ```
+- Added support for overriding defaults using pubished configuration file
+    - `laravel-craftsman publish`
+
+## [1.7.0] - 2019-09-26
 
 ### Added
 
 - Added `craft:api` command
+- Code cleanup (based on phpinsights analysis)
 
 ## [1.6.3] - 2019-08-28
 

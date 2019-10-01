@@ -20,7 +20,7 @@ class CraftMigration extends Command
                                 {--m|model= : Path to migration model (required)}
                                 {--t|tablename= : Desired tablename}
                                 {--f|fields= : List of fields (optional)}
-                                {--c|foreign= :     Add constraint (optional)}
+                                {--r|foreign= :     Add constraint (optional)}
                                 {--u|current :        Use --useCurrent for timestamps}
                                 {--d|down : Include down method in migration}
                                 {--p|template= : Template path (override configuration file)}
@@ -34,7 +34,7 @@ class CraftMigration extends Command
                      --tablename, -t      Desired tablename
                      --fields, -f         List of fields (optional)
                                            eg. --fields first_name:string@20:nullable, email:string@80:nullable:unique
-                     --foreign, -c        Add constraint (skipped by default)
+                     --foreign, -r        Add constraint (skipped by default)
                      --current, -u        Use --useCurrent for timestamps (skipped by default)
                      --down, -d           Include down methods (skipped by default)
 

@@ -25,17 +25,6 @@ class CraftApiTest extends TestCase
         $this->withoutExceptionHandling();
     }
 
-    public function cleanUp()
-    {
-        $this->fs->rmdir("app/Http");
-        $this->fs->rmdir("app/Models");
-        $this->fs->rmdir("app/Test");
-        $this->fs->rmdir("resources/views/posts");
-        $this->fs->rmdir("database/migrations");
-        $this->fs->rmdir("database/factories");
-        $this->fs->rmdir("database/seeds");
-    }
-
     /** @test */
     public function should_craft_all_api_assets_using_default()
     {
@@ -67,7 +56,18 @@ class CraftApiTest extends TestCase
         $this->cleanUp();
     }
 
-    /** @test  */
+    public function cleanUp()
+    {
+        $this->fs->rmdir("app/Http");
+        $this->fs->rmdir("app/Models");
+        $this->fs->rmdir("app/Test");
+        $this->fs->rmdir("resources/views/posts");
+        $this->fs->rmdir("database/migrations");
+        $this->fs->rmdir("database/factories");
+        $this->fs->rmdir("database/seeds");
+    }
+
+    /** @test */
     public function should_create_all_api_assets_using_custom_model_path(): void
     {
         $resource = "Contact";
@@ -89,14 +89,14 @@ class CraftApiTest extends TestCase
         $this->assertFileExists($factoryFilename);
         unlink($factoryFilename);
 
-        $migrationFilename = $this->fs->getLastFilename("database/migrations", $migrationName);
+        $migrationFilename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
         $this->assertFileExists($migrationFilename);
         unlink($migrationFilename);
 
         $this->cleanUp();
     }
 
-    /** @test  */
+    /** @test */
     public function should_use_custom_tablename()
     {
         $resource = "Contact";
@@ -113,7 +113,7 @@ class CraftApiTest extends TestCase
         $this->cleanUp();
     }
 
-    /** @test  */
+    /** @test */
     public function should_not_create_marked_resources(): void
     {
         $resource = 'Contact';
@@ -131,7 +131,7 @@ class CraftApiTest extends TestCase
 
         // check migration
         $migrationName = "create_contacts_table";
-        $migrationFilename = $this->fs->getLastFilename("database/migrations", $migrationName);
+        $migrationFilename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
         $this->assertNull($migrationFilename);
 
         // check seed

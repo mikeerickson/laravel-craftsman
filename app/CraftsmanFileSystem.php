@@ -51,33 +51,6 @@ class CraftsmanFileSystem
         }
     }
 
-    public function getLocalConfigFilename()
-    {
-        if ($this->isPhar()) {
-            $localConfigFilename = $this->path_join(getcwd(), "config", "craftsman.php");
-        } else {
-            $localConfigFilename = $this->path_join(getcwd(), "sandbox", "craftsman.php");
-        }
-
-        if (!file_exists($localConfigFilename)) {
-            return null;
-        }
-        return $localConfigFilename;
-    }
-
-    public function getAppPath()
-    {
-        return $this->pharPath();
-    }
-
-    public function getAppConfigFilename()
-    {
-        if (strlen($this->getPharPath()) > 0) {
-            return $this->path_join($this->getPharPath(), "config", "craftsman.php");
-        }
-        return $this->path_join(getcwd(), "config", "craftsman.php");
-    }
-
     public function getConfigValue($key)
     {
         $localConfigFilename = $this->getLocalConfigFilename();
@@ -91,6 +64,59 @@ class CraftsmanFileSystem
             return Arr::get($configData, $key);
         }
         return config($key);
+    }
+
+    public function getLocalConfigFilename()
+    {
+        if ($this->isPhar()) {
+            $localConfigFilename = $this->path_join(getcwd(), "config", "craftsman.php");
+        } else {
+            // sandbox only used for development testing
+            $localConfigFilename = $this->path_join(getcwd(), "sandbox", "craftsman.php");
+        }
+
+        if (!file_exists($localConfigFilename)) {
+            return null;
+        }
+        return $localConfigFilename;
+    }
+
+    public function isPhar()
+    {
+        return strlen(Phar::running(false)) > 0;
+    }
+
+    public function path_join()
+    {
+        $paths = [];
+
+        foreach (func_get_args() as $arg) {
+            if ($arg !== '') {
+                $paths[] = $arg;
+            }
+        }
+
+        return preg_replace('#/+#', '/', join('/', $paths));
+    }
+
+    public function getAppConfigFilename()
+    {
+        if (strlen($this->getPharPath()) > 0) {
+            return $this->path_join($this->getPharPath(), "config", "craftsman.php");
+        }
+        return $this->path_join(getcwd(), "config", "craftsman.php");
+    }
+
+    /**
+     * @return string
+     */
+    public function getPharPath()
+    {
+        $path = Phar::running(false);
+        if (strlen($path) > 0) {
+            $path = dirname($path) . DIRECTORY_SEPARATOR;
+        }
+        return $path;
     }
 
     public function mergeConfigFrom($path, $key)
@@ -243,14 +269,6 @@ class CraftsmanFileSystem
     /**
      * @return Repository|mixed
      */
-    public function templates_path()
-    {
-        return config('craftsman.paths.templates');
-    }
-
-    /**
-     * @return Repository|mixed
-     */
     public function class_path()
     {
         return config('craftsman.paths.class');
@@ -304,6 +322,14 @@ class CraftsmanFileSystem
         return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.seeds');
     }
 
+    /**
+     * @return Repository|mixed
+     */
+    public function templates_path()
+    {
+        return config('craftsman.paths.templates');
+    }
+
     public function test_path()
     {
         return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.tests');
@@ -326,47 +352,6 @@ class CraftsmanFileSystem
         }
 
         return ""; // we didnt find the entry, return null string
-    }
-
-    public function getTemplatesDirectory()
-    {
-        return $this->getPharPath() . "templates";
-    }
-
-    public function isPhar()
-    {
-        return strlen(Phar::running(false)) > 0;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getPharPath()
-    {
-        $path = Phar::running(false);
-        if (strlen($path) > 0) {
-            $path = dirname($path) . DIRECTORY_SEPARATOR;
-        }
-        return $path;
-    }
-
-    public function path_join()
-    {
-        $paths = [];
-
-        foreach (func_get_args() as $arg) {
-            if ($arg !== '') {
-                $paths[] = $arg;
-            }
-        }
-
-        return preg_replace('#/+#', '/', join('/', $paths));
-    }
-
-    public function getProjectTemplatesDiretory()
-    {
-        return $this->path_join(getcwd(), "templates");
     }
 
     /**
@@ -414,6 +399,15 @@ class CraftsmanFileSystem
         return basename($dest);
     }
 
+    public function shortenFilename($filename)
+    {
+        $newFilename = str_replace(getcwd(), ".", $filename);
+        if (!Str::startsWith($newFilename, ".")) {
+            $newFilename = "./" . $newFilename;
+        }
+        return $newFilename;
+    }
+
     /**
      * @param $filename
      */
@@ -422,6 +416,21 @@ class CraftsmanFileSystem
         if (!is_dir(dirname($filename))) {
             mkdir(dirname($filename), 0777, true);
         }
+    }
+
+    public function tildify($filename)
+    {
+        return str_replace($this->getUserHome(), "~", $filename);
+    }
+
+    public function getUserHome()
+    {
+        return getenv("HOME");
+    }
+
+    public function getTemplatesDirectory()
+    {
+        return $this->getPharPath() . "templates";
     }
 
     public function copy_directory($src, $dst)
@@ -438,25 +447,6 @@ class CraftsmanFileSystem
             }
         }
         closedir($dir);
-    }
-
-    public function tildify($filename)
-    {
-        return str_replace($this->getUserHome(), "~", $filename);
-    }
-
-    public function shortenFilename($filename)
-    {
-        $newFilename = str_replace(getcwd(), ".", $filename);
-        if (!Str::startsWith($newFilename, ".")) {
-            $newFilename = "./" . $newFilename;
-        }
-        return $newFilename;
-    }
-
-    public function getUserHome()
-    {
-        return getenv("HOME");
     }
 
     /**
@@ -517,7 +507,7 @@ class CraftsmanFileSystem
 
         // if we have supplied a custom path (ie App/Models/Contact) it will be used instead of default path
         $dest = (Str::startsWith($filename, "App") || Str::startsWith($filename, "app"))
-            ?  $this->path_join($filename . ".php")
+            ? $this->path_join($filename . ".php")
             : $this->path_join($path, $filename . ".php");
 
         if (file_exists($dest) && (!$overwrite)) {
@@ -611,17 +601,19 @@ class CraftsmanFileSystem
 
         if (isset($data["foreign"])) {
             $parts = explode(":", trim($data["foreign"]));
+            $vars["foreign"] = true;
+            $fk = $parts[0];
+            $vars["fk"] = $fk;
             if (sizeof($parts) >= 2) {
-                $fk = $parts[0];
                 $primaryInfo = explode(",", $parts[1]);
-                // list($pkid, $pktable) = $primaryInfo;
                 [$pkid, $pktable] = $primaryInfo;
-                $vars["foreign"] = true;
-                $vars["fk"] = $fk;
                 $vars["pkid"] = $pkid;
                 $vars["pktable"] = $pktable;
             } else {
-                $vars["foreign"] = false;
+                $primaryInfo = explode("_", $parts[0]);
+                [$pktable, $pkid] = $primaryInfo;
+                $vars["pkid"] = $pkid;
+                $vars["pktable"] = Str::plural($pktable);
             }
         }
         $template = $this->fs->get($src);
@@ -710,10 +702,9 @@ class CraftsmanFileSystem
         return getcwd() . DIRECTORY_SEPARATOR . config("craftsman.templates.{$type}");
     }
 
-    public function getClassName($name)
+    public function getProjectTemplatesDiretory()
     {
-        $parts = explode("/", $name);
-        return end($parts);
+        return $this->path_join(getcwd(), "templates");
     }
 
     /**
@@ -779,6 +770,12 @@ class CraftsmanFileSystem
         return substr($ruleData, 0, -1);
     }
 
+    public function getClassName($name)
+    {
+        $parts = explode("/", $name);
+        return end($parts);
+    }
+
     /**
      * @return string|null
      */
@@ -800,7 +797,7 @@ class CraftsmanFileSystem
      * @param  string  $partial
      * @return string
      */
-    public function getLastFilename($dirname = "", $partial = ""): ?string
+    public function getLastMigrationFilename($dirname = "", $partial = ""): ?string
     {
         if (!file_exists($dirname)) {
             return null;
