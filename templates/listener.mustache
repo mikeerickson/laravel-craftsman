@@ -1,0 +1,35 @@
+<?php
+
+namespace {{namespace}};
+
+{{#useEvent}}
+use App\Events\{{event}};
+{{/useEvent}}
+{{#queued}}
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+{{/queued}}
+
+class {{name}} {{#queued}}implements ShouldQueue{{/queued}}
+{
+    /**
+     * Create the event listener.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     * Handle the event.
+     *
+     * @param  object {{event}} $event
+     * @return void
+     */
+    public function handle({{event}} $event)
+    {
+        //
+    }
+}

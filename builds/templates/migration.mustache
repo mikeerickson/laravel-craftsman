@@ -16,6 +16,9 @@ class Create{{model}}Table extends Migration
         {{#create}}
         Schema::create('{{tablename}}', function (Blueprint $table) {
             $table->bigIncrements('id');
+            {{#foreign}}
+            $table->unsignedBigInteger('{{fk}}');
+            {{/foreign}}
             {{{fields}}}
             {{#current}}
             $table->timestamp('created_at')->useCurrent();

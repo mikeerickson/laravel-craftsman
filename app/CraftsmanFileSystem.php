@@ -224,6 +224,15 @@ class CraftsmanFileSystem
             case 'controller':
                 $path = $this->controller_path();
                 break;
+            case 'command':
+                $path = $this->command_path();
+                break;
+            case 'event':
+                $path = $this->event_path();
+                break;
+            case 'listener':
+                $path = $this->listener_path();
+                break;
             case 'factories':
             case 'factory':
                 $path = $this->factory_path();
@@ -281,6 +290,28 @@ class CraftsmanFileSystem
     {
         return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.controllers');
     }
+
+    public function command_path()
+    {
+        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.commands');
+    }
+
+    /**
+     * @return Repository|mixed
+     */
+    public function event_path()
+    {
+        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.events');
+    }
+
+    /**
+     * @return Repository|mixed
+     */
+    public function listener_path()
+    {
+        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.listeners');
+    }
+
 
     /**
      * @return Repository|mixed
@@ -428,6 +459,14 @@ class CraftsmanFileSystem
         return getenv("HOME");
     }
 
+    /**
+     * @param $path
+     */
+    public function delete($path)
+    {
+        unlink($path);
+    }
+
     public function getTemplatesDirectory()
     {
         return $this->getPharPath() . "templates";
@@ -472,10 +511,10 @@ class CraftsmanFileSystem
     public function createFile($type = null, $filename = null, $data = [])
     {
         $namespace = "";
+
         $overwrite = (isset($data["overwrite"])) ? $data["overwrite"] : false;
         $factory = (isset($data["factory"])) ? $data["factory"] : false;
         $all = (isset($data["all"])) ? $data["all"] : false;
-
         $path = $this->getOutputPath($type);
 
         if (isset($data["template"])) {
@@ -525,7 +564,6 @@ class CraftsmanFileSystem
                 "message" => "{$dest} already exists",
             ];
         }
-
         $tablename = "";
         if (isset($data["tablename"])) {
             $tablename = strtolower($data["tablename"]);
@@ -557,6 +595,7 @@ class CraftsmanFileSystem
 
         $vars = [
             "name" => $filename,
+            "path" => $path,
             "model" => $model,
             "model_path" => $model_path,
             "all" => $all,
@@ -565,6 +604,7 @@ class CraftsmanFileSystem
             "rules" => $ruleData,
             "collection" => isset($data["collection"]) ? $data["collection"] : false,
             "binding" => "",
+            "broadcast" => isset($data["no-broadcast"]) ? !$data["no-broadcast"] : true,
         ];
 
         if (isset($data["binding"]) && $data["binding"]) {
@@ -585,6 +625,14 @@ class CraftsmanFileSystem
             }
         }
 
+        if ($type === "event") {
+            if ($vars["namespace"] === $vars["name"]) {
+                $vars["namespace"] = "App\\Events";
+            } else {
+                $vars["namespace"] = "App\\Events\\" . $vars["namespace"];
+            }
+        }
+
         // this variable is only used in seed
         $vars["num_rows"] = (isset($data["num_rows"])) ? (int) $data["num_rows"] : 1;
 
@@ -598,6 +646,8 @@ class CraftsmanFileSystem
         $vars["current"] = (isset($data["current"])) ? $data["current"] : config("craftsman.miscellaneous.useCurrentDefault");
         $vars["create"] = (isset($data["create"])) ? $data["create"] : true;
         $vars["update"] = (isset($data["update"])) ? $data["update"] : false;
+        $vars["signature"] = (isset($data["signature"])) ? $data["signature"] : false;
+        $vars["description"] = (isset($data["description"])) ? $data["description"] : false;
 
         if (isset($data["foreign"])) {
             $parts = explode(":", trim($data["foreign"]));
@@ -633,7 +683,10 @@ class CraftsmanFileSystem
         }
 
         $vars["name"] = $this->getClassName($vars["name"]);
-        $template_data = $mustache->render($template, $vars);
+
+        $mergeVars = array_merge($data, $vars);
+
+        $template_data = $mustache->render($template, $mergeVars);
 
         try {
             $this->createParentDirectory($dest);

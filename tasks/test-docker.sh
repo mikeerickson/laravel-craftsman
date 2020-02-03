@@ -10,4 +10,8 @@ info "Testing PHP 7.3 (Alpine Distribution)" " INFO "
 docker run -v $(pwd):/app -w /app --rm php:7.3-alpine vendor/bin/phpunit -c phpunit.ci.xml --colors=always
 echo "\n"
 
+warn "Testing PHP 7.4 (Alpine Distribution) -- Currently Not Working" " WARNING "
+# docker run -v $(pwd):/app -w /app --rm php:7.4-alpine vendor/bin/phpunit -c phpunit.ci.xml --colors=always
+echo "\n"
+
 success "Docker Testing Complete" " DONE "

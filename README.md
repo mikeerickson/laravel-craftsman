@@ -17,13 +17,13 @@ In addition, you can create all assets with a single command, allowing you to qu
 
 ## Table Of Conents
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Commands](#commands)
-- [Tips](#tips)
-- [Custom Templates](#custom-templates)
-- [License](#license)
-- [Credits](#credits)
+-   [Installation](#installation)
+-   [Usage](#usage)
+-   [Commands](#commands)
+-   [Tips](#tips)
+-   [Custom Templates](#custom-templates)
+-   [License](#license)
+-   [Credits](#credits)
 
 ## Installation
 
@@ -62,6 +62,9 @@ or
 
 > laravel-craftsman craft:controller PostController --model App/Models/Post
 
+> laravel-craftsman craft:event ContactCreated
+> laravel-craftsman craft:event ContactCreated --no-broadcast
+
 > laravel-craftsman craft:factory PostFactory --model App/Models/Post
 
 > laravel-craftsman craft:migration create_posts_table --tablename posts
@@ -98,7 +101,7 @@ laravel-craftsman craft:all Contact \
 | **interactive**      |                        | **Run Interactive Mode (uses wizard to craft resources**                             |
 |                      | --silent, -s           | Skips Wizard Instructions                                                            |
 | **publish**          |                        | **Publish templates to project diretory**                                            |
-|                      |                        | *==> all craft:xxx commands will use project template if it exists*                  |
+|                      |                        | _==> all craft:xxx commands will use project template if it exists_                  |
 |                      | --skip-config, -c      | Skip publishing craftsman configuration file                                         |
 |                      | --overwrite, -o        | Overwrites published templates directory                                             |
 | **craft:api**        |                        | **Craft API Resources (create model, controller, factory, migration, seed)**         |
@@ -133,6 +136,12 @@ laravel-craftsman craft:all Contact \
 |                      | --constructor, -c      | Include constructor method                                                           |
 |                      | --template, -t         | Path to custom template (override config file)                                       |
 |                      | --overwrite, -w        | Overwrite existing class                                                             |
+| **craft:command**    |                        | **Creates Artisan Command class**                                                    |
+|                      | **🚩 command name**    | Command name                                                                         |
+|                      | --signature, -s        | Command Signature                                                                    |
+|                      | --description, -d      | Command Description                                                                  |
+|                      | --template, -t         | Path to custom template (override config file)                                       |
+|                      | --overwrite, -w        | Overwrite existing class                                                             |
 | **craft:controller** |                        | **Create controller using supplied options**                                         |
 |                      | **🚩 controller name** | Controller Name                                                                      |
 |                      | --model, -m            | Path to model (eg App/Models/Post)                                                   |
@@ -143,13 +152,22 @@ laravel-craftsman craft:all Contact \
 |                      | --resource, -r         | Create resource controller                                                           |
 |                      | --template, -t         | Path to custom template (override config file)                                       |
 |                      | --overwrite, -w        | Overwrite existing class                                                             |
+| **craft:event**      |                        | **Creates event class**                                                              |
+|                      | **🚩 event name**      | Event Name                                                                           |
+|                      | --no-broadcast, -b     | Skips broadcast code when event class created                                        |
+|                      | --overwrite, -w        | Overwrite existing class                                                             |
 | **craft:factory**    |                        | **Creates factory using supplied options**                                           |
 |                      | **🚩 factory name**    | Factory Name                                                                         |
 |                      | --model, -m            | Path to model (eg App/Models/Post)                                                   |
+| **craft:listener**   |                        | **Creates listener class**                                                           |
+|                      | **🚩 listener name**   | Listener Name                                                                        |
+|                      | --event, -e            | The event class be listener for                                                      |
+|                      | --queued               | Indicates the event listener should be queued                                        |
+|                      | --overwrite, -w        | Overwrite existing class                                                             |
 | **craft:migration**  |                        | **Creates migration using supplied options**                                         |
-|                      | **🚩 migration name**  | Migration Name (eg create_contacts_table)                                            |
+|                      | **🚩 migration name**  | Migration Name (eg create\*contacts_table)                                           |
 |                      | --tablename, -t        | Tablename used in database (will set \$tablename in Model)                           |
-|                      |                        | _If not supplied, default table will be pluralized model name_                       |
+|                      |                        | \_If not supplied, default table will be pluralized model name\*                     |
 |                      | --fields, -f           | List of fields (option) _see syntax below_                                           |
 |                      |                        | **🚨 If you have spaces separating fields, you must surround fields list in quotes** |
 |                      | --foreign, -r          | Add foreign key constraint (foreign info) _see syntax below_                         |
@@ -202,7 +220,9 @@ This will create a class in the `App/Services` path, with filename `Sync.php`. D
 The following commands support defining class path
 
 -   craft:class
+-   craft:event
 -   craft:factory
+-   craft:listener
 -   craft:model
 -   craft:seed
 -   craft:test
@@ -256,9 +276,26 @@ will be translated internally to use the full `--foreign` format
 --foreign=post_id:id,posts
 ```
 
+#### Automatic foreign key field creation
+
+When using the `--foreign` flag, the appropriate field will be added automatically in migration file.
+For example, if the `--foreign post_id` flag is supplied, the following will be added to new migration
+
+```php
+    ...
+    Schema::create('comments', function (Blueprint $table) {
+        $table->bigIncrements('id');
+        $table->unsignedBigInteger('post_id');
+        ...
+        $table->foreign('post_id')->references('id')->on('posts');
+    });
+    ...
+```
+
 ### Field Option Syntax
 
 When using the `--fields` option when building migrations, you should use the following syntax:
+Note: If you have used teh `--foreign` flag as outlined above, the foreign key field will be added automatically
 
 ```bash
 format:

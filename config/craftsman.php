@@ -15,6 +15,9 @@ return [
     'paths' => [
         'class' => 'app',
         'controllers' => 'app/Http/Controllers',
+        'commands' => 'app/Console/Commands',
+        'events' => 'app/Events',
+        'listeners' => 'app/Listeners',
         'resources' => 'app/Http/Resources',
         'factories' => 'database/factories',
         'migrations' => 'database/migrations',
@@ -41,11 +44,14 @@ return [
     'templates' => [
         'base' => 'templates',
         'class' => 'templates/class.mustache',
+        'command' => 'templates/command.mustache',
         'api-controller' => 'templates/api-controller.mustache',
         'binding-controller' => 'templates/binding-controller.mustache',
         'empty-controller' => 'templates/empty-controller.mustache',
         'resource-controller' => 'templates/resource-controller.mustache',
         'controller' => 'templates/controller.mustache',
+        'event' => 'templates/event.mustache',
+        'listener' => 'templates/listeners.mustache',
         'factory' => 'templates/factory.mustache',
         'migration' => 'templates/migration.mustache',
         'model' => 'templates/model.mustache',
@@ -69,5 +75,5 @@ return [
 
     "miscellaneous" => [
         "useCurrentDefault" => true,
-    ]
+    ],
 ];

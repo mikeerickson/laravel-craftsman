@@ -7,44 +7,51 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.8.0] - 2019-10-01
+## [1.8.0] - 2020-02-20
 
 ### Added
 
-- Added support for crafting migrations based on `--foreign` short format
-    - `laravel-craftsman craft:migration create_members_table --foreign=member_id` will populate `ftable` and `fkey`
+-   Added `craft:command` command
+-   Added `craft:event` and `craft:listener` commands
+
+## [1.7.2] - 2019-09-25
+
+### Added
+
+-   Added support for crafting migrations based on `--foreign` short format
+    -   `laravel-craftsman craft:migration create_members_table --foreign=member_id` will populate `ftable` and `fkey`
         ```php
         $table->foreign('member_id')->references('id')->on('members');
         ```
-- Added support for overriding defaults using pubished configuration file
-    - `laravel-craftsman publish`
+-   Added support for overriding defaults using published configuration file
+    -   `laravel-craftsman publish`
 
 ## [1.7.0] - 2019-09-26
 
 ### Added
 
-- Added `craft:api` command
-- Code cleanup (based on phpinsights analysis)
+-   Added `craft:api` command
+-   Code cleanup (based on phpinsights analysis)
 
 ## [1.6.3] - 2019-08-28
 
 ### Fixed
 
-- Fixed `craft:controller` to craft new controller in `App/Http/Controllers` directory when using `resource` flag
-- Fixed test case to `CraftControllerTest::should_create_resource_controller` to cover correct resource creation related to `resource` flag (see above)
+-   Fixed `craft:controller` to craft new controller in `App/Http/Controllers` directory when using `resource` flag
+-   Fixed test case to `CraftControllerTest::should_create_resource_controller` to cover correct resource creation related to `resource` flag (see above)
 
 ### Modified
 
-- Modified `craft:controller` shortcut for `resource` controller from `-u` to `-r`
-- Modified npm tasks for running test, adding `test:all` task
-- Modified `task:stress` to call `stress-test.sh` task so it will properly handle stress retries
+-   Modified `craft:controller` shortcut for `resource` controller from `-u` to `-r`
+-   Modified npm tasks for running test, adding `test:all` task
+-   Modified `task:stress` to call `stress-test.sh` task so it will properly handle stress retries
 
 ## [1.6.2] - 2019-08-14
 
 ### Added
 
-- `craft` command alias for `interactive`
-  - `$ laravel-craftsman craft`
+-   `craft` command alias for `interactive`
+    -   `$ laravel-craftsman craft`
 
 ## [1.6.1] - 2019-08-03
 
@@ -68,7 +75,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added artisan fallback when executing commands which dont exist in `craftsman`
+-   Added artisan fallback when executing commands which dont exist in `craftsman`
     o For example, call `laravel-craftsman craft:observer TestObserver` the artiasn command `make:observer` will be executed
 
 ## [1.5.0] - 2019-07-12

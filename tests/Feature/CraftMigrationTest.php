@@ -93,14 +93,32 @@ class CraftMigrationTest extends TestCase
         $primaryKey = "id";
         $primaryTable = "posts";
 
-        $this->artisan("craft:migration {$migrationName} --foreign={$foreignKey}:{$primaryTable},{$primaryKey}")
+        $this->artisan("craft:migration {$migrationName} --foreign={$foreignKey}:{$primaryKey},{$primaryTable}")
             ->assertExitCode(0);
 
         $this->assertMigrationFileExists($migrationName);
 
         $filename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
 
-        $this->assertFileContainsString($filename, "\$table->foreign('post_id')->references('posts')->on('id');");
+        $this->assertFileContainsString($filename, "\$table->foreign('post_id')->references('id')->on('posts');");
+
+        $this->fs->rmdir("database/migrations");
+    }
+
+    /** @test */
+    public function should_create_migration_using_foreign_key_only(): void
+    {
+        $migrationName = "create_tests_table";
+        $foreignKey = "post_id";
+
+        $this->artisan("craft:migration {$migrationName} --foreign {$foreignKey}")
+            ->assertExitCode(0);
+
+        $this->assertMigrationFileExists($migrationName);
+
+        $filename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
+
+        $this->assertFileContainsString($filename, "\$table->foreign('{$foreignKey}')->references('id')->on('posts');");
 
         $this->fs->rmdir("database/migrations");
     }
@@ -177,7 +195,7 @@ class CraftMigrationTest extends TestCase
     {
         $migrationName = "create_contacts_table";
         $dt = Carbon::now()->format('Y_m_d_His');
-        $migrationFilename = $dt."_".$migrationName;
+        $migrationFilename = $dt . "_" . $migrationName;
 
         $fields = "first_name:string@20:nullable, last_name:string@60:nullable, email:string@80:nullable:unique";
 
