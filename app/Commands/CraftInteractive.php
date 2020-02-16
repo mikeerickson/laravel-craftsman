@@ -3,12 +3,15 @@
 namespace App\Commands;
 
 use Illuminate\Support\Str;
+use App\Traits\CommandDebugTrait;
 use Illuminate\Support\Facades\Artisan;
 use LaravelZero\Framework\Commands\Command;
 use Codedungeon\PHPMessenger\Facades\Messenger;
 
 class CraftInteractive extends Command
 {
+    use CommandDebugTrait;
+
     protected $hidden = false;
 
     /**
@@ -45,6 +48,8 @@ class CraftInteractive extends Command
      */
     public function handle()
     {
+        $this->handleDebug();
+
         $skip = $this->option('skip');
         if (!$skip) {
             echo "\n";

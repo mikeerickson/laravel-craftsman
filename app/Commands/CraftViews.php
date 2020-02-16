@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use App\CraftsmanFileSystem;
+use App\Traits\CommandDebugTrait;
 use LaravelZero\Framework\Commands\Command;
 
 /**
@@ -11,6 +12,8 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftViews extends Command
 {
+    use CommandDebugTrait;
+
     protected $signature = 'craft:views
                                 {name : Resource name (resources/views/<name>)}
                                 {--x|extends= : Include extends block using supplied layout}
@@ -22,6 +25,7 @@ class CraftViews extends Command
                                 {--o|no-show : Don\'t craft show view}
 
                                 {--w|overwrite : Overwrite existing views}
+                                {--b|debug   : Use Debug Interface}
                             ';
 
     protected $description = "Craft Views (create, edit, index, show)";
@@ -50,6 +54,8 @@ class CraftViews extends Command
 
     public function handle()
     {
+        $this->handleDebug();
+
         $assetName = strtolower($this->argument('name'));
 
         $data = [

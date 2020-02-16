@@ -7,6 +7,7 @@ use Exception;
 use Mustache_Engine;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use App\Traits\CommandDebugTrait;
 use Illuminate\Config\Repository;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
@@ -19,8 +20,10 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
  */
 class CraftsmanFileSystem
 {
+    use CommandDebugTrait;
+
     const SUCCESS = 0;
-    const FILE_EXIST = -43;
+    const FILE_NOT_EXIST = -43;
 
     /**
      * @var Filesystem
@@ -221,6 +224,7 @@ class CraftsmanFileSystem
             case 'binding-controller':
             case 'api-controller':
             case 'empty-controller':
+            case 'invokable-controller':
             case 'controller':
                 $path = $this->controller_path();
                 break;
@@ -405,7 +409,7 @@ class CraftsmanFileSystem
 
         if (file_exists($dest) && !$data["overwrite"]) {
             Messenger::error("{$shortFilename} already exists\n", "ERROR");
-            return self::FILE_EXIST;
+            return self::FILE_NOT_EXIST;
         }
 
         try {
@@ -512,9 +516,14 @@ class CraftsmanFileSystem
     {
         $namespace = "";
 
+        $debug = (isset($data["debug"])) ? $data["debug"] : in_array("--debug", $_SERVER["argv"]);
+
         $overwrite = (isset($data["overwrite"])) ? $data["overwrite"] : false;
         $factory = (isset($data["factory"])) ? $data["factory"] : false;
+        $listener = (isset($data["listener"])) ? $data["listener"] : false;
         $all = (isset($data["all"])) ? $data["all"] : false;
+        $controller = (isset($data["controller"])) ? $data["controller"] : false;
+
         $path = $this->getOutputPath($type);
 
         if (isset($data["template"])) {
@@ -537,9 +546,10 @@ class CraftsmanFileSystem
             }
         }
 
-        if (!file_exists($src)) {
+        if (!file_exists($src) || (is_dir($src))) {
             printf("\n");
-            $src = str_replace($this->getUserHome(), "~", $src);
+            $template = $this->path_join($this->getProjectTemplatesDiretory(), $data["template"]);
+            $src = str_replace($this->getUserHome(), "~", $template);
             Messenger::error("Unable to locate template '{$src}'", "ERROR");
             exit(1);
         }
@@ -559,7 +569,7 @@ class CraftsmanFileSystem
             Messenger::error("{$filename} already exists\n", "ERROR");
 
             return [
-                "status" => self::FILE_EXIST,
+                "status" => self::FILE_NOT_EXIST,
                 "filename" => $filename,
                 "message" => "{$dest} already exists",
             ];
@@ -594,6 +604,7 @@ class CraftsmanFileSystem
         }
 
         $vars = [
+            "debug" => $debug,
             "name" => $filename,
             "path" => $path,
             "model" => $model,
@@ -602,34 +613,23 @@ class CraftsmanFileSystem
             "tablename" => $tablename,
             "fields" => $fieldData,
             "rules" => $ruleData,
-            "collection" => isset($data["collection"]) ? $data["collection"] : false,
+            "controller" => isset($data["controller"]) ? $data["controller"] : false,
             "binding" => "",
             "broadcast" => isset($data["no-broadcast"]) ? !$data["no-broadcast"] : true,
+            "listener" => isset($data["listener"]) ? !$data["listener"] : true,
         ];
 
         if (isset($data["binding"]) && $data["binding"]) {
             $vars["binding"] = "{$model} \$data";
         }
 
+        $namespace = $this->getNamespace($type, $vars["name"]);
+
         if (isset($data["namespace"])) {
             $vars["namespace"] = $data["namespace"];
         } else {
             if (strlen($namespace) > 0) {
                 $vars["namespace"] = $namespace;
-            }
-        }
-
-        if (isset($data["namespace"])) {
-            if ($vars["model"] === $vars["namespace"]) {
-                $vars["namespace"] = "App";
-            }
-        }
-
-        if ($type === "event") {
-            if ($vars["namespace"] === $vars["name"]) {
-                $vars["namespace"] = "App\\Events";
-            } else {
-                $vars["namespace"] = "App\\Events\\" . $vars["namespace"];
             }
         }
 
@@ -648,6 +648,7 @@ class CraftsmanFileSystem
         $vars["update"] = (isset($data["update"])) ? $data["update"] : false;
         $vars["signature"] = (isset($data["signature"])) ? $data["signature"] : false;
         $vars["description"] = (isset($data["description"])) ? $data["description"] : false;
+        $vars["controller"] = (isset($data["controller"])) ? $data["controller"] : false;
 
         if (isset($data["foreign"])) {
             $parts = explode(":", trim($data["foreign"]));
@@ -717,16 +718,20 @@ class CraftsmanFileSystem
             Artisan::call("craft:factory {$model}Factory --model {$filename} {$overwrite}");
         }
 
+        if ($controller && !$all) {
+            Artisan::call("craft:controller {$model}Controller {$overwrite}");
+        }
+
         if ($all) {
-            if ($data["collection"]) {
-                Artisan::call("craft:resource {$model}sResource --collection {$overwrite}");
-            } else {
-                Artisan::call("craft:resource {$model}Resource {$overwrite}");
-            }
+            Artisan::call("craft:controller {$model}Controller {$overwrite}");
 
             Artisan::call("craft:factory {$model}Factory --model {$filename} {$overwrite}");
 
             Artisan::call("craft:migration create_{$tablename}_table --model {$filename} --tablename {$tablename}");
+        }
+
+        if ($listener) {
+            Artisan::call("craft:listener {$model}Listener --event {$model}");
         }
 
         return $result;
@@ -827,6 +832,34 @@ class CraftsmanFileSystem
     {
         $parts = explode("/", $name);
         return end($parts);
+    }
+
+    public function getNamespace($type, $name)
+    {
+        $parts = explode("/", $name);
+        if (sizeof($parts) >= 2) {
+            array_pop($parts);
+            return implode("\\", $parts);
+        }
+
+        switch ($type) {
+            case "class":
+                $namespace = "App";
+                break;
+            case "event":
+                $namespace = "App\Events";
+                break;
+            case "listener":
+                $namespace = "App\Listeners";
+                break;
+            case "services":
+                $namespace = "App\Services";
+                break;
+            default:
+                $namespace = $name;
+                break;
+        }
+        return $namespace;
     }
 
     /**

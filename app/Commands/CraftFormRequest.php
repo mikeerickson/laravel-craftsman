@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use App\CraftsmanFileSystem;
+use App\Traits\CommandDebugTrait;
 use LaravelZero\Framework\Commands\Command;
 
 /**
@@ -11,11 +12,14 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftFormRequest extends Command
 {
+    use CommandDebugTrait;
+
     protected $signature = 'craft:request
                                 {name : Class name}
                                 {--r|rules= : List of rules (optional)}
                                 {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite   : Overwrite existing class}
+                                {--d|debug   : Use Debug Interface}
                             ';
 
     protected $description = 'Craft Form Request';
@@ -40,6 +44,8 @@ class CraftFormRequest extends Command
 
     public function handle()
     {
+        $this->handleDebug();
+
         $className = $this->argument('name');
         $rules = $this->option('rules');
 

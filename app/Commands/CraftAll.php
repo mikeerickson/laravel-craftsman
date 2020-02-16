@@ -4,12 +4,15 @@ namespace App\Commands;
 
 use Illuminate\Support\Str;
 use App\CraftsmanFileSystem;
+use App\Traits\CommandDebugTrait;
 use Illuminate\Support\Facades\Artisan;
 use LaravelZero\Framework\Commands\Command;
 use Codedungeon\PHPMessenger\Facades\Messenger;
 
 class CraftAll extends Command
 {
+    use CommandDebugTrait;
+
     protected $fs;
 
     protected $signature = 'craft:all
@@ -68,6 +71,8 @@ class CraftAll extends Command
 
     public function handle()
     {
+        $this->handleDebug();
+
         // argument
         $name = $this->argument('name');
 

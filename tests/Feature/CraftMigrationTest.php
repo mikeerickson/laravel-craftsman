@@ -48,7 +48,7 @@ class CraftMigrationTest extends TestCase
 
         $this->assertFileContainsString($filename, "Schema::create('tests', function (Blueprint \$table) {");
 
-        $this->fs->rmdir("database/migrations");
+        $this->cleanUp();
     }
 
     /**
@@ -82,7 +82,7 @@ class CraftMigrationTest extends TestCase
         $this->assertFileContainsString($filename, $class);
         $this->assertFileContainsString($filename, "\$table->timestamp('created_at')->useCurrent();");
 
-        $this->fs->rmdir("database/migrations");
+        $this->cleanUp();
     }
 
     /** @test */
@@ -102,7 +102,7 @@ class CraftMigrationTest extends TestCase
 
         $this->assertFileContainsString($filename, "\$table->foreign('post_id')->references('id')->on('posts');");
 
-        $this->fs->rmdir("database/migrations");
+        $this->cleanUp();
     }
 
     /** @test */
@@ -120,7 +120,7 @@ class CraftMigrationTest extends TestCase
 
         $this->assertFileContainsString($filename, "\$table->foreign('{$foreignKey}')->references('id')->on('posts');");
 
-        $this->fs->rmdir("database/migrations");
+        $this->cleanUp();
     }
 
     /** @test */
@@ -135,7 +135,7 @@ class CraftMigrationTest extends TestCase
 
         $this->assertMigrationFileExists($migrationName);
 
-        $this->fs->rmdir("database/migrations");
+        $this->cleanUp();
     }
 
     /** @test */
@@ -161,7 +161,7 @@ class CraftMigrationTest extends TestCase
         $this->assertStringContainsString("\$table->text('notes');", $data);
         $this->assertStringContainsString("\$table->timezone('deleted_at');", $data);
 
-        $this->fs->rmdir("database/migrations");
+        $this->cleanUp();
     }
 
     /** @test */
@@ -216,7 +216,7 @@ class CraftMigrationTest extends TestCase
         // this is not working correctly
         $this->assertFileContainsString($lastFilename, "\$table->string('first_name',20)->nullable();");
 
-        $this->fs->rmdir("database/migrations");
+        $this->cleanUp();
     }
 
     // check to see if migration file was created. Since the filename is changed (adding timestamp)
@@ -237,7 +237,7 @@ class CraftMigrationTest extends TestCase
 
         $this->assertStringContainsString("CreateProductContactsTable", $data);
 
-        $this->fs->rmdir("database/migrations");
+        $this->cleanUp();
     }
 
     /** @test */
@@ -255,7 +255,7 @@ class CraftMigrationTest extends TestCase
 
         $this->assertStringContainsString("CreateContactsTable", $data);
 
-        $this->fs->rmdir("database/migrations");
+        $this->cleanUp();
     }
 
     /**
@@ -279,6 +279,11 @@ class CraftMigrationTest extends TestCase
 
         $this->assertStringContainsString("Schema::table('contacts', function (Blueprint \$table)", $data);
 
-        $this->fs->rmdir("database/migrations");
+        $this->cleanUp();
+    }
+
+    public function cleanUp()
+    {
+        $this->fs->rmdir("database");
     }
 }

@@ -27,6 +27,13 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
+        $errMsg = ($exception->getMessage());
+        $isDebug = strpos($exception->getMessage(), "--debug") > 0;
+        if ($isDebug) {
+            Messenger::warn($errMsg, " DEBUG ");
+            exit;
+        }
+
         $msg = $exception->getMessage() . " \n\nPlease review laravel-craftsman <command> --help for details.";
 
         $ret = preg_match('/"([^"]+)"/', $msg, $matches);
@@ -43,7 +50,7 @@ class Handler extends ExceptionHandler
             shell_exec($str);
         } else {
             echo "\n";
-            Messenger::error($msg, "ERROR");
+            Messenger::error($msg, " ERROR ");
         }
 
         exit;

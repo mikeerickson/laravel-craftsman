@@ -13,7 +13,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        config([
+            'logging.channels.single.path' => \Phar::running()
+                ? dirname(\Phar::running(false)) . '/logs/laravel-craftsman.log'
+                : storage_path('logs/laravel-craftsman.log')
+        ]);
     }
 
     /**

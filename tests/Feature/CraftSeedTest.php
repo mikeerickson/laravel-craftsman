@@ -47,7 +47,7 @@ class CraftSeedTest extends TestCase
         $this->assertFileContainsString($filename, "class {$class} extends Seeder");
         $this->assertFileContainsString($filename, "factory({$model}::class,{$rows})->create();");
 
-        $this->fs->rmdir("database/seeds");
+        $this->cleanUp();
     }
 
     public function should_craft_seed_using_custom_template()
@@ -63,6 +63,11 @@ class CraftSeedTest extends TestCase
 
         //        $this->assertFileContainsString($filename, "testMethod");
 
-        //        $this->fs->rmdir("database/seeds");
+        $this->cleanUp();
+    }
+
+    public function cleanUp()
+    {
+        $this->fs->rmdir("database");
     }
 }

@@ -78,6 +78,27 @@ class CraftEventTest extends TestCase
         $this->cleanUp();
     }
 
+    /** @test  */
+    public function should_create_event_listener(): void
+    {
+
+        $resource = "ProductEvent";
+
+        $this->artisan("craft:event {$resource} --no-broadcast --listener --overwrite")
+            ->assertExitCode(0);
+
+        $listenerFilename = $this->fs->path_join($this->fs->listener_path(), "{$resource}Listener.php");
+
+        $this->assertFileExists($listenerFilename);
+
+        $this->assertFileContainsString($listenerFilename, "class ${resource}Listener");
+
+        unlink($listenerFilename);
+
+        $this->cleanUp();
+    }
+
+
     private function cleanUp()
     {
         $this->fs->rmdir("app/Events");

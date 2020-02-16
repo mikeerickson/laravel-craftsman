@@ -41,8 +41,6 @@ class CraftAllTest extends TestCase
         $this->fs->rmdir("app/Models");
         $this->fs->rmdir("app/Test");
         $this->fs->rmdir("resources/views/posts");
-        $this->fs->rmdir("database/migrations");
-        $this->fs->rmdir("database/factories");
-        $this->fs->rmdir("database/seeds");
+        $this->fs->rmdir("database");
     }
 }

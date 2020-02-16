@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use App\CraftsmanFileSystem;
+use App\Traits\CommandDebugTrait;
 use LaravelZero\Framework\Commands\Command;
 
 /**
@@ -11,12 +12,15 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftListener extends Command
 {
+    use CommandDebugTrait;
+
     protected $signature = 'craft:listener
                                 {name : Listener name}
                                 {--e|event= : The event class be listener for}
                                 {--queued : Indicates the event listener should be queued}
                                 {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite   : Overwrite existing class}
+                                {--d|debug   : Use Debug Interface}
                             ';
 
     protected $description = "Craft Listener Classes";
@@ -41,6 +45,8 @@ class CraftListener extends Command
 
     public function handle()
     {
+        $this->handleDebug();
+
         $className = $this->argument('name');
 
         $data = [

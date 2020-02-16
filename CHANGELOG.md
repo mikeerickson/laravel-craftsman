@@ -7,7 +7,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.8.0] - 2020-02-20
+## [1.8.1] - 2020-02-28
+
+### Added
+
+-   Added `getNamespace` method to `CraftsmanFileSytem.php`
+-   Added `--invokable` option to `craft:controller`
+
+### Changed
+
+-   Refactored `craft:model` command to use --controller|-c instead of --collection|-c
+-   Refactored all `Commands/Craft*.php` to support `getNamespace` method
+-   Refactored all `Commands/Craft*.php` to include new `--debug` option
+-   Refactored `app/Exception/Handler` to fixed `Undefined Offset`
+-   Added test to support `--controller` in CraftModelTest
+-   Added more tests to `CraftListenerTest`
+-   Added more tests to `CraftEveTest`
+
+## [1.8.0] - 2020-02-02
 
 ### Added
 

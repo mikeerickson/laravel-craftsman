@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use App\CraftsmanFileSystem;
+use App\Traits\CommandDebugTrait;
 use LaravelZero\Framework\Commands\Command;
 
 /**
@@ -11,11 +12,14 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftClass extends Command
 {
+    use CommandDebugTrait;
+
     protected $signature = 'craft:class
                                 {name : Class name}
                                 {--c|constructor : Include constructor method}
                                 {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite   : Overwrite existing class}
+                                {--d|debug   : Use Debug Interface}
                             ';
 
     protected $description = "Craft Standard Classes (may use any type of standard PHP class)";
@@ -39,6 +43,8 @@ class CraftClass extends Command
 
     public function handle()
     {
+        $this->handleDebug();
+
         $className = $this->argument('name');
 
         $data = [

@@ -1,13 +1,16 @@
 {
     "name": "codedungeon/laravel-craftsman",
-    "version": "1.8.0",
+    "version": "1.8.1",
     "description": "Laravel Craftsman",
     "keywords": [
-        "framework",
+        "cli",
+        "make",
         "laravel",
-        "laravel zero",
         "console",
-        "cli"
+        "artisan",
+        "generator",
+        "framework",
+        "laravel zero"
     ],
     "homepage": "https://laravel-craftsman.com",
     "type": "project",

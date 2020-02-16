@@ -3,10 +3,13 @@
 namespace App\Commands;
 
 use App\CraftsmanFileSystem;
+use App\Traits\CommandDebugTrait;
 use LaravelZero\Framework\Commands\Command;
 
 class CraftDeveloper extends Command
 {
+    use CommandDebugTrait;
+
     protected $hidden = true;
 
     protected $signature = 'craft:developer';
@@ -15,6 +18,8 @@ class CraftDeveloper extends Command
 
     public function handle()
     {
+        $this->handleDebug();
+
         $fs = new CraftsmanFileSystem();
 
         debug("cwd: " . getcwd());

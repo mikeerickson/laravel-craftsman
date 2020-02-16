@@ -57,6 +57,38 @@ class CraftControllerTest extends TestCase
     }
 
     /** @test */
+    public function should_create_invokable_controller()
+    {
+        $class = "InvokableController";
+
+        $this->artisan("craft:controller ${class} --invokable")
+            ->assertExitCode(0);
+
+        $controllerPath = $this->fs->controller_path();
+        $filename = $this->pathJoin($controllerPath, "{$class}.php");
+        $this->assertFileExists($filename);
+
+        $this->assertFileContainsString($filename, "public function __invoke");
+    }
+
+    /** @test */
+    public function should_not_add_any_other_options_when_invokable_controller()
+    {
+        $class = "InvokableController";
+
+        $this->artisan("craft:controller ${class} --invokable --model App/Models/Post --api")
+            ->assertExitCode(0);
+
+        $controllerPath = $this->fs->controller_path();
+        $filename = $this->pathJoin($controllerPath, "{$class}.php");
+        $this->assertFileExists($filename);
+
+        $this->assertFileContainsString($filename, "public function __invoke");
+
+        $this->assertFileNotContainString($filename, "Post");
+    }
+
+    /** @test */
     public function should_execute_craft_controller_command()
     {
         $model = "App/Models/Test";

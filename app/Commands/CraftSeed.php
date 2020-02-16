@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use Exception;
 use App\CraftsmanFileSystem;
+use App\Traits\CommandDebugTrait;
 use LaravelZero\Framework\Commands\Command;
 
 /**
@@ -12,6 +13,8 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftSeed extends Command
 {
+    use CommandDebugTrait;
+
     protected $fs;
 
     protected $signature = 'craft:seed
@@ -20,6 +23,7 @@ class CraftSeed extends Command
                                 {--r|rows= : Alternate number of rows to use in factory call}
                                 {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite : Overwrite existing seed}
+                                {--d|debug   : Use Debug Interface}
                             ';
 
     protected $description = "Craft Seed";
@@ -44,6 +48,8 @@ class CraftSeed extends Command
 
     public function handle()
     {
+        $this->handleDebug();
+
         try {
             $seedName = $this->argument('name');
             $model = $this->option('model');

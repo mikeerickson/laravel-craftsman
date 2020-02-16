@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use App\CraftsmanFileSystem;
+use App\Traits\CommandDebugTrait;
 use Illuminate\Filesystem\Filesystem;
 use LaravelZero\Framework\Commands\Command;
 use Codedungeon\PHPMessenger\Facades\Messenger;
@@ -13,10 +14,13 @@ use Codedungeon\PHPMessenger\Facades\Messenger;
  */
 class CraftPublish extends Command
 {
+    use CommandDebugTrait;
+
     protected $signature = 'publish
                                 {--o|overwrite : Overwite existing templates}
                                 {--c|no-config : Skip Publishing Configuration File}
                                 {--t|no-templates : Skip Publishing Templates}
+                                {--b|debug   : Use Debug Interface}
                             ';
 
     protected $description = "Copy Craftsman Templates to Project Directory";
@@ -38,6 +42,8 @@ class CraftPublish extends Command
 
     public function handle()
     {
+        $this->handleDebug();
+
         $overwrite = $this->option('overwrite');
         $noConfig = $this->option('no-config');
         $noTemplates = $this->option('no-templates');

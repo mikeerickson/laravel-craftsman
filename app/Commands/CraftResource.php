@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use App\CraftsmanFileSystem;
+use App\Traits\CommandDebugTrait;
 use LaravelZero\Framework\Commands\Command;
 
 /**
@@ -11,12 +12,15 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftResource extends Command
 {
+    use CommandDebugTrait;
+
     protected $fs;
 
     protected $signature = 'craft:resource {name : Resource Name}
                                 {--c|collection : Create resource collection}
                                 {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite : Overwrite existing controller}
+                                {--d|debug   : Use Debug Interface}
                            ';
 
     protected $description = "Craft Resource";
@@ -40,6 +44,8 @@ class CraftResource extends Command
 
     public function handle()
     {
+        $this->handleDebug();
+
         $controllerName = $this->argument('name');
 
         $data = [

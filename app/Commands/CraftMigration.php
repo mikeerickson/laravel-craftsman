@@ -5,6 +5,7 @@ namespace App\Commands;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use App\CraftsmanFileSystem;
+use App\Traits\CommandDebugTrait;
 use LaravelZero\Framework\Commands\Command;
 
 /**
@@ -13,6 +14,8 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftMigration extends Command
 {
+    use CommandDebugTrait;
+
     protected $fs;
 
     protected $signature = 'craft:migration
@@ -20,10 +23,11 @@ class CraftMigration extends Command
                                 {--m|model= : Path to migration model (required)}
                                 {--t|tablename= : Desired tablename}
                                 {--f|fields= : List of fields (optional)}
-                                {--r|foreign= :     Add constraint (optional)}
-                                {--u|current :        Use --useCurrent for timestamps}
+                                {--r|foreign= : Add constraint (optional)}
+                                {--u|current : Use --useCurrent for timestamps}
                                 {--d|down : Include down method in migration}
                                 {--p|template= : Template path (override configuration file)}
+                                {--b|debug   : Use Debug Interface}
                             ';
 
     protected $description = "Craft Database Migration";
@@ -59,6 +63,8 @@ class CraftMigration extends Command
 
     public function handle()
     {
+        $this->handleDebug();
+
         $migrationName = $this->argument('name');
         $model = $this->option('model');
         $tablename = $this->option('tablename');

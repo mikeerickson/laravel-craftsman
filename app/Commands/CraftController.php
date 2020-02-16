@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use App\CraftsmanFileSystem;
+use App\Traits\CommandDebugTrait;
 use LaravelZero\Framework\Commands\Command;
 use Codedungeon\PHPMessenger\Facades\Messenger;
 
@@ -12,6 +13,8 @@ use Codedungeon\PHPMessenger\Facades\Messenger;
  */
 class CraftController extends Command
 {
+    use CommandDebugTrait;
+
     protected $fs;
 
     protected $signature = 'craft:controller {name : Controller Name}
@@ -21,8 +24,10 @@ class CraftController extends Command
                                 {--c|collection : Create resource collection}
                                 {--l|validation : Scaffold validation}
                                 {--a|api : Create API controller (skips create and update methods)}
+                                {--i|invokable : Generate a single method, invokable controller class}
                                 {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite : Overwrite existing controller}
+                                {--d|debug   : Use Debug Interface}
                            ';
 
     protected $description = "Craft Controller (standard, api, empty, resource)";
@@ -36,6 +41,7 @@ class CraftController extends Command
                      --resource, -r       Create resource controller
                      --binding, -b        Include Route Model Biding (requires model option)
                      --collection, -c     Use resource collection
+                     --invokable, -i      Generate a single method, invokable controller class.
 
                      --template, -t       Template path (override configuration file)
                      --overwrite, -w      Overwrite existing controller
@@ -52,11 +58,20 @@ class CraftController extends Command
 
     public function handle()
     {
+        $this->handleDebug();
+
         $controllerName = $this->argument('name');
         $model = $this->option('model');
         $binding = $this->option('binding');
         $api = $this->option('api');
         $resource = $this->option('resource');
+        $invokable = $this->option('invokable');
+        if ($invokable) {
+            $api = false;
+            $resource = false;
+            $binding = false;
+            $model = "";
+        }
 
         $data = [
             "model" => $model,
@@ -65,6 +80,7 @@ class CraftController extends Command
             "overwrite" => $this->option('overwrite'),
             "collection" => false,
             "binding" => $this->option('binding'),
+            "invokable" => $invokable,
         ];
 
         if ($api) {
@@ -85,10 +101,14 @@ class CraftController extends Command
 
                 $this->fs->createFile('binding-controller', $controllerName, $data);
             } else {
-                if (strlen($model) === 0) {
-                    $this->fs->createFile('empty-controller', $controllerName, $data);
+                if ($invokable) {
+                    $this->fs->createFile('invokable-controller', $controllerName, $data);
                 } else {
-                    $this->fs->createFile('controller', $controllerName, $data);
+                    if (strlen($model) === 0) {
+                        $this->fs->createFile('empty-controller', $controllerName, $data);
+                    } else {
+                        $this->fs->createFile('controller', $controllerName, $data);
+                    }
                 }
             }
         }

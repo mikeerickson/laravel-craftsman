@@ -58,13 +58,13 @@ class CraftListenerTest extends TestCase
         $this->assertFileContainsString($filename, "use App\Events\MyEvent");
         $this->assertFileContainsString($filename, "public function handle(MyEvent");
 
-        // unlink($filename);
+        unlink($filename);
 
         $this->cleanUp();
     }
 
     private function cleanUp()
     {
-        $this->fs->rmdir("app/Events");
+        $this->fs->rmdir("app/Listeners");
     }
 }

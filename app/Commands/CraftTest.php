@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use Illuminate\Support\Str;
 use App\CraftsmanFileSystem;
+use App\Traits\CommandDebugTrait;
 use LaravelZero\Framework\Commands\Command;
 
 /**
@@ -12,6 +13,8 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftTest extends Command
 {
+    use CommandDebugTrait;
+
     protected $signature = 'craft:test
                                 {name : Class name}
                                 {--s|setup : Include setUp block}
@@ -19,6 +22,7 @@ class CraftTest extends Command
                                 {--u|unit : Create unit test}
                                 {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite : Overwrite existing test}
+                                {--b|debug   : Use Debug Interface}
                             ';
 
     protected $description = "Craft Test (dusk, unit, feature)";
@@ -44,6 +48,8 @@ class CraftTest extends Command
 
     public function handle()
     {
+        $this->handleDebug();
+
         $className = $this->argument('name');
         $setup = $this->option("setup");
         $teardown = $this->option("teardown");

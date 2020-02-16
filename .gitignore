@@ -29,3 +29,6 @@ templates/custom.mustache
 templates/custom-request.mustache
 config.codekit3
 sandbox/
+app/Events
+app/Listeners
+storage/

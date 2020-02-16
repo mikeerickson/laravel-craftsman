@@ -4,12 +4,15 @@ namespace App\Commands;
 
 use Illuminate\Support\Str;
 use App\CraftsmanFileSystem;
+use App\Traits\CommandDebugTrait;
 use Illuminate\Support\Facades\Artisan;
 use LaravelZero\Framework\Commands\Command;
 use Codedungeon\PHPMessenger\Facades\Messenger;
 
 class CraftApi extends Command
 {
+    use CommandDebugTrait;
+
     protected $fs;
 
     protected $signature = 'craft:api
@@ -56,6 +59,8 @@ class CraftApi extends Command
 
     public function handle()
     {
+        $this->handleDebug();
+
         // required options
         $name = $this->argument('name');
         $model = $this->option('model');

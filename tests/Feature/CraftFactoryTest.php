@@ -46,7 +46,7 @@ class CraftFactoryTest extends TestCase
 
         $this->assertFileContainsString($filename, "use {$model_path};");
 
-        $this->fs->rmdir("database/factories");
+        $this->cleanUp();
     }
 
     /** @test */
@@ -64,6 +64,11 @@ class CraftFactoryTest extends TestCase
 
         $this->assertFileContainsString($filename, "testMethod");
 
-        $this->fs->rmdir("database/factories");
+        $this->cleanUp();
+    }
+
+    public function cleanUp()
+    {
+        $this->fs->rmdir("database");
     }
 }

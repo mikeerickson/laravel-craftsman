@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use App\CraftsmanFileSystem;
+use App\Traits\CommandDebugTrait;
 use LaravelZero\Framework\Commands\Command;
 
 /**
@@ -11,11 +12,14 @@ use LaravelZero\Framework\Commands\Command;
  */
 class CraftFactory extends Command
 {
+    use CommandDebugTrait;
+
     protected $signature = 'craft:factory
                                 {name : Factory Name}
                                 {--m|model= : Associated model}
                                 {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite : Overwrite existing factory}
+                                {--d|debug   : Use Debug Interface}
                             ';
 
     protected $description = "Craft Factory";
@@ -39,6 +43,8 @@ class CraftFactory extends Command
 
     public function handle()
     {
+        $this->handleDebug();
+
         $factoryName = $this->argument('name');
         $model = $this->option('model');
 

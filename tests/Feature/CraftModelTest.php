@@ -46,6 +46,8 @@ class CraftModelTest extends TestCase
         $this->assertFileContainsString($filename, "class {$model} extends Model");
 
         unlink($filename);
+
+        $this->cleanUp();
     }
 
     /** @test */
@@ -61,8 +63,7 @@ class CraftModelTest extends TestCase
 
         $this->assertFileContainsString($filename, "Schema::create('tests', function (Blueprint \$table) {");
 
-        $this->fs->rmdir("database/migrations");
-        $this->fs->rmdir("app/models");
+        $this->cleanUp();
     }
 
     /** @test */
@@ -95,7 +96,8 @@ class CraftModelTest extends TestCase
         $this->assertFileContainsString($filename, "class {$model} extends Model");
 
         unlink("{$modelPath}/{$model}.php");
-        $this->fs->rmdir("app/Models");
+
+        $this->cleanUp();
     }
 
     /** @test */
@@ -115,12 +117,38 @@ class CraftModelTest extends TestCase
         $filename = $this->pathJoin($factoryPath, "{$model}Factory.php");
         $this->assertFileExists($filename);
 
-        // verify resource
-        $resourcePath = $this->fs->resource_path();
-        $filename = $this->pathJoin($resourcePath, "{$model}Resource.php");
+        // verify controller
+        $resourcePath = $this->fs->controller_path();
+        $filename = $this->pathJoin($resourcePath, "{$model}Controller.php");
         $this->assertFileExists($filename);
 
         unlink("{$modelPath}/{$model}.php");
-        $this->fs->rmdir("database/factories");
+
+        $this->cleanUp();
+    }
+
+    /** @test */
+    public function should_create_controller_when_controller_option_supplied(): void
+    {
+        $model = "Customer";
+
+        Artisan::call("craft:model App/Models/{$model} --tablename customers --controller --overwrite");
+
+        // verify model
+        $controllerPath = $this->fs->controller_path();
+        $filename = $this->pathJoin($controllerPath, "{$model}Controller.php");
+        $this->assertFileExists($filename);
+
+        $this->assertTrue(true);
+
+        unlink($filename);
+
+        $this->cleanUp();
+    }
+
+    private function cleanUp()
+    {
+        $this->fs->rmdir("app/Models");
+        $this->fs->rmdir("database");
     }
 }
