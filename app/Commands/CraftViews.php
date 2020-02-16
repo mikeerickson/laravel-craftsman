@@ -14,6 +14,8 @@ class CraftViews extends Command
 {
     use CommandDebugTrait;
 
+    protected $fs;
+
     protected $signature = 'craft:views
                                 {name : Resource name (resources/views/<name>)}
                                 {--x|extends= : Include extends block using supplied layout}

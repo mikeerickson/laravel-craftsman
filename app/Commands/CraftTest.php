@@ -15,6 +15,8 @@ class CraftTest extends Command
 {
     use CommandDebugTrait;
 
+    protected $fs;
+
     protected $signature = 'craft:test
                                 {name : Class name}
                                 {--s|setup : Include setUp block}

@@ -1,5 +1,9 @@
 <?php
 
+namespace App;
+
+use Illuminate\Support\Facades\DB;
+
 function printl($data)
 {
     return $data . PHP_EOL;
@@ -114,7 +118,7 @@ class DBTools
     public function isAutoIncrement($colName = null)
     {
         if (!$this->isValidTablename($this->tablename)) {
-            return self::INVAOID_TABLE;
+            return self::INVALID_TABLE;
         }
 
         $columnInfo = $this->getColumnInfo($colName);

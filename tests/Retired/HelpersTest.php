@@ -29,5 +29,4 @@ class HelpersTest extends TestCase
         $migration_path = path_join(database_path(), "migrations");
         $this->assertTrue(valid_path($migration_path));
     }
-
 }

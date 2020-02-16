@@ -14,6 +14,8 @@ class CraftListener extends Command
 {
     use CommandDebugTrait;
 
+    protected $fs;
+
     protected $signature = 'craft:listener
                                 {name : Listener name}
                                 {--e|event= : The event class be listener for}

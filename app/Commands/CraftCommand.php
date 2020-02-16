@@ -14,6 +14,8 @@ class CraftCommand extends Command
 {
     use CommandDebugTrait;
 
+    protected $fs;
+
     protected $signature = 'craft:command
                                 {name : Command name}
                                 {--s|signature= : Command Signature}

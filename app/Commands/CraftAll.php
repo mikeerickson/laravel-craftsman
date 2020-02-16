@@ -41,9 +41,9 @@ class CraftAll extends Command
     protected $help = 'Craft All Assets
                      <name>               Base Asset Name
                      --model, -m          Path to model [default: app/]
-ß                     --tablename, -t      Tablename
+                     --tablename, -t      Tablename
                      --fields, -f         Field List (passed to migration)
-                                           eg. --fields first_name:string,20^nullable^unique, last_name:string,20
+                                           eg. --fields "first_name:string,20^nullable^unique, last_name:string,20"
                      --rows, -r           Number of rows for migration [default: 1] (passed to seeder)
                      --extends, -x        View extends block (optional)
                      --section, -i        View section block (optional)

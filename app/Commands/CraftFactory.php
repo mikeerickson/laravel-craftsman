@@ -14,6 +14,8 @@ class CraftFactory extends Command
 {
     use CommandDebugTrait;
 
+    protected $fs;
+
     protected $signature = 'craft:factory
                                 {name : Factory Name}
                                 {--m|model= : Associated model}

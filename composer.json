@@ -1,6 +1,6 @@
 {
     "name": "codedungeon/laravel-craftsman",
-    "version": "1.8.1",
+    "version": "1.9.0",
     "description": "Laravel Craftsman",
     "keywords": [
         "cli",
@@ -39,6 +39,7 @@
     "require-dev": {
         "codedungeon/phpunit-result-printer": "^0.26.2",
         "mockery/mockery": "^1.0",
+        "phpstan/phpstan": "^0.12.10",
         "spatie/phpunit-watcher": "^1.8"
     },
     "autoload": {

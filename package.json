@@ -1,7 +1,7 @@
 {
   "name": "laravel-craftsman",
-  "version": "1.8.1",
-  "build": "299",
+  "version": "1.9.0",
+  "build": "305",
   "description": "Laravel Craftsman",
   "tagLine": "Laravel Artisan Make On Steroids",
   "main": "index.js",
@@ -9,6 +9,7 @@
     "test": "tests"
   },
   "scripts": {
+    "analyze": "vendor/bin/phpinsights",
     "bump": "./tasks/bumpBuild.js",
     "build": "./tasks/build.sh",
     "build:deploy": "./tasks/build.sh --deploy",
@@ -23,8 +24,9 @@
     "test:watch": "vendor/bin/phpunit-watcher watch",
     "test:stress": "./tasks/stress-test.sh 10",
     "test:docker": "./tasks/test-docker.sh",
+    "test:ci": "./vendor/bin/phpunit -c phpunit.ci.xml --testsuite Unit",
     "test:travis": "./vendor/bin/phpunit -c phpunit.ci.xml --testsuite Unit",
-    "pre-commit": "npm run test:ci",
+    "pre-commit": "npm run test:travis",
     "todo": "./tasks/todo.js",
     "todo:file": "./tasks/todo.js > TODO.md",
     "todo:out": "./tasks/todo.js > TODO.md"

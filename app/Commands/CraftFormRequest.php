@@ -14,6 +14,8 @@ class CraftFormRequest extends Command
 {
     use CommandDebugTrait;
 
+    protected $fs;
+
     protected $signature = 'craft:request
                                 {name : Class name}
                                 {--r|rules= : List of rules (optional)}

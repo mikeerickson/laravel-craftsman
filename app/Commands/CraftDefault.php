@@ -45,8 +45,9 @@ class CraftDefault extends Command
      */
     public function handle()
     {
-        $this->handleDebug();
+        // $this->handleDebug();
 
+        debug();
         $skip = $this->option('skip');
         if (!$skip) {
             echo "\n";

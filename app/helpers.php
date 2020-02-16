@@ -129,7 +129,7 @@ if (!function_exists("dlog")) {
     function dlog($msg = "")
     {
         if (!is_phar()) {
-            Log::info($msg);
+            app('log')->info($msg);
         }
     }
 }

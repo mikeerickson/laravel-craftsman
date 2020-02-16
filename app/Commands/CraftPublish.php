@@ -16,6 +16,8 @@ class CraftPublish extends Command
 {
     use CommandDebugTrait;
 
+    protected $fs;
+
     protected $signature = 'publish
                                 {--o|overwrite : Overwite existing templates}
                                 {--c|no-config : Skip Publishing Configuration File}

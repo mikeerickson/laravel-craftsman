@@ -14,6 +14,8 @@ class CraftClass extends Command
 {
     use CommandDebugTrait;
 
+    protected $fs;
+
     protected $signature = 'craft:class
                                 {name : Class name}
                                 {--c|constructor : Include constructor method}

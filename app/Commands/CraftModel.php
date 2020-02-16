@@ -25,6 +25,7 @@ class CraftModel extends Command
                                 {--t|tablename= : Tablename if different than model name}
                                 {--f|factory : Create a new factory for the model}
                                 {--m|migration : Create a new migration file for the model}
+                                {--s|seed : Create a new seeder file for the model}
                                 {--l|template= : Template path (override configuration file)}
                                 {--w|overwrite : Overwrite existing model}
                                 {--d|debug : Debug mode}
@@ -39,6 +40,7 @@ class CraftModel extends Command
                      --tablename, -t      Desired tablename
                      --factory, -f        Create a new factory for the mode
                      --migration, -m      Create a new migration file for the model
+                     --seed, -s           Create a new seed file for the model
 
                      --template, -l       Template path (override configuration file)
                      --overwrite, -w      Overwrite existing model
@@ -65,10 +67,11 @@ class CraftModel extends Command
         $overwrite = $this->option('overwrite');
         $factory = $this->option('factory');
         $migration = $this->option('migration');
+        $seed = $this->option('seed');
 
         $parts = explode("/", $modelName);
         $model = array_pop($parts);
-        $namespace = count($parts) > 0 ? implode($parts, "\\") : "App";
+        $namespace = count($parts) > 0 ? implode("\\", $parts) : "App";
 
         $tablename = $this->option("tablename");
         if (strlen($tablename) === 0) {
@@ -83,8 +86,8 @@ class CraftModel extends Command
             "namespace" => $namespace,
             "overwrite" => $overwrite,
             "controller" => $controller,
+            "seed" => $seed,
         ];
-
 
         $this->fs->createFile('model', $modelName, $data);
 

@@ -50,6 +50,12 @@ class CraftModelTest extends TestCase
         $this->cleanUp();
     }
 
+    private function cleanUp()
+    {
+        $this->fs->rmdir("app/Models");
+        $this->fs->rmdir("database");
+    }
+
     /** @test */
     public function should_create_model_and_migration()
     {
@@ -146,9 +152,34 @@ class CraftModelTest extends TestCase
         $this->cleanUp();
     }
 
-    private function cleanUp()
+    /** @test */
+    public function should_create_seeder_when_seed_option_supplied(): void
     {
-        $this->fs->rmdir("app/Models");
-        $this->fs->rmdir("database");
+        $model = "Customer";
+
+        Artisan::call("craft:model {$model} --tablename customers --seed --overwrite");
+
+        $seederPath = $this->fs->seed_path();
+
+        $filename = $this->pathJoin($seederPath, "{$model}sTableSeeder.php");
+        $this->assertFileExists($filename);
+
+        $this->cleanUp();
+    }
+
+    /** @test */
+    public function should_create_seeder_when_seed_option_supplied_custom_model_path(): void
+    {
+        $model = "Customer";
+
+        Artisan::call("craft:model App/Models/{$model} --tablename customers --seed --overwrite");
+
+        // verify model
+        $seederPath = $this->fs->seed_path();
+
+        $filename = $this->pathJoin($seederPath, "{$model}sTableSeeder.php");
+        $this->assertFileExists($filename);
+
+        $this->cleanUp();
     }
 }

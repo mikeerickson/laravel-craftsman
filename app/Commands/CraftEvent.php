@@ -15,6 +15,8 @@ class CraftEvent extends Command
 {
     use CommandDebugTrait;
 
+    protected $fs;
+
     protected $signature = 'craft:event
                                 {name : Event name}
                                 {--b|no-broadcast : Skip broadcasting}

@@ -37,7 +37,7 @@ class CraftMigration extends Command
                      --model, -m          Path to model (required)
                      --tablename, -t      Desired tablename
                      --fields, -f         List of fields (optional)
-                                           eg. --fields first_name:string@20:nullable, email:string@80:nullable:unique
+                                           eg. --fields "first_name:string@20:nullable, email:string@80:nullable:unique"
                      --foreign, -r        Add constraint (skipped by default)
                      --current, -u        Use --useCurrent for timestamps (skipped by default)
                      --down, -d           Include down methods (skipped by default)
@@ -112,7 +112,7 @@ class CraftMigration extends Command
 
         // timestamp to be prepended to name
         $dt = Carbon::now()->format('Y_m_d_His');
-        $migrationFilename = $dt . "_" . $migrationName;
+        $migrationFilename = $dt."_".$migrationName;
 
         $this->fs->createFile('migration', $migrationFilename, $data);
     }
