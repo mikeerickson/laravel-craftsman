@@ -27,8 +27,10 @@ app/Post.php
 app/Test.php
 templates/custom.mustache
 templates/custom-request.mustache
+templates/custom-provider.mustache
 config.codekit3
 sandbox/
 app/Events
 app/Listeners
 storage/
+custom-templates/

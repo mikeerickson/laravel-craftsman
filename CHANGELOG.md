@@ -7,12 +7,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.9.0] - 2020-02-28
+## [1.9.0] - 2020-03-08
 
 ### Added
 
 -   Added `getNamespace` method to `CraftsmanFileSytem.php`
 -   Added `--invokable` option to `craft:controller`
+-   Added `craft:rule` command
+-   Added `craft:provider` command
+-   Refactored tests to check for custom template path for each command
 
 ### Changed
 
@@ -26,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed `craft:command` template did not properly extend Command
 - Fixed issues when running on PHP 7.4
     * implode parameter alignments
     * Upgraded mustache package to 2.13 (issues with 2.12 and missing variables)

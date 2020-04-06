@@ -40,6 +40,7 @@ class CraftCommandTest extends TestCase
             ->assertExitCode(0);
 
         $filename = $this->pathJoin("app", "Console", "Commands", "{$class}.php");
+
         $this->assertFileExists($filename);
 
         $this->assertFileContainsString($filename, "class {$class}");
@@ -47,7 +48,8 @@ class CraftCommandTest extends TestCase
         unlink($filename);
     }
 
-    public function should_create_class_with_namespace()
+    /** @test */
+    public function should_create_command_with_namespace()
     {
         $class = "App/Test/SampleClass";
 
@@ -62,19 +64,21 @@ class CraftCommandTest extends TestCase
         $this->fs->rmdir("app/Test");
     }
 
-    public function should_create_class_using_user_template()
+    /** @test */
+    public function should_create_command_using_user_template()
     {
-        $class = "App/Test/SampleClass";
+        $class = "SampleCommand";
 
-        $this->artisan("craft:class {$class} --template <project>/templates/custom.mustache")
+        $this->artisan("craft:command {$class} --template <project>/custom-templates/command.mustache")
             ->assertExitCode(0);
 
-        $filename = $this->pathJoin("app/Test", "SampleClass.php");
+        $filename = $this->pathJoin("App", "Console", "Commands", "${class}.php");
+
         $this->assertFileExists($filename);
 
-        $this->assertFileContainsString($filename, "class SampleClass");
-        $this->assertFileContainsString($filename, "testMethod");
+        $this->assertFileContainsString($filename, "class SampleCommand");
+        $this->assertFileContainsString($filename, "// custom-command");
 
-        $this->fs->rmdir("app/Test");
+        $this->fs->rmdir("App/Console");
     }
 }

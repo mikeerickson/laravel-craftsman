@@ -24,7 +24,7 @@ class CraftClass extends Command
                                 {--d|debug   : Use Debug Interface}
                             ';
 
-    protected $description = "Craft Standard Classes (may use any type of standard PHP class)";
+    protected $description = "Craft Standard Class (may use any type of standard PHP class)";
 
     protected $help = 'Craft Class
                      <name>               Class Name
@@ -56,6 +56,8 @@ class CraftClass extends Command
             "overwrite" => $this->option("overwrite"),
         ];
 
-        $this->fs->createFile('class', $className, $data);
+        $result = $this->fs->createFile('class', $className, $data);
+
+        return $result["status"];
     }
 }

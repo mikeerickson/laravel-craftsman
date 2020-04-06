@@ -55,6 +55,8 @@ class CraftResource extends Command
             "collection" => $this->option('collection'),
         ];
 
-        $this->fs->createFile('resource', $controllerName, $data);
+        $result = $this->fs->createFile('resource', $controllerName, $data);
+
+        return $result["status"];
     }
 }

@@ -4,7 +4,8 @@
 
 Laravel Craftsman (written using the awesome [Laravel-Zero](https://www.laravel-zero.com) CLI builder) provides a suite of crafting assets using a project agnostic CLI.
 
-You can quickly create `class`, `controller`, `factory`, `migration`, `model`, `form-request`, `resource`, `seed` and `view` assets.
+You can quickly create `class`, `command`, `controller`, `event`, `factory`, `form-request`, `listener`, `migration`, `model`, `resource`, `rule`, `seed`, `test` and `view` assets.
+
 In addition, you can create all assets with a single command, allowing you to quickly craft a new resource in seconds!
 
 📝 [Laravel News Article](https://laravel-news.com/laravel-craftsman-cli)
@@ -73,6 +74,8 @@ or
 > laravel-craftsman craft:model App/Models/Post --tablename posts --migration
 
 > laravel-craftsman craft:request CustomerRequest --rules "title?required|unique|posts,body?required"
+
+> laravel-craftsman craft:rule Uppercase
 
 > laravel-craftsman craft:seed PostTableSeeder --model App/Models/Post --rows 100
 
@@ -154,7 +157,9 @@ laravel-craftsman craft:all Contact \
 |                      | --overwrite, -w        | Overwrite existing class                                                             |
 | **craft:event**      |                        | **Creates event class**                                                              |
 |                      | **🚩 event name**      | Event Name                                                                           |
+|                      | --listener, -l         | Generate Listener                                                                    |
 |                      | --no-broadcast, -b     | Skips broadcast code when event class created                                        |
+|                      | --template, -t         | Path to custom template (override config file)                                       |
 |                      | --overwrite, -w        | Overwrite existing class                                                             |
 | **craft:factory**    |                        | **Creates factory using supplied options**                                           |
 |                      | **🚩 factory name**    | Factory Name                                                                         |
@@ -163,9 +168,11 @@ laravel-craftsman craft:all Contact \
 |                      | **🚩 listener name**   | Listener Name                                                                        |
 |                      | --event, -e            | The event class be listener for                                                      |
 |                      | --queued               | Indicates the event listener should be queued                                        |
+|                      | --template, -t         | Path to custom template (override config file)                                       |
 |                      | --overwrite, -w        | Overwrite existing class                                                             |
 | **craft:migration**  |                        | **Creates migration using supplied options**                                         |
 |                      | **🚩 migration name**  | Migration Name (eg create\*contacts_table)                                           |
+|                      | **--model, -m**        | Path to model (required)                                                             |
 |                      | --tablename, -t        | Tablename used in database (will set \$tablename in Model)                           |
 |                      |                        | \_If not supplied, default table will be pluralized model name\*                     |
 |                      | --fields, -f           | List of fields (option) _see syntax below_                                           |
@@ -178,11 +185,14 @@ laravel-craftsman craft:all Contact \
 | **craft:model**      |                        | **Creates model using supplied options**                                             |
 |                      | **🚩 model name**      | Model Name (eg Contact or App/Models/Contact)                                        |
 |                      |                        | _See below about defining alternate model path_                                      |
+|                      | --all, -a              | Generate a migration, factory, and controller for the model                          |
 |                      | --tablename, -t        | Tablename used in database (will set \$tablename in Model)                           |
 |                      |                        | _If not supplied, default table will be pluralized model name_                       |
 |                      | --template, -m         | Path to custom template (override config file)                                       |
+|                      | --controller, -c       | Create a new controller                                                              |
 |                      | --factory, -f          | Create factory                                                                       |
 |                      | --migration, -m        | Create a new migration file file                                                     |
+|                      | --seed, -s             | Create a new seed file file                                                          |
 |                      | --overwrite, -w        | Overwrite existing class                                                             |
 | **craft:request**    |                        | **Creates form request using supplied options**                                      |
 |                      | **🚩 request name**    | Request Name                                                                         |
@@ -191,10 +201,22 @@ laravel-craftsman craft:all Contact \
 |                      |                        | **🚨 If you have spaces separating fields, you must surround rules lists in quotes** |
 |                      | --template, -m         | Path to custom template (override config file)                                       |
 |                      | --overwrite, -w        | Overwrite existing class                                                             |
+
+| **craft:rule**       |                        | **Creates validation rule**                                                          |
+|                      | **🚩 Rule Name**       | Rule Name (eg Uppercase)                                                             |
+|                      | --template, -t         | Path to custom template (override config file)                                       |
+|                      | --overwrite, -w        | Overwrite existing class                                                             |
 | **craft:seed**       |                        | **Creates seed file using supplied options**                                         |
 |                      | **🚩 Seed Name**       | Seed Name (eg ContactTableSeeder)                                                    |
 |                      | **🚩 --model, -m**     | Path to model (eg App/Models/Post)                                                   |
 |                      | --rows, -r             | Number of rows to use in factory call (Optional)                                     |
+|                      | --template, -t         | Path to custom template (override config file)                                       |
+|                      | --overwrite, -w        | Overwrite existing class                                                             |
+| **craft:test**       |                        | **Creates seed file using supplied options**                                         |
+| **craft:views**      | **🚩 base resource**   | **Seed name**                                                                        |
+|                      | --setup, -s            | Include setup block                                                                  |
+|                      | --teardown, -d         | Include tearDown block                                                               |
+|                      | --unit, -u             | Create unit test                                                                     |
 |                      | --template, -t         | Path to custom template (override config file)                                       |
 |                      | --overwrite, -w        | Overwrite existing class                                                             |
 | **craft:views**      | **🚩 base resource**   | **Creates view files**                                                               |
@@ -226,6 +248,7 @@ The following commands support defining class path
 -   craft:model
 -   craft:seed
 -   craft:test
+-   craft:views
 
 ### 📝 Template Access
 
@@ -389,12 +412,17 @@ By default, this will be `~/.composer/vendor/codedungeon/laravel-craftsman`, but
             'api-controller' => 'user_templates/api-controller.mustache',
             'binding-controller' => 'user_templates/binding-controller.mustache',
             'empty-controller' => 'user_templates/empty-controller.mustache',
+            'command' => 'user_templates/command.mustache',
             'controller' => 'user_templates/controller.mustache',
+            'events' => 'user_templates/event.mustache',
             'factory' => 'user_templates/factory.mustache',
+            'listener' => 'user_templates/listener.mustache',
             'migration' => 'user_templates/migration.mustache',
             'model' => 'user_templates/model.mustache',
             'request' => 'user_templates/request.mustache',
+            'rule' => 'user_templates/rule.mustache',
             'seed' => 'user_templates/seed.mustache',
+            'test' => 'user_templates/tested.mustache',
             'view-create' => 'user_templates/view-create.mustache',
             'view-edit' => 'user_templates/view-edit.mustache',
             'view-index' => 'user_templates/view-index.mustache',
@@ -425,7 +453,7 @@ The following variables can be used in any of the supported templates (review th
 | `fields`      | Used by `migration`                                                                         |
 | `model`       | Used by `api-controller`, `class`, `controller`, `factory`, `migration`, `model` and `seed` |
 | `model_path`  | Used by `api-controller`, `controller`, `factory`, `migration`, `seed`                      |
-| `name`        | Used by `api-controller`, `controller` and `empty-controller`                               |
+| `name`        | Used by `event`, `listener`, `rule`, `api-controller`, `controller` and `empty-controller`  |
 | `namespace`   | Used by `class`, `model`                                                                    |
 | `num_rows`    | Used by `seed`                                                                              |
 | `rules`       | Used by `request`                                                                           |
@@ -437,7 +465,7 @@ The following variables can be used in any of the supported templates (review th
 
 ## License
 
-Copyright &copy; 2019 Mike Erickson
+Copyright &copy; 2019-2020 Mike Erickson
 Released under the MIT license
 
 ## Credits

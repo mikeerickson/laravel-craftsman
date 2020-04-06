@@ -132,27 +132,11 @@ class VerifyTemplatesTest extends TestCase
         $this->assertFileExists($filename);
     }
 
-    /** @test */
     public function should_use_custom_template_overriding_default()
     {
-        $filename = $this->fs->getTemplateFilename("<project>/templates/custom.mustache");
+        $filename = $this->fs->getTemplateFilename("<project>/custom-templates/view.mustache");
         $this->assertFileExists($filename);
-    }
 
-    /** @test */
-    public function should_create_asset_using_custom_templates()
-    {
-        $className = "App/Services/TestService";
-        $mergeData = [
-            "name" => $className,
-            "template" => "<project>/templates/custom.mustache",
-            "overwrite" => true,
-        ];
-        $assetFilename = $this->fs->createFile("class", $className, $mergeData);
-
-        $this->assertFileExists($assetFilename["fullPath"]);
-        $this->assertFileExists($assetFilename["filename"]);
-
-        $this->fs->rmdir("App/Services");
+        $this->assertFileContainsString($filename, "<h1>Custom View Template</h1>");
     }
 }

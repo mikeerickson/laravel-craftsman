@@ -88,10 +88,10 @@ class CraftController extends Command
                 Messenger::error("When creating an API controller, you must supply model", "ERROR");
                 exit;
             }
-            $this->fs->createFile('api-controller', $controllerName, $data);
+            $result = $this->fs->createFile('api-controller', $controllerName, $data);
         } elseif ($resource) {
             $data["collection"] = $this->option("collection");
-            $this->fs->createFile('resource-controller', $controllerName, $data);
+            $result = $this->fs->createFile('resource-controller', $controllerName, $data);
         } else {
             if ($binding) {
                 if (strlen($data["model"]) === 0) {
@@ -99,18 +99,21 @@ class CraftController extends Command
                     exit;
                 }
 
-                $this->fs->createFile('binding-controller', $controllerName, $data);
+                $result = $this->fs->createFile('binding-controller', $controllerName, $data);
             } else {
                 if ($invokable) {
-                    $this->fs->createFile('invokable-controller', $controllerName, $data);
+                    $result = $this->fs->createFile('invokable-controller', $controllerName, $data);
                 } else {
                     if (strlen($model) === 0) {
-                        $this->fs->createFile('empty-controller', $controllerName, $data);
+                        $result = $this->fs->createFile('empty-controller', $controllerName, $data);
                     } else {
-                        $this->fs->createFile('controller', $controllerName, $data);
+                        $result = $this->fs->createFile('controller', $controllerName, $data);
                     }
                 }
             }
         }
+
+        return $result["status"];
+
     }
 }

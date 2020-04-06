@@ -60,7 +60,10 @@ class CraftFactory extends Command
                 "overwrite" => $this->option('overwrite'),
             ];
 
-            $this->fs->createFile('factory', $factoryName, $data);
+            $result = $this->fs->createFile('factory', $factoryName, $data);
+
+            return $result["status"];
+
         }
     }
 }

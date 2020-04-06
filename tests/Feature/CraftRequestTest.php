@@ -57,7 +57,7 @@ class CraftRequestTest extends TestCase
     {
         $class = 'App/Http/Requests/TestFormRequest';
 
-        $this->artisan("craft:request {$class} --template <project>/templates/custom-request.mustache")
+        $this->artisan("craft:request {$class} --template <project>/custom-templates/request.mustache")
             ->assertExitCode(0);
 
         $filename = $this->pathJoin('app', 'Http', 'Requests', 'TestFormRequest.php');
@@ -68,12 +68,27 @@ class CraftRequestTest extends TestCase
     }
 
     /** @test */
+    public function should_return_error_when_filename_exists()
+    {
+        $class = 'TestFormRequest';
+
+        $this->artisan("craft:request {$class}");
+
+        $this->artisan("craft:request {$class}")
+            ->assertExitCode(-1);
+
+        $filename = $this->pathJoin($this->fs->request_path(), "${class}.php");
+
+        unlink($filename);
+    }
+
+    /** @test */
     public function should_return_error_if_already_exists()
     {
         $class = 'TestFormRequest';
 
         $data = [
-            'name' => $class
+            'name' => $class,
         ];
 
         // create file twice to force error

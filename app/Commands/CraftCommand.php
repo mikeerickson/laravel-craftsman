@@ -62,6 +62,8 @@ class CraftCommand extends Command
             "overwrite" => $this->option("overwrite"),
         ];
 
-        $this->fs->createFile('command', $className, $data);
+        $result = $this->fs->createFile('command', $className, $data);
+
+        return $result["status"];
     }
 }

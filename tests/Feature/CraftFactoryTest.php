@@ -49,26 +49,26 @@ class CraftFactoryTest extends TestCase
         $this->cleanUp();
     }
 
+    public function cleanUp()
+    {
+        $this->fs->rmdir("database");
+    }
+
     /** @test */
     public function should_craft_factory_using_custom_template()
     {
         $model = "App/Models/Test";
         $model_path = "App\\Models\\Test";
 
-        $this->artisan("craft:factory TestFactory --model {$model} --template <project>/templates/custom.mustache --overwrite")
+        $this->artisan("craft:factory TestFactory --model {$model} --template <project>/custom-templates/factory.mustache --overwrite")
             ->assertExitCode(0);
 
         $factoryPath = $this->fs->factory_path();
         $filename = $this->fs->path_join($factoryPath, "TestFactory.php");
         $this->assertFileExists($filename);
 
-        $this->assertFileContainsString($filename, "testMethod");
+        $this->assertFileContainsString($filename, "// custom-factory");
 
         $this->cleanUp();
-    }
-
-    public function cleanUp()
-    {
-        $this->fs->rmdir("database");
     }
 }

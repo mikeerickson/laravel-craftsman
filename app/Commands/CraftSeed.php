@@ -67,7 +67,9 @@ class CraftSeed extends Command
                     "template" => $this->option('template'),
                 ];
 
-                $this->fs->createFile('seed', $seedName, $data);
+                $result = $this->fs->createFile('seed', $seedName, $data);
+
+                return $result["status"];
             }
         } catch (Exception $e) {
             $this->error($e->getMessage());

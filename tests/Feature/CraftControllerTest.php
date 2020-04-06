@@ -146,7 +146,7 @@ class CraftControllerTest extends TestCase
     {
         $model = "App/Models/Contact";
 
-        $this->artisan("craft:controller CustomController --model {$model} --template <project>/templates/custom.mustache --overwrite")
+        $this->artisan("craft:controller CustomController --model {$model} --template <project>/custom-templates/controller.mustache --overwrite")
             ->assertExitCode(0);
 
         $controllerPath = $this->fs->controller_path();
@@ -156,7 +156,7 @@ class CraftControllerTest extends TestCase
         // spot check merged data
         $data = file_get_contents($filename);
 
-        $this->assertStringContainsString("testMethod", $data);
+        $this->assertStringContainsString("// custom-controller", $data);
     }
 
     /** @test */

@@ -66,6 +66,11 @@ class CraftMigrationTest extends TestCase
         Assert::assertTrue(false);
     }
 
+    public function cleanUp()
+    {
+        $this->fs->rmdir("database");
+    }
+
     /** @test */
     public function should_create_migration_with_current_timestamp(): void
     {
@@ -190,12 +195,15 @@ class CraftMigrationTest extends TestCase
         // $this->fs->rmdir("database/migrations");
     }
 
+    // check to see if migration file was created. Since the filename is changed (adding timestamp)
+    // we can only validate the core migration ($migrationName) is actually created
+
     /** @test */
     public function should_build_complex_field_data()
     {
         $migrationName = "create_contacts_table";
         $dt = Carbon::now()->format('Y_m_d_His');
-        $migrationFilename = $dt . "_" . $migrationName;
+        $migrationFilename = $dt."_".$migrationName;
 
         $fields = "first_name:string@20:nullable, last_name:string@60:nullable, email:string@80:nullable:unique";
 
@@ -219,9 +227,6 @@ class CraftMigrationTest extends TestCase
         $this->cleanUp();
     }
 
-    // check to see if migration file was created. Since the filename is changed (adding timestamp)
-    // we can only validate the core migration ($migrationName) is actually created
-
     /** @test */
     public function should_create_migration_without_tablename()
     {
@@ -239,6 +244,12 @@ class CraftMigrationTest extends TestCase
 
         $this->cleanUp();
     }
+
+    /**
+     * ===============================================================================================
+     *  Migration Helpers and special asserts for migration testing only
+     * ===============================================================================================
+     */
 
     /** @test */
     public function should_create_migration_without_model()
@@ -258,12 +269,6 @@ class CraftMigrationTest extends TestCase
         $this->cleanUp();
     }
 
-    /**
-     * ===============================================================================================
-     *  Migration Helpers and special asserts for migration testing only
-     * ===============================================================================================
-     */
-
     /** @test */
     public function should_create_update_migration()
     {
@@ -282,8 +287,18 @@ class CraftMigrationTest extends TestCase
         $this->cleanUp();
     }
 
-    public function cleanUp()
+    public function should_craft_migration_using_custom_template()
     {
-        $this->fs->rmdir("database");
+        $migrationName = "create_template_migration";
+
+        $this->artisan("craft:migration ${migrationName} --template <project>/custom-templates/migration.mustache")
+            ->assertExitCode(0);
+
+        $migrationFilename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
+        $data = file_get_contents($migrationFilename);
+
+        $this->assertFileContainsString($migrationFilename, "// custom-migration");
+
+        $this->cleanUp();
     }
 }

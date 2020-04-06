@@ -4,7 +4,6 @@ namespace App\Commands;
 
 use App\CraftsmanFileSystem;
 use App\Traits\CommandDebugTrait;
-use Illuminate\Support\Facades\Log;
 use LaravelZero\Framework\Commands\Command;
 
 /**
@@ -26,7 +25,7 @@ class CraftEvent extends Command
                                 {--d|debug   : Use Debug Interface}
                             ';
 
-    protected $description = "Craft Event Class";
+    protected $description = "Craft Event";
 
     protected $help = 'Craft Event
                      <name>               Class Name
@@ -61,6 +60,8 @@ class CraftEvent extends Command
             // "debug" => $this->option("debug")
         ];
 
-        $this->fs->createFile('event', $className, $data);
+        $result = $this->fs->createFile('event', $className, $data);
+
+        return $result["status"];
     }
 }

@@ -45,6 +45,11 @@ class CraftListenerTest extends TestCase
         $this->cleanUp();
     }
 
+    private function cleanUp()
+    {
+        $this->fs->rmdir("app/Listeners");
+    }
+
     /** @test */
     public function should_create_listener_with_event()
     {
@@ -63,8 +68,17 @@ class CraftListenerTest extends TestCase
         $this->cleanUp();
     }
 
-    private function cleanUp()
+    /** @test */
+    public function should_craft_listener_using_custom_template()
     {
-        $this->fs->rmdir("app/Listeners");
+        $this->artisan("craft:listener TestListener --template <project>/custom-templates/listener.mustache --overwrite")
+            ->assertExitCode(0);
+
+        $filename = $this->fs->path_join($this->fs->listener_path(), "TestListener.php");
+        $this->assertFileExists($filename);
+
+        $this->assertFileContainsString($filename, "// custom-listener");
+
+        $this->cleanUp();
     }
 }

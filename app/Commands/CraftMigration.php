@@ -114,6 +114,8 @@ class CraftMigration extends Command
         $dt = Carbon::now()->format('Y_m_d_His');
         $migrationFilename = $dt."_".$migrationName;
 
-        $this->fs->createFile('migration', $migrationFilename, $data);
+        $result = $this->fs->createFile('migration', $migrationFilename, $data);
+
+        return $result["status"];
     }
 }

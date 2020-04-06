@@ -89,11 +89,13 @@ class CraftModel extends Command
             "seed" => $seed,
         ];
 
-        $this->fs->createFile('model', $modelName, $data);
+        $result = $this->fs->createFile('model', $modelName, $data);
 
         if ($migration) {
             $command = "craft:migration create_{$tablename}_table";
             Artisan::call($command);
         }
+
+        return $result["status"];
     }
 }

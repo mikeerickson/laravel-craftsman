@@ -19,9 +19,9 @@
             <directory suffix="Test.php">./tests/Unit</directory>
         </testsuite>
     </testsuites>
-    <!-- <listeners>
+    <listeners>
         <listener class="NunoMaduro\Collision\Adapters\Phpunit\Listener"/>
-    </listeners> -->
+    </listeners>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./app</directory>

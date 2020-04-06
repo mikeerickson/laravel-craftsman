@@ -25,7 +25,7 @@ class CraftListener extends Command
                                 {--d|debug   : Use Debug Interface}
                             ';
 
-    protected $description = "Craft Listener Classes";
+    protected $description = "Craft Listener";
 
     protected $help = 'Craft Listener
                      <name>               Class Name
@@ -61,6 +61,8 @@ class CraftListener extends Command
 
         $data["useEvent"] = strlen($data["event"]) > 0;
 
-        $this->fs->createFile('listener', $className, $data);
+        $result = $this->fs->createFile('listener', $className, $data);
+
+        return $result["status"];
     }
 }

@@ -76,6 +76,9 @@ class CraftTest extends Command
         }
 
         $filename = $this->fs->path_join($unit ? "Unit" : "Feature", $className);
-        $this->fs->createFile('test', $filename, $data);
+
+        $result = $this->fs->createFile('test', $filename, $data);
+
+        return $result["status"];
     }
 }

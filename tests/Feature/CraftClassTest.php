@@ -68,7 +68,7 @@ class CraftClassTest extends TestCase
     {
         $class = "App/Test/SampleClass";
 
-        $this->artisan("craft:class {$class} --template <project>/templates/custom.mustache")
+        $this->artisan("craft:class {$class} --template <project>/custom-templates/class.mustache")
             ->assertExitCode(0);
 
         $filename = $this->pathJoin("app/Test", "SampleClass.php");

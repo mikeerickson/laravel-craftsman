@@ -52,12 +52,14 @@ class CraftFormRequest extends Command
         $rules = $this->option('rules');
 
         $data = [
-            'name'      => $className,
-            'template'  => $this->option('template'),
+            'name' => $className,
+            'template' => $this->option('template'),
             'overwrite' => $this->option('overwrite'),
             'rules' => $rules,
         ];
 
-        $this->fs->createFile('request', $className, $data);
+        $result = $this->fs->createFile('request', $className, $data);
+
+        return $result["status"];
     }
 }
