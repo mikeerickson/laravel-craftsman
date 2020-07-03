@@ -40,9 +40,16 @@ class CraftEventTest extends TestCase
 
         $this->assertFileContainsString($filename, "broadcast");
 
+        $this->assertFileContainsString($filename, "class {$resource}");
+
         $this->fs->delete($filename);
 
         $this->cleanUp();
+    }
+
+    private function cleanUp()
+    {
+        $this->fs->rmdir("app/Events");
     }
 
     /** @test */
@@ -78,7 +85,7 @@ class CraftEventTest extends TestCase
         $this->cleanUp();
     }
 
-    /** @test  */
+    /** @test */
     public function should_create_event_listener(): void
     {
 
@@ -96,11 +103,5 @@ class CraftEventTest extends TestCase
         unlink($listenerFilename);
 
         $this->cleanUp();
-    }
-
-
-    private function cleanUp()
-    {
-        $this->fs->rmdir("app/Events");
     }
 }

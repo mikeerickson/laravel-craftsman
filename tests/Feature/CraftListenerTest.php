@@ -38,7 +38,7 @@ class CraftListenerTest extends TestCase
 
         $this->assertFileExists($filename);
 
-        $this->assertFileContainsString($filename, "class MyListener");
+        $this->assertFileContainsString($filename, "class {$resource}");
 
         $this->fs->delete($filename);
 

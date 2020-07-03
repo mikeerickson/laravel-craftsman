@@ -22,6 +22,7 @@ class CraftTest extends Command
                                 {--s|setup : Include setUp block}
                                 {--d|teardown : Include tearDown block}
                                 {--u|unit : Create unit test}
+                                {--p|pest : Create pest test}
                                 {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite : Overwrite existing test}
                                 {--b|debug   : Use Debug Interface}
@@ -34,6 +35,7 @@ class CraftTest extends Command
                      --setup, -s          Include setUp block
                      --teardown, -d       Include tearDown block
                      --unit, -u           Create unit test
+                     --pest, -p           Create Pest test
 
                     --template, -t       Template path (override configuration file)
                     --overwrite, -w      Overwrite existing test
@@ -56,6 +58,7 @@ class CraftTest extends Command
         $setup = $this->option("setup");
         $teardown = $this->option("teardown");
         $unit = $this->option("unit");
+        $pest = $this->option("pest");
         $overwrite = $this->option("overwrite");
 
         $namespace = "App\\Feature";
@@ -65,6 +68,7 @@ class CraftTest extends Command
 
         $data = [
             "name" => $className,
+            "pest" => $pest,
             "setup" => $setup,
             "teardown" => $teardown,
             "namespace" => $namespace,
@@ -75,7 +79,12 @@ class CraftTest extends Command
             $className .= "Test";
         }
 
-        $filename = $this->fs->path_join($unit ? "Unit" : "Feature", $className);
+
+        if ($pest) {
+            $filename = $this->fs->path_join($unit ? "Unit" : "Feature", $className);
+        } else {
+            $filename = $this->fs->path_join($unit ? "Unit" : "Feature", $className);
+        }
 
         $result = $this->fs->createFile('test', $filename, $data);
 

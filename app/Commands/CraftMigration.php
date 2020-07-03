@@ -76,7 +76,7 @@ class CraftMigration extends Command
                 $parts = explode("_", $migrationName);
                 array_shift($parts);
                 array_pop($parts);
-                $tablename = implode("_", $parts);
+                $tablename = Str::plural(implode("_", $parts));
                 $model = str_replace("_", "", Str::title($tablename));
             } else {
                 $parts = explode("/", $model);
@@ -87,7 +87,6 @@ class CraftMigration extends Command
                 $model = str_replace("_", "", Str::title($tablename));
             }
         }
-
         $create = true;
         $update = false;
         $resourceParts = explode("_", $migrationName);
@@ -112,7 +111,7 @@ class CraftMigration extends Command
 
         // timestamp to be prepended to name
         $dt = Carbon::now()->format('Y_m_d_His');
-        $migrationFilename = $dt."_".$migrationName;
+        $migrationFilename = $dt . "_" . $migrationName;
 
         $result = $this->fs->createFile('migration', $migrationFilename, $data);
 

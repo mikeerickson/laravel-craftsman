@@ -7,6 +7,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.0] - 2020-07-03
+
+### Added
+
+-   Added `craft:test --pest` option to create [pest](http://pestphp.com) formatted tests
+
+```bash
+ laravel-craftsman craft:test TestPest.php --pest
+ laravel-craftsman craft:test TestPest.php --pest --unit
+```
+
+### Fixed
+
+-- Fixed `craft:migration` to properly use `--tablename` for `CreateXXXTable` class name
+-- Fixed `$tablename` variable in `templates/model.mustache` template to use correct `$table`
+Before:
+
+```php
+protected $tablename = "users";
+```
+
+After:
+
+```php
+protected $table = "users";
+```
+
 ## [1.9.0] - 2020-03-08
 
 ### Added
@@ -29,10 +56,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fixed `craft:command` template did not properly extend Command
-- Fixed issues when running on PHP 7.4
-    * implode parameter alignments
-    * Upgraded mustache package to 2.13 (issues with 2.12 and missing variables)
+-   Fixed `craft:command` template did not properly extend Command
+-   Fixed issues when running on PHP 7.4
+    -   implode parameter alignments
+    -   Upgraded mustache package to 2.13 (issues with 2.12 and missing variables)
 
 ## [1.8.0] - 2020-02-02
 
@@ -46,10 +73,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 -   Added support for crafting migrations based on `--foreign` short format
-    -   `laravel-craftsman craft:migration create_members_table --foreign=member_id` will populate `ftable` and `fkey`
-        ```php
-        $table->foreign('member_id')->references('id')->on('members');
-        ```
+    `laravel-craftsman craft:migration create_members_table --foreign=member_id` will populate `ftable` and `fkey`
+
+```php
+$table->foreign('member_id')->references('id')->on('members');
+```
+
 -   Added support for overriding defaults using published configuration file
     -   `laravel-craftsman publish`
 

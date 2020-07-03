@@ -53,7 +53,7 @@ class CraftControllerTest extends TestCase
         $filename = $this->pathJoin($controllerPath, "{$class}.php");
         $this->assertFileExists($filename);
 
-        $this->assertFileContainsString($filename, "class EmptyController");
+        $this->assertFileContainsString($filename, "class {$class}");
     }
 
     /** @test */

@@ -5,12 +5,12 @@ namespace {{namespace}};
 {{#useEvent}}
 use App\Events\{{event}};
 {{/useEvent}}
-{{#queued}}
+    {{#queued}}
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 {{/queued}}
 
-class {{name}} {{#queued}}implements ShouldQueue{{/queued}}
+class {{className}} {{#queued}}implements ShouldQueue{{/queued}}
 {
     /**
      * Create the event listener.

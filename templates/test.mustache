@@ -6,26 +6,26 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class {{model}} extends TestCase
+class {{className}} extends TestCase
 {
 {{#setup}}
     function setUp(): void
     {
         parent::setUp();
         $this->withoutExceptionHandling();
-    }
+}
 
 {{/setup}}
-    /** @test */
-    public function should_pass()
-    {
-        $this->assertTrue(true);
-    }
+/** @test */
+public function should_pass()
+{
+$this->assertTrue(true);
+}
 
 {{#teardown}}
     function tearDown(): void
     {
-        parent::tearDown();
+    parent::tearDown();
     }
 {{/teardown}}
 }
