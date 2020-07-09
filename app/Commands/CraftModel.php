@@ -22,7 +22,7 @@ class CraftModel extends Command
                                 {name : Model name}
                                 {--a|all : Generate a migration, factory, and resource controller for the model}
                                 {--c|controller : Create a new controller for the model}
-                                {--t|tablename= : Tablename if different than model name}
+                                {--t|table= : Tablename if different than model name}
                                 {--f|factory : Create a new factory for the model}
                                 {--m|migration : Create a new migration file for the model}
                                 {--s|seed : Create a new seeder file for the model}
@@ -37,7 +37,7 @@ class CraftModel extends Command
                      <name>               Model Name (eg App\Models\Post)
                      --all, -a            Generate a migration, factory, and resource controller for the model
                      -controller, -c      Create a new controller for the model
-                     --tablename, -t      Desired tablename
+                     --table, -t          Desired tablename
                      --factory, -f        Create a new factory for the mode
                      --migration, -m      Create a new migration file for the model
                      --seed, -s           Create a new seed file for the model
@@ -73,7 +73,7 @@ class CraftModel extends Command
         $model = array_pop($parts);
         $namespace = count($parts) > 0 ? implode("\\", $parts) : "App";
 
-        $tablename = $this->option("tablename");
+        $tablename = $this->option("table");
         if (strlen($tablename) === 0) {
             $tablename = Str::plural(strtolower($model));
         }

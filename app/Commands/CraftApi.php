@@ -36,7 +36,7 @@ class CraftApi extends Command
     protected $help = 'Craft API
                      <name>               Resource Name (ie Contact, Post, Comment)
                      --model, -m          Path to model [default: app/]
-                     --tablename, -t      Desired tablename [default to pluarlized resource name]
+                     --table, -t          Desired tablename [default to pluarlized resource name]
                      --rows, -r           Number of rows for migration [default: 1] (passed to seeder)
                      --current, -u        Use --useCurrent for timestamps when creating migration
                      --no-model, -o       Skip crafting model
@@ -102,13 +102,13 @@ class CraftApi extends Command
         }
 
         if (!$noMigration) {
-            Artisan::call("craft:migration create_{$tablename}_table --model {$model} --tablename {$tablename} {$useCurrent}");
+            Artisan::call("craft:migration create_{$tablename}_table --model {$model} --table {$tablename} {$useCurrent}");
         } else {
             Messenger::info("▶︎ Migration crafting skipped\n");
         }
 
         if (!$noModel) {
-            Artisan::call("craft:model {$model} --tablename {$tablename} {$overwrite}");
+            Artisan::call("craft:model {$model} --table {$tablename} {$overwrite}");
         } else {
             Messenger::info("▶︎ Model crafting skipped\n");
         }

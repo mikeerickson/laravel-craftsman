@@ -135,7 +135,7 @@ class CraftMigrationTest extends TestCase
         $tablename = "tests";
         $migrationName = "create_tests_table";
 
-        $this->artisan("craft:migration {$migrationName} --tablename {$tablename}")
+        $this->artisan("craft:migration {$migrationName} --table {$tablename}")
             ->assertExitCode(0);
 
         $this->assertMigrationFileExists($migrationName);
@@ -151,7 +151,7 @@ class CraftMigrationTest extends TestCase
         $migrationName = "create_contacts_table";
         $fieldList = "--fields fname:string@25:nullable,lname:string@50:nullable,email:string@80:nullable:unique,dob:datetime,notes:text,deleted_at:timezone";
 
-        $this->artisan("craft:migration {$migrationName} --tablename {$tablename} --fields {$fieldList}")
+        $this->artisan("craft:migration {$migrationName} --table {$tablename} --fields {$fieldList}")
             ->assertExitCode(0);
 
         $this->assertMigrationFileExists($migrationName);
@@ -177,7 +177,7 @@ class CraftMigrationTest extends TestCase
         $migrationName = "update_contacts_table";
         $fieldList = "--fields fname:string@25:nullable,lname:string@50:nullable,email:string@80:nullable:unique,dob:datetime,notes:text,deleted_at:timezone";
 
-        $this->artisan("craft:migration {$migrationName} --tablename {$tablename} --fields {$fieldList}")
+        $this->artisan("craft:migration {$migrationName} --table {$tablename} --fields {$fieldList}")
             ->assertExitCode(0);
 
         $this->assertMigrationFileExists($migrationName);
@@ -256,7 +256,7 @@ class CraftMigrationTest extends TestCase
     {
         $migrationName = "create_product_contacts_table";
 
-        $this->artisan("craft:migration {$migrationName} --tablename contacts")
+        $this->artisan("craft:migration {$migrationName} --table contacts")
             ->assertExitCode(0);
 
         $this->assertMigrationFileExists($migrationName);
@@ -308,7 +308,7 @@ class CraftMigrationTest extends TestCase
         $migrationName = "create_contact_tag_table";
         $tablename = "contact_tag";
 
-        $this->artisan("craft:migration ${migrationName} --tablename ${tablename}")
+        $this->artisan("craft:migration ${migrationName} --table ${tablename}")
             ->assertExitCode(0);
 
         $migrationFilename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);

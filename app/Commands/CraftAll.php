@@ -18,7 +18,7 @@ class CraftAll extends Command
     protected $signature = 'craft:all
                                 {name : Base Entity used by rest of commands}
                                 {--m|model= : Associated model}
-                                {--t|tablename= : Associated tablename}
+                                {--t|tablename= : Associated database tablename}
                                 {--f|fields= : List of fields used in migration}
                                 {--r|rows= : Number of rows created by migration command}
                                 {--x|extends= : Views extend block}
@@ -41,7 +41,8 @@ class CraftAll extends Command
     protected $help = 'Craft All Assets
                      <name>               Base Asset Name
                      --model, -m          Path to model [default: app/]
-                     --tablename, -t      Tablename
+                     --tablename, -t      Database Tablename
+                                           Note: uses --tablename here to remove conflict with other commands
                      --fields, -f         Field List (passed to migration)
                                            eg. --fields "first_name:string,20^nullable^unique, last_name:string,20"
                      --rows, -r           Number of rows for migration [default: 1] (passed to seeder)
@@ -119,13 +120,13 @@ class CraftAll extends Command
         }
 
         if (!$noMigration) {
-            Artisan::call("craft:migration create_{$tablename}_table --model {$model} --tablename {$tablename} --fields {$fields} {$overwrite}");
+            Artisan::call("craft:migration create_{$tablename}_table --model {$model} --table {$tablename} --fields {$fields} {$overwrite}");
         } else {
             Messenger::info("▶︎ Migration crafting skipped\n");
         }
 
         if (!$noModel) {
-            Artisan::call("craft:model {$model} --tablename {$tablename} {$overwrite}");
+            Artisan::call("craft:model {$model} --table {$tablename} {$overwrite}");
         } else {
             Messenger::info("▶︎ Model crafting skipped\n");
         }

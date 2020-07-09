@@ -274,7 +274,7 @@ class CraftDefault extends Command
 
         $tablename = $this->ask("Desired tablename", $this->getMigrationTablename($resource));
         if (strlen($tablename) > 0) {
-            $tablename = "--tablename " . $tablename;
+            $tablename = "--table " . $tablename;
         }
 
         $fields = trim($this->ask("List of fields (eg. first_name:string@20:nullable, email:string@80:nullable:unique)"));
@@ -326,7 +326,7 @@ class CraftDefault extends Command
 
         $overwrite = $this->confirm("Would you like to overwrite class if it exists") ? '--overwrite' : '';
 
-        $craftCommand = "{$commandName} {$resource} --tablename {$tablename} {$all} {$collection} {$template} {$overwrite}";
+        $craftCommand = "{$commandName} {$resource} --table {$tablename} {$all} {$collection} {$template} {$overwrite}";
 
         return str_replace("  ", " ", $craftCommand);
     }

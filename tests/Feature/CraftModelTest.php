@@ -111,7 +111,7 @@ class CraftModelTest extends TestCase
     {
         $model = "Customer";
 
-        Artisan::call("craft:model App/Models/{$model} --tablename customers --all --overwrite");
+        Artisan::call("craft:model App/Models/{$model} --table customers --all --overwrite");
 
         // verify model
         $modelPath = $this->fs->model_path("Models");
@@ -138,7 +138,7 @@ class CraftModelTest extends TestCase
     {
         $model = "Customer";
 
-        Artisan::call("craft:model App/Models/{$model} --tablename customers --controller --overwrite");
+        Artisan::call("craft:model App/Models/{$model} --table customers --controller --overwrite");
 
         // verify model
         $controllerPath = $this->fs->controller_path();
@@ -157,7 +157,7 @@ class CraftModelTest extends TestCase
     {
         $model = "Customer";
 
-        Artisan::call("craft:model {$model} --tablename customers --seed --overwrite");
+        Artisan::call("craft:model {$model} --table customers --seed --overwrite");
 
         $seederPath = $this->fs->seed_path();
 
@@ -172,7 +172,7 @@ class CraftModelTest extends TestCase
     {
         $model = "Customer";
 
-        Artisan::call("craft:model App/Models/{$model} --tablename customers --seed --overwrite");
+        Artisan::call("craft:model App/Models/{$model} --table customers --seed --overwrite");
 
         // verify model
         $seederPath = $this->fs->seed_path();

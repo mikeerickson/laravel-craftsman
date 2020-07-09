@@ -21,7 +21,7 @@ class CraftMigration extends Command
     protected $signature = 'craft:migration
                                 {name : Migration name (timestamp applied at creation)}
                                 {--m|model= : Path to migration model (required)}
-                                {--t|tablename= : Desired tablename}
+                                {--t|table= : Desired tablename}
                                 {--f|fields= : List of fields (optional)}
                                 {--r|foreign= : Add constraint (optional)}
                                 {--u|current : Use --useCurrent for timestamps}
@@ -35,7 +35,7 @@ class CraftMigration extends Command
     protected $help = 'Craft Migration
                      <name>               Migration Name (will be appended with timestamp)
                      --model, -m          Path to model (required)
-                     --tablename, -t      Desired tablename
+                     --table, -t          Desired tablename
                      --fields, -f         List of fields (optional)
                                            eg. --fields "first_name:string@20:nullable, email:string@80:nullable:unique"
                      --foreign, -r        Add constraint (skipped by default)
@@ -67,7 +67,7 @@ class CraftMigration extends Command
 
         $migrationName = $this->argument('name');
         $model = $this->option('model');
-        $tablename = $this->option('tablename');
+        $tablename = $this->option('table');
         $fields = $this->option('fields');
         $foreign = $this->option('foreign');
 
