@@ -76,7 +76,7 @@ class CraftsmanFileSystem
             $localConfigFilename = $this->path_join(getcwd(), "config", "craftsman.php");
         } else {
             // sandbox only used for development testing
-            $localConfigFilename = $this->path_join(getcwd(), "sandbox", "craftsman.php");
+            $localConfigFilename = $this->path_join(getcwd(), "tests", "config", "craftsman.php");
         }
 
         if (!file_exists($localConfigFilename)) {

@@ -601,8 +601,8 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function it_should_use_custom_configuration_access(): void
     {
-        $configValue = $this->fs->getConfigValue("templates.model");
-        $this->AssertEquals("templates/model.mustache", $configValue);
+        $configValue = $this->fs->getConfigValue("migrations.useCurrentDefault");
+        $this->AssertEquals(true, $configValue);
     }
 
     /** @test */
