@@ -4,7 +4,9 @@ namespace App\Commands;
 
 use App\CraftsmanFileSystem;
 use App\Traits\CommandDebugTrait;
+use App\Generators\ClassGenerator;
 use LaravelZero\Framework\Commands\Command;
+use Codedungeon\PHPMessenger\Facades\Messenger;
 
 /**
  * Class CraftClass
@@ -13,8 +15,6 @@ use LaravelZero\Framework\Commands\Command;
 class CraftClass extends Command
 {
     use CommandDebugTrait;
-
-    protected $fs;
 
     protected $signature = 'craft:class
                                 {name : Class name}
@@ -47,16 +47,17 @@ class CraftClass extends Command
     {
         $this->handleDebug();
 
-        $className = $this->argument('name');
+        $result = (new ClassGenerator($this))->createFile();
 
-        $data = [
-            "name" => $className,
-            "constructor" => $this->option("constructor"),
-            "template" => $this->option("template"),
-            "overwrite" => $this->option("overwrite"),
-        ];
+        if (!$this->option('quiet')) {
+            if ($result["status"] === CraftsmanResultCodes::SUCCESS) {
+                Messenger::success("{$result["message"]}\n", "SUCCESS");
+            }
 
-        $result = $this->fs->createFile('class', $className, $data);
+            if ($result["status"] === CraftsmanResultCodes::FAIL) {
+                Messenger::error("{$result["message"]}\n", "ERROR");
+            }
+        }
 
         return $result["status"];
     }

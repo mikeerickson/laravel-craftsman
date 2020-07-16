@@ -5,8 +5,10 @@ namespace App\Commands;
 use Illuminate\Support\Str;
 use App\CraftsmanFileSystem;
 use App\Traits\CommandDebugTrait;
+use App\Generators\ModelGenerator;
 use Illuminate\Support\Facades\Artisan;
 use LaravelZero\Framework\Commands\Command;
+use Codedungeon\PHPMessenger\Facades\Messenger;
 
 /**
  * Class CraftModel
@@ -16,6 +18,9 @@ class CraftModel extends Command
 {
     use CommandDebugTrait;
 
+    /**
+     * @var CraftsmanFileSystemTest
+     */
     protected $fs;
 
     protected $signature = 'craft:model
@@ -46,13 +51,14 @@ class CraftModel extends Command
                      --overwrite, -w      Overwrite existing model
             ';
 
+
     public function __construct()
     {
         parent::__construct();
 
-        $this->fs = new CraftsmanFileSystem();
-
         $this->setHelp($this->help);
+
+        $this->fs = new CraftsmanFileSystem();
     }
 
     public function handle()
@@ -60,39 +66,60 @@ class CraftModel extends Command
         $this->handleDebug();
 
         $modelName = $this->argument('name');
-        $controller = $this->option('controller');
-        if (!$controller) {
-            $controller = $this->option('all');
-        }
+
         $overwrite = $this->option('overwrite');
         $factory = $this->option('factory');
-        $migration = $this->option('migration');
         $seed = $this->option('seed');
 
-        $parts = explode("/", $modelName);
-        $model = array_pop($parts);
-        $namespace = count($parts) > 0 ? implode("\\", $parts) : "App";
+        $namespace = $this->fs->getNamespace("model", $modelName);
+        $model = $this->fs->getModel($modelName);
 
         $tablename = $this->option("table");
-        if (strlen($tablename) === 0) {
-            $tablename = Str::plural(strtolower($model));
-        }
+        $tablename = (is_null($tablename)) ? Str::plural(strtolower($model)) : $this->option("table");
+
         $data = [
             "model" => $model,
             "name" => $modelName,
+            "className" => $model,
             "all" => $this->option('all'),
             "tablename" => $tablename,
             "factory" => $factory,
             "namespace" => $namespace,
             "overwrite" => $overwrite,
-            "controller" => $controller,
             "seed" => $seed,
         ];
 
-        $result = $this->fs->createFile('model', $modelName, $data);
+        $result = (new ModelGenerator($this))->createFile();
 
-        if ($migration) {
-            $command = "craft:migration create_{$tablename}_table";
+        if (!$this->option('quiet')) {
+            ($result["status"] === CraftsmanResultCodes::SUCCESS)
+                ? Messenger::success("{$result["message"]}\n", "SUCCESS")
+                : Messenger::error("{$result["message"]}\n", "ERROR");
+        }
+
+        if ($this->option('migration') || $this->option('all')) {
+            $useCurrent = config("craftsman.miscellaneous.useCurrentDefault") ? "--current" : "";
+            $command = "craft:migration create_{$tablename}_table --table {$tablename} {$useCurrent}";
+            Artisan::call($command);
+        }
+
+        if ($this->option('controller') || $this->option('all')) {
+            $overwrite = $data["overwrite"] ? "--overwrite" : "";
+            $command = "craft:controller {$data["model"]}Controller {$overwrite}";
+            Artisan::call($command);
+        }
+
+        if ($this->option('seed') || $this->option('all')) {
+            $model = $data["model"];
+            $overwrite = $data["overwrite"] ? "--overwrite" : "";
+            $command = "craft:seed {$model}sTableSeeder --model {$data['name']} {$overwrite}";
+            Artisan::call($command);
+        }
+
+        if ($this->option('factory') || $this->option('all')) {
+            $model = $data["model"];
+            $overwrite = $data["overwrite"] ? "--overwrite" : "";
+            $command = "craft:factory {$model}Factory --model {$data['name']} {$overwrite}";
             Artisan::call($command);
         }
 

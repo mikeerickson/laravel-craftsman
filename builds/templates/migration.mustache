@@ -31,6 +31,13 @@ class Create{{model}}Table extends Migration
 
             $table->foreign('{{{fk}}}')->references('{{{pkid}}}')->on('{{{pktable}}}');
             {{/foreign}}
+
+            {{#pivot}}
+            $table->unique(['contact_id', 'tag_id']);
+
+            $table->foreign('contact_id')->references('id')->on('contacts')->cascadeOnDelete();
+            $table->foreign('tag_id')->references('id')->on('tags')->cascadeOnDelete();
+            {{/pivot}}
         });
         {{/create}}
 }

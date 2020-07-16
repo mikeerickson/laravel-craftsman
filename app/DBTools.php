@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 function printl($data)
 {
-    return $data . PHP_EOL;
+    return $data.PHP_EOL;
 }
 
 class DBTools
@@ -23,12 +23,28 @@ class DBTools
             : null;
     }
 
+    public function verifyTablename($tablename = null)
+    {
+        $tableList = $this->getTableList();
+        $resultObject = array_filter($tableList, function ($e) use (&$tablename) {
+            return $e->table_name == $tablename;
+        });
+        return sizeof($resultObject) >= 1;
+    }
+
+    public function getTableList()
+    {
+        $sql = "SELECT table_name FROM information_schema.tables";
+        return DB::select(DB::raw($sql));
+    }
+
     public function setTable($tablename = "")
     {
         if ($this->verifyTablename($tablename)) {
             $this->tablename = $tablename;
         }
     }
+
     public function getColumnType($colName = null)
     {
         if (!$this->isValidTablename()) {
@@ -39,11 +55,11 @@ class DBTools
             return self::INVALID_COLUMN;
         }
 
-        var_dump($this->tablename . "." . $colName);
+        var_dump($this->tablename.".".$colName);
 
         $result = null;
         $columnInfo = DB::select(
-            DB::raw('SHOW COLUMNS FROM ' . $this->tablename)
+            DB::raw('SHOW COLUMNS FROM '.$this->tablename)
         );
         foreach ($columnInfo as $column) {
             if ($colName === $column->Field) {
@@ -52,40 +68,6 @@ class DBTools
             }
         }
         return $result;
-    }
-
-    public function getColumnInfo($colName = null)
-    {
-        if (!$this->isValidTablename()) {
-            return self::INVALID_TABLE;
-        }
-
-        $columnInfo = DB::select(
-            DB::raw('SHOW COLUMNS FROM ' . $this->tablename)
-        );
-
-        $resultObject = array_filter($columnInfo, function ($e) use (
-            &$colName
-        ) {
-            return $e->Field == $colName;
-        });
-
-        return $resultObject;
-    }
-
-    public function getTableList()
-    {
-        $sql = "SELECT table_name FROM information_schema.tables";
-        return DB::select(DB::raw($sql));
-    }
-
-    public function getColumnList()
-    {
-        if (!$this->isValidTablename($this->tablename)) {
-            return self::INVALID_TABLE;
-        }
-
-        return DB::getSchemaBuilder()->getColumnListing($this->tablename);
     }
 
     public function isValidTablename($tablename = null)
@@ -99,6 +81,34 @@ class DBTools
         return sizeof($colInfo) > 0;
     }
 
+    public function getColumnInfo($colName = null)
+    {
+        if (!$this->isValidTablename()) {
+            return self::INVALID_TABLE;
+        }
+
+        $columnInfo = DB::select(
+            DB::raw('SHOW COLUMNS FROM '.$this->tablename)
+        );
+
+        $resultObject = array_filter($columnInfo, function ($e) use (
+            &$colName
+        ) {
+            return $e->Field == $colName;
+        });
+
+        return $resultObject;
+    }
+
+    public function getColumnList()
+    {
+        if (!$this->isValidTablename($this->tablename)) {
+            return self::INVALID_TABLE;
+        }
+
+        return DB::getSchemaBuilder()->getColumnListing($this->tablename);
+    }
+
     public function isPrimaryKey($colName = null)
     {
         if (!$this->isValidTablename($this->tablename)) {
@@ -106,7 +116,6 @@ class DBTools
         }
 
         if (!$this->isValidColumn($colName)) {
-            dd("here");
             return self::INVALID_COLUMN;
         }
 
@@ -125,23 +134,12 @@ class DBTools
 
         return end($columnInfo)->Extra === "auto_increment";
     }
-
-    public function verifyTablename($tablename = null)
-    {
-        $tableList = $this->getTableList();
-        $resultObject = array_filter($tableList, function ($e) use (&$tablename) {
-            return $e->table_name == $tablename;
-        });
-        return sizeof($resultObject) >= 1;
-    }
 }
 
 /**
  * Test
-
  * $type = DB::getSchemaBuilder()->getColumnType("users", "name");
  * $type = DB::getSchemaBuilder()->getColumnListing("users");
-
  */
 
 
@@ -150,7 +148,7 @@ $db = new DBTools($tablename);
 $type = $db->getColumnType("id");
 printl("${tablename}.id type ${type}");
 
-var_dump("${tablename} column list: " . $db->getColumnList());
+var_dump("${tablename} column list: ".$db->getColumnList());
 
 printl("================================================================");
 

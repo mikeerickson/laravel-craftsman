@@ -9,7 +9,7 @@ trait CommandDebugTrait
 {
     function handleDebug()
     {
-        $this->isDebug() ? $this->debugMessasge() : null;
+        $this->isDebug() ? $this->debugMessage() : null;
     }
 
     function isDebug()
@@ -18,7 +18,7 @@ trait CommandDebugTrait
         // return $this->option("debug");
     }
 
-    function debugMessasge()
+    function debugMessage()
     {
         $data = array_merge($this->arguments(), $this->options());
         $msg = "";

@@ -20,9 +20,6 @@ class CraftModelTest extends TestCase
      */
     protected $fs;
 
-    /**
-     *
-     */
     function setUp(): void
     {
         parent::setUp();
@@ -45,15 +42,7 @@ class CraftModelTest extends TestCase
 
         $this->assertFileContainsString($filename, "class {$model} extends Model");
 
-        unlink($filename);
-
-        $this->cleanUp();
-    }
-
-    private function cleanUp()
-    {
-        $this->fs->rmdir("app/Models");
-        $this->fs->rmdir("database");
+        $this->cleanUp($filename);
     }
 
     /** @test */
@@ -77,7 +66,7 @@ class CraftModelTest extends TestCase
     {
         $model = "Post";
 
-        $this->artisan('craft:model App/Models/Post')
+        $this->artisan('craft:model App/Models/Post --table tests --factory')
             ->assertExitCode(0);
 
         $modelPath = $this->fs->model_path("Models");
@@ -93,7 +82,7 @@ class CraftModelTest extends TestCase
     {
         $model = "Post";
 
-        $this->artisan('craft:model App/Models/Post --template <project>/templates/custom.mustache --overwrite')
+        $this->artisan('craft:model App/Models/Post --template <project>/custom-templates/model.mustache --overwrite')
             ->assertExitCode(0);
 
         $modelPath = $this->fs->model_path("Models");
@@ -182,4 +171,19 @@ class CraftModelTest extends TestCase
 
         $this->cleanUp();
     }
+
+    /** ------------------------------------------------------------------------------------------------------
+     * Test Helpers
+     * ------------------------------------------------------------------------------------------------------- */
+
+    /**
+     * @param  string  $filename
+     */
+    private function cleanUp($filename = "")
+    {
+        $this->fs->delete($filename);
+        $this->fs->rmdir("app/Models");
+        $this->fs->rmdir("database");
+    }
+
 }

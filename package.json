@@ -1,16 +1,16 @@
 {
   "name": "laravel-craftsman",
-  "version": "1.11.1",
-  "build": "326",
+  "version": "1.13.0",
+  "build": "346",
   "description": "Laravel Craftsman",
-  "tagLine": "Laravel Artisan Make On Steroids",
+  "tagLine": "Laravel Artisan `make:xxx` On Steroids",
   "main": "index.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
     "analyze": "vendor/bin/phpinsights",
-    "bump": "./tasks/bumpBuild.js",
+    "bump": "./tasks/bumpBuild.js --verbose",
     "build": "./tasks/build.sh",
     "build:deploy": "./tasks/build.sh --deploy",
     "deploy": "./tasks/deploy.sh",
@@ -50,5 +50,7 @@
     "url": "https://github.com/mikeerickson/laravel-craftsman/issues"
   },
   "homepage": "https://github.com/mikeerickson/laravel-craftsman#readme",
-  "devDependencies": {}
+  "devDependencies": {
+    "colors": "1.4.0"
+  }
 }

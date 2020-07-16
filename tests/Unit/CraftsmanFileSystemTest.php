@@ -150,7 +150,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_custom_template_using_root()
     {
-        $result = getcwd() . DIRECTORY_SEPARATOR . "templates/class.mustache";
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/class.mustache";
 
         $filename = $this->fs->getTemplateFilename("<root>/templates/class.mustache");
 
@@ -160,7 +160,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_class_template_filename()
     {
-        $result = getcwd() . DIRECTORY_SEPARATOR . "templates/class.mustache";
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/class.mustache";
 
         $filename = $this->fs->getTemplateFilename("class");
 
@@ -170,7 +170,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_controller_template_filename()
     {
-        $result = getcwd() . DIRECTORY_SEPARATOR . "templates/controller.mustache";
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/controller.mustache";
 
         $filename = $this->fs->getTemplateFilename("controller");
 
@@ -180,7 +180,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_event_template_filename()
     {
-        $result = getcwd() . DIRECTORY_SEPARATOR . "templates/event.mustache";
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/event.mustache";
 
         $filename = $this->fs->getTemplateFilename("event");
 
@@ -190,7 +190,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_listener_template_filename()
     {
-        $result = getcwd() . DIRECTORY_SEPARATOR . "templates/listener.mustache";
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/listener.mustache";
 
         $filename = $this->fs->getTemplateFilename("listener");
 
@@ -201,7 +201,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_api_controller_filename()
     {
-        $result = getcwd() . DIRECTORY_SEPARATOR . "templates/api-controller.mustache";
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/api-controller.mustache";
 
         $filename = $this->fs->getTemplateFilename("api-controller");
 
@@ -211,7 +211,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_invoke_controller_filename()
     {
-        $result = getcwd() . DIRECTORY_SEPARATOR . "templates/invokable-controller.mustache";
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/invokable-controller.mustache";
         $filename = $this->fs->getTemplateFilename("invokable-controller");
 
         $this->assertSame($result, $filename);
@@ -220,7 +220,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_empty_controller_filename()
     {
-        $result = getcwd() . DIRECTORY_SEPARATOR . "templates/empty-controller.mustache";
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/empty-controller.mustache";
 
         $filename = $this->fs->getTemplateFilename("empty-controller");
 
@@ -230,7 +230,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_view_index_filename()
     {
-        $result = getcwd() . DIRECTORY_SEPARATOR . "templates/view-index.mustache";
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/view-index.mustache";
 
         $filename = $this->fs->getTemplateFilename("view-index");
 
@@ -240,7 +240,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_view_create_filename()
     {
-        $result = getcwd() . DIRECTORY_SEPARATOR . "templates/view-create.mustache";
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/view-create.mustache";
 
         $filename = $this->fs->getTemplateFilename("view-create");
 
@@ -250,7 +250,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_view_show_filename()
     {
-        $result = getcwd() . DIRECTORY_SEPARATOR . "templates/view-show.mustache";
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/view-show.mustache";
 
         $filename = $this->fs->getTemplateFilename("view-show");
 
@@ -260,7 +260,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_view_edit_filename()
     {
-        $result = getcwd() . DIRECTORY_SEPARATOR . "templates/view-edit.mustache";
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/view-edit.mustache";
 
         $filename = $this->fs->getTemplateFilename("view-edit");
 
@@ -271,7 +271,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_tests_filename()
     {
-        $result = getcwd() . DIRECTORY_SEPARATOR . "templates/test.mustache";
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/test.mustache";
 
         $filename = $this->fs->getTemplateFilename("test");
 
@@ -281,7 +281,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_model_filename()
     {
-        $result = getcwd() . DIRECTORY_SEPARATOR . "templates/model.mustache";
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/model.mustache";
 
         $filename = $this->fs->getTemplateFilename("model");
 
@@ -291,7 +291,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_migration_filename()
     {
-        $result = getcwd() . DIRECTORY_SEPARATOR . "templates/migration.mustache";
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/migration.mustache";
 
         $filename = $this->fs->getTemplateFilename("migration");
 
@@ -301,7 +301,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_factories_filename()
     {
-        $result = getcwd() . DIRECTORY_SEPARATOR . "templates/factory.mustache";
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/factory.mustache";
 
         $filename = $this->fs->getTemplateFilename("factory");
 
@@ -319,7 +319,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_return_seeds_filename()
     {
-        $result = getcwd() . DIRECTORY_SEPARATOR . "templates/seed.mustache";
+        $result = getcwd().DIRECTORY_SEPARATOR."templates/seed.mustache";
 
         $filename = $this->fs->getTemplateFilename("seed");
 
@@ -433,7 +433,7 @@ class CraftsmanFileSystemTest extends TestCase
     /** @test */
     public function should_call_pathjoin()
     {
-        $filename = $this->fs->pathJoin("App", "Models", "Test.php");
+        $filename = $this->fs->path_join("App", "Models", "Test.php");
 
         $this->assertSame("App/Models/Test.php", $filename);
     }
@@ -548,7 +548,7 @@ class CraftsmanFileSystemTest extends TestCase
     {
         $migrationName = "create_test_migration";
         $dt = Carbon::now()->format('Y_m_d_His');
-        $migrationFilename = $dt . "_" . $migrationName;
+        $migrationFilename = $dt."_".$migrationName;
 
         $fields = "first_name:string@20:nullable, last_name:string@60:nullable, email:string@80:nullable:unique";
 

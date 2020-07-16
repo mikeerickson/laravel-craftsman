@@ -114,6 +114,5 @@ class CraftController extends Command
         }
 
         return $result["status"];
-
     }
 }

@@ -72,6 +72,5 @@ class CraftViews extends Command
         ];
 
         $this->fs->createViewFiles($assetName, $data);
-
     }
 }

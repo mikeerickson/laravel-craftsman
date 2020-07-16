@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use App\Traits\CommandDebugTrait;
 use Illuminate\Config\Repository;
 use Illuminate\Filesystem\Filesystem;
+use App\Commands\CraftsmanResultCodes;
 use Illuminate\Support\Facades\Artisan;
 use Codedungeon\PHPMessenger\Facades\Messenger;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -21,10 +22,6 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 class CraftsmanFileSystem
 {
     use CommandDebugTrait;
-
-    const SUCCESS = 0;
-    const FILE_EXIST = -1;
-    const FILE_NOT_EXIST = -43;
 
     /**
      * @var Filesystem
@@ -51,7 +48,7 @@ class CraftsmanFileSystem
     public function rmdir(string $dirname)
     {
         if (is_dir($dirname)) {
-            system("rm -rf " . escapeshellarg($dirname));
+            system("rm -rf ".escapeshellarg($dirname));
         }
     }
 
@@ -121,7 +118,7 @@ class CraftsmanFileSystem
     {
         $path = Phar::running(false);
         if (strlen($path) > 0) {
-            $path = dirname($path) . DIRECTORY_SEPARATOR;
+            $path = dirname($path).DIRECTORY_SEPARATOR;
         }
         return $path;
     }
@@ -163,7 +160,7 @@ class CraftsmanFileSystem
                 $src = config("craftsman.templates.{$createTemplate}");
             }
 
-            $src = $this->getPharPath() . $src;
+            $src = $this->getPharPath().$src;
 
             $dest = $this->path_join($path, $asset, "create.blade.php");
 
@@ -177,7 +174,7 @@ class CraftsmanFileSystem
                 $src = config("craftsman.templates.{$editTemplate}");
             }
 
-            $src = $this->getPharPath() . $src;
+            $src = $this->getPharPath().$src;
 
             $dest = $this->path_join($path, $asset, "edit.blade.php");
 
@@ -191,7 +188,7 @@ class CraftsmanFileSystem
                 $src = config("craftsman.templates.{$indexTemplate}");
             }
 
-            $src = $this->getPharPath() . $src;
+            $src = $this->getPharPath().$src;
 
             $dest = $this->path_join($path, $asset, "index.blade.php");
 
@@ -205,7 +202,7 @@ class CraftsmanFileSystem
                 $src = config("craftsman.templates.{$showTemplate}");
             }
 
-            $src = $this->getPharPath() . $src;
+            $src = $this->getPharPath().$src;
 
             $dest = $this->path_join($path, $asset, "show.blade.php");
 
@@ -233,6 +230,7 @@ class CraftsmanFileSystem
             case 'api-controller':
             case 'empty-controller':
             case 'invokable-controller':
+            case 'resource-controller':
             case 'controller':
                 $path = $this->controller_path();
                 break;
@@ -264,9 +262,6 @@ class CraftsmanFileSystem
                 break;
             case 'rule':
                 $path = $this->rule_path();
-                break;
-            case 'resource-controller':
-                $path = $this->controller_path();
                 break;
             case 'resource':
                 $path = $this->resource_path();
@@ -300,70 +295,70 @@ class CraftsmanFileSystem
 
     public function controller_path(): string
     {
-        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.controllers');
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.controllers');
     }
 
     public function command_path(): string
     {
-        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.commands');
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.commands');
     }
 
     public function event_path(): string
     {
-        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.events');
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.events');
     }
 
     public function listener_path(): string
     {
-        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.listeners');
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.listeners');
     }
 
     public function factory_path(): string
     {
-        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.factories');
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.factories');
     }
 
     public function migration_path(): string
     {
-        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.migrations');
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.migrations');
     }
 
     public function model_path(string $model_path = null): string
     {
         if (is_null($model_path)) {
-            return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.models');
+            return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.models');
         } else {
-            return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.models') . DIRECTORY_SEPARATOR . $model_path;
+            return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.models').DIRECTORY_SEPARATOR.$model_path;
         }
     }
 
     public function provider_path(string $provider_path = null): string
     {
         if (is_null($provider_path)) {
-            return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.providers');
+            return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.providers');
         } else {
-            return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.providers') . DIRECTORY_SEPARATOR . $provider_path;
+            return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.providers').DIRECTORY_SEPARATOR.$provider_path;
         }
     }
 
     public function request_path(): string
     {
-        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.requests');
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.requests');
     }
 
     public function rule_path(): string
     {
-        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.rules');
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.rules');
     }
 
     public function resource_path(): string
     {
-        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.resources');
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.resources');
     }
 
     public function seed_path(): string
     {
-        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.seeds');
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.seeds');
     }
 
     public function templates_path(): string
@@ -373,12 +368,12 @@ class CraftsmanFileSystem
 
     public function test_path(): string
     {
-        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.tests');
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.tests');
     }
 
     public function view_path(): string
     {
-        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.views');
+        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.views');
     }
 
     public function getUserTemplate(string $userConfigFilename = "./config.php", string $type = ""): string
@@ -387,7 +382,7 @@ class CraftsmanFileSystem
             $config = include($userConfigFilename);
             if (isset($config["templates"])) {
                 if (isset($config["templates"][$type])) {
-                    return getcwd() . DIRECTORY_SEPARATOR . $config["templates"][$type];
+                    return getcwd().DIRECTORY_SEPARATOR.$config["templates"][$type];
                 }
             }
         }
@@ -395,68 +390,17 @@ class CraftsmanFileSystem
         return ""; // we didnt find the entry, return null string
     }
 
-    /**
-     * @param $src
-     * @param $dest
-     * @param $data
-     * @return int
-     * @throws FileNotFoundException
-     */
-    private function createMergeFile(string $src, string $dest, array $data): string
-    {
-        $shortFilename = $this->shortenFilename($dest);
-
-        $template = $this->fs->get($src);
-
-        $data["useExtends"] = $data["extends"];
-        $data["useSection"] = $data["section"];
-
-        $merged_data = $this->mustache->render($template, $data);
-
-        if (file_exists($dest) && !$data["overwrite"]) {
-            Messenger::error("{$shortFilename} already exists\n", "ERROR");
-            return self::FILE_EXIST;
-        }
-
-        try {
-            $this->createParentDirectory($dest);
-            $this->fs->put($dest, $merged_data);
-            $shortenFilename = $this->shortenFilename($dest);
-            $dest = $this->tildify(($dest));
-
-            $result = [
-                "filename" => $dest,
-                "status" => "success",
-                "message" => "{$dest} created successfully",
-            ];
-            Messenger::success("{$shortenFilename} created successfully\n", "SUCCESS");
-        } catch (Exception $e) {
-            $result = [
-                "status" => "error",
-                "message" => $e->getMessage(),
-            ];
-        }
-
-        return basename($dest);
-    }
-
     public function shortenFilename(string $filename): string
     {
-        $newFilename = str_replace(getcwd(), ".", $filename);
-        if (!Str::startsWith($newFilename, ".")) {
-            $newFilename = "./" . $newFilename;
-        }
-        return $newFilename;
-    }
+        $cwd = $this->tildify(getcwd());
+        $newFilename = str_replace($cwd, ".", $filename);
+        $newFilename = str_replace(getcwd(), ".", $newFilename);
 
-    /**
-     * @param $filename
-     */
-    public function createParentDirectory(string $filename): void
-    {
-        if (!is_dir(dirname($filename))) {
-            mkdir(dirname($filename), 0777, true);
+        if (!Str::startsWith($newFilename, ".")) {
+            $newFilename = "./".$newFilename;
         }
+
+        return $newFilename;
     }
 
     public function tildify(string $filename): string
@@ -470,16 +414,28 @@ class CraftsmanFileSystem
     }
 
     /**
+     * @param $filename
+     */
+    public function createParentDirectory(string $filename): void
+    {
+        if (!is_dir(dirname($filename))) {
+            mkdir(dirname($filename), 0777, true);
+        }
+    }
+
+    /**
      * @param $path
      */
     public function delete(string $path): void
     {
-        unlink($path);
+        if (file_exists($path)) {
+            unlink($path);
+        }
     }
 
     public function getTemplatesDirectory(): string
     {
-        return $this->getPharPath() . "templates";
+        return $this->getPharPath()."templates";
     }
 
     public function copy_directory(string $src, string $dst): void
@@ -488,10 +444,10 @@ class CraftsmanFileSystem
         @mkdir($dst);
         while (($file = readdir($dir))) {
             if (($file !== '.') && ($file !== '..')) {
-                if (is_dir($src . '/' . $file)) {
-                    $this->copy_directory($src . '/' . $file, $dst . '/' . $file);
+                if (is_dir($src.'/'.$file)) {
+                    $this->copy_directory($src.'/'.$file, $dst.'/'.$file);
                 } else {
-                    copy($src . '/' . $file, $dst . '/' . $file);
+                    copy($src.'/'.$file, $dst.'/'.$file);
                 }
             }
         }
@@ -505,9 +461,9 @@ class CraftsmanFileSystem
     public function model_request(string $model_path = null): string
     {
         if (is_null($model_path)) {
-            return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.requests');
+            return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.requests');
         } else {
-            return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.requests') . DIRECTORY_SEPARATOR . $model_path;
+            return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.requests').DIRECTORY_SEPARATOR.$model_path;
         }
     }
 
@@ -531,7 +487,6 @@ class CraftsmanFileSystem
         $controller = (isset($data["controller"])) ? $data["controller"] : false;
         $seed = (isset($data["seed"])) ? $data["seed"] : false;
 
-        // NOTE: Modify getOutputPath whenever adding new craft commands
         $path = $this->getOutputPath($type);
 
         if (isset($data["template"])) {
@@ -553,7 +508,7 @@ class CraftsmanFileSystem
                     $src = config("craftsman.templates.{$type}");
                 }
 
-                $src = $this->getPharPath() . $src;
+                $src = $this->getPharPath().$src;
                 $src = str_replace("//", "/", $src);
             }
         }
@@ -568,8 +523,8 @@ class CraftsmanFileSystem
 
         // if we have supplied a custom path (ie App/Models/Contact) it will be used instead of default path
         $dest = (Str::startsWith($filename, "App") || Str::startsWith($filename, "app"))
-            ? $this->path_join($filename . ".php")
-            : $this->path_join($path, $filename . ".php");
+            ? $this->path_join($filename.".php")
+            : $this->path_join($path, $filename.".php");
 
         if (file_exists($dest) && (!$overwrite)) {
             $filename = $this->shortenFilename($dest);
@@ -581,7 +536,7 @@ class CraftsmanFileSystem
             Messenger::error("{$filename} already exists\n", "ERROR");
 
             return [
-                "status" => self::FILE_EXIST,
+                "status" => CraftsmanResultCodes::FILE_EXIST,
                 "filename" => $filename,
                 "message" => "{$dest} already exists",
             ];
@@ -612,7 +567,7 @@ class CraftsmanFileSystem
             $model_path = $data["model"];
         } else {
             $model = class_basename($data["name"]);
-            $namespace = str_replace("/", "\\", str_replace("/" . $model, "", $data["name"]));
+            $namespace = str_replace("/", "\\", str_replace("/".$model, "", $data["name"]));
         }
 
         $vars = [
@@ -720,10 +675,12 @@ class CraftsmanFileSystem
             $this->fs->put($dest, $template_data);
             $shortenFilename = $this->shortenFilename($dest);
             $dest = $this->tildify($dest);
+            $fullPath = $this->path_join(getcwd(), $filename);
             $result = [
+                "status" => CraftsmanResultCodes::SUCCESS,
                 "filename" => $dest,
-                "fullPath" => getcwd() . DIRECTORY_SEPARATOR . $dest,
-                "status" => "success",
+                "fullPath" => $fullPath,
+                "shortenFilename" => $shortenFilename,
                 "message" => "{$dest} created successfully",
             ];
         } catch (Exception $e) {
@@ -734,7 +691,7 @@ class CraftsmanFileSystem
             ];
         }
 
-        if ($result["status"] === "success") {
+        if ($result["status"] === CraftsmanResultCodes::SUCCESS) {
             Messenger::success("{$shortenFilename} created successfully\n", "SUCCESS");
         }
 
@@ -775,19 +732,23 @@ class CraftsmanFileSystem
     {
         if (strpos($type, "<project>") !== false) {
             $filename = str_replace("<project>", "", $type);
-            $filename = getcwd() . DIRECTORY_SEPARATOR . $filename;
+            $filename = getcwd().DIRECTORY_SEPARATOR.$filename;
             $filename = str_replace("//", "/", $filename);
-            return file_exists($filename) ? $filename : $this->tildify($filename) . " Not Found";
+            return file_exists($filename) ? $filename : $this->tildify($filename)." Not Found";
         }
 
         if (strpos($type, "<root>") !== false) {
             $filename = str_replace("<root>", "", $type);
-            $filename = getcwd() . DIRECTORY_SEPARATOR . $filename;
+            $filename = getcwd().DIRECTORY_SEPARATOR.$filename;
             $filename = str_replace("//", "/", $filename);
-            return file_exists($filename) ? $filename : $this->tildify($filename) . " Not Found";
+            return file_exists($filename) ? $filename : $this->tildify($filename)." Not Found";
         }
 
-        return getcwd() . DIRECTORY_SEPARATOR . config("craftsman.templates.{$type}");
+        if ($this->isPhar()) {
+            return $this->getPharPath().config("craftsman.templates.{$type}");
+        } else {
+            return $this->path_join(getcwd(), config("craftsman.templates.{$type}"));
+        }
     }
 
     public function getProjectTemplatesDirectory(): string
@@ -819,7 +780,7 @@ class CraftsmanFileSystem
                 $fieldSize = "";
                 if (strpos($fieldType, "@") !== false) {
                     [$fieldType, $fieldSize] = explode("@", $fieldType);
-                    $fieldSize = "," . $fieldSize;
+                    $fieldSize = ",".$fieldSize;
                 }
 
                 $optional = "";
@@ -830,7 +791,7 @@ class CraftsmanFileSystem
                     }
                 }
 
-                $fieldData .= "            \$table->{$fieldType}('{$name}'{$fieldSize}){$optional};" . PHP_EOL;
+                $fieldData .= "            \$table->{$fieldType}('{$name}'{$fieldSize}){$optional};".PHP_EOL;
             }
         }
 
@@ -876,6 +837,9 @@ class CraftsmanFileSystem
             case "listener":
                 $namespace = "App\Listeners";
                 break;
+            case "model":
+                $namespace = "App";
+                break;
             case "provider":
                 $namespace = "App\Providers";
                 break;
@@ -892,26 +856,83 @@ class CraftsmanFileSystem
         return $namespace;
     }
 
+    public function getModel($modelName): string
+    {
+        $namespace = $this->getNamespace("model", $modelName);
+        $namespace = str_replace("\\", "/", $namespace);
+
+        return trim(str_replace($namespace, "", $modelName), "/");
+    }
+
     public function getClassName(string $name): string
     {
         $parts = explode("/", $name);
         return end($parts);
     }
 
-    /**
-     * @return string|null
-     */
-    public function pathJoin(): string
+    public function verifyTemplate($filename)
     {
-        $paths = [];
+        $result["status"] = "pass";
+//        $filename = str_replace(" Not Found", "", $filename);
+        if (!file_exists($filename) || (is_dir($filename))) {
+            $filename = str_replace($this->getUserHome(), "~", $filename);
+            $shortenFilename = $this->shortenFilename($filename);
 
-        foreach (func_get_args() as $arg) {
-            if ($arg !== '') {
-                $paths[] = $arg;
-            }
+            $result["status"] = CraftsmanResultCodes::FAIL;
+            $result["filename"] = $filename;
+            $result["shortenFilename"] = $shortenFilename;
+            $result["message"] = "Unable to locate template '{$shortenFilename}'";
+        }
+        return $result;
+    }
+
+    public function mergeFile(string $src = "", string $dest = "", array $data = []): array
+    {
+        $template = $this->fs->get($src);
+
+        $mustache = new Mustache_Engine();
+        $template_data = $mustache->render($template, $data);
+
+        // handle existing asset
+        if (file_exists($dest) && !$data["overwrite"]) {
+            return [
+                "status" => CraftsmanResultCodes::FAIL,
+                "filename" => $this->shortenFilename($dest),
+                "shortenFilename" => $this->shortenFilename($dest),
+                "fullPath" => $this->path_join(getcwd(), $dest),
+                "message" => "{$this->shortenFilename($dest)} already exists",
+            ];
         }
 
-        return preg_replace('#/+#', '/', join('/', $paths));
+        return $this->writeFile($dest, $template_data);
+    }
+
+    public function writeFile($dest = "", $data = ""): array
+    {
+        $this->createParentDirectory($dest);
+        $shortenFilename = $this->shortenFilename($dest);
+        $fullPath = $this->path_join(getcwd(), $dest);
+
+        try {
+            $this->fs->put($dest, $data);
+            $result = [
+                "filename" => $this->tildify($dest),
+                "fullPath" => $fullPath,
+                "shortenFilename" => $shortenFilename,
+                "status" => CraftsmanResultCodes::SUCCESS,
+                "message" => "{$shortenFilename} created successfully",
+            ];
+        } catch (\Exception $e) {
+            $result = [
+                "filename" => $this->tildify($dest),
+                "fullPath" => $fullPath,
+                "shortenFilename" => $shortenFilename,
+                "status" => CraftsmanResultCodes::FAIL,
+                "message" => $e->getMessage(),
+            ];
+        }
+
+        return $result;
     }
 
     /**
@@ -936,8 +957,53 @@ class CraftsmanFileSystem
             }
         }
 
-        $dirname = getcwd() . DIRECTORY_SEPARATOR . $dirname;
+        $dirname = getcwd().DIRECTORY_SEPARATOR.$dirname;
 
-        return $dirname . DIRECTORY_SEPARATOR . $filename;
+        return $dirname.DIRECTORY_SEPARATOR.$filename;
+    }
+
+    /**
+     * @param $src
+     * @param $dest
+     * @param $data
+     * @return int
+     * @throws FileNotFoundException
+     */
+    private function createMergeFile(string $src, string $dest, array $data): string
+    {
+        $shortFilename = $this->shortenFilename($dest);
+
+        $template = $this->fs->get($src);
+
+        $data["useExtends"] = $data["extends"];
+        $data["useSection"] = $data["section"];
+
+        $merged_data = $this->mustache->render($template, $data);
+
+        if (file_exists($dest) && !$data["overwrite"]) {
+            Messenger::error("{$shortFilename} already exists\n", "ERROR");
+            return CraftsmanResultCodes::FILE_EXIST;
+        }
+
+        try {
+            $this->createParentDirectory($dest);
+            $this->fs->put($dest, $merged_data);
+            $shortenFilename = $this->shortenFilename($dest);
+            $dest = $this->tildify(($dest));
+
+            $result = [
+                "filename" => $dest,
+                "status" => CraftsmanResultCodes::SUCCESS,
+                "message" => "{$dest} created successfully",
+            ];
+            Messenger::success("{$shortenFilename} created successfully\n", "SUCCESS");
+        } catch (Exception $e) {
+            $result = [
+                "status" => "error",
+                "message" => $e->getMessage(),
+            ];
+        }
+
+        return basename($dest);
     }
 }

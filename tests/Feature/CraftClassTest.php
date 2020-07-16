@@ -44,7 +44,7 @@ class CraftClassTest extends TestCase
 
         $this->assertFileContainsString($filename, "class {$class}");
 
-        unlink($filename);
+        $this->fs->delete($filename);
     }
 
     /** @test */
@@ -79,4 +79,9 @@ class CraftClassTest extends TestCase
 
         $this->fs->rmdir("app/Test");
     }
+
+    /** ------------------------------------------------------------------------------------------------------
+     * Test Helpers
+     * ------------------------------------------------------------------------------------------------------- */
+
 }

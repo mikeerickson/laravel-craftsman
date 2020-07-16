@@ -71,4 +71,5 @@ class CraftFactoryTest extends TestCase
 
         $this->cleanUp();
     }
+
 }
