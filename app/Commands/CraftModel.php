@@ -41,7 +41,7 @@ class CraftModel extends Command
     protected $help = 'Craft Model
                      <name>               Model Name (eg App\Models\Post)
                      --all, -a            Generate a migration, factory, and resource controller for the model
-                     -controller, -c      Create a new controller for the model
+                     --controller, -c     Create a new controller for the model
                      --table, -t          Desired tablename
                      --factory, -f        Create a new factory for the mode
                      --migration, -m      Create a new migration file for the model

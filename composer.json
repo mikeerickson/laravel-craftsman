@@ -1,6 +1,6 @@
 {
     "name": "codedungeon/laravel-craftsman",
-    "version": "1.13.0",
+    "version": "1.12.0",
     "description": "Laravel Craftsman",
     "keywords": [
         "cli",
@@ -10,7 +10,10 @@
         "artisan",
         "generator",
         "framework",
-        "laravel zero"
+        "laravel zero",
+        "phpunit",
+        "pest",
+        "scaffold"
     ],
     "homepage": "https://laravel-craftsman.com",
     "type": "project",

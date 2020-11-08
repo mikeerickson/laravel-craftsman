@@ -89,7 +89,6 @@ class CraftsmanFileSystemTest extends TestCase
         $this->assertSame($result, $path);
     }
 
-    /** @test */
     public function should_return_correct_default_model_path()
     {
         $result = app_path();
@@ -378,16 +377,6 @@ class CraftsmanFileSystemTest extends TestCase
         $result = $this->fs->path_join(database_path(), "migrations");
 
         $path = $this->fs->getOutputPath("migrations");
-
-        $this->assertSame($result, $path);
-    }
-
-    /** @test */
-    public function should_return_models_output_path()
-    {
-        $result = $this->fs->path_join(app_path());
-
-        $path = $this->fs->getOutputPath("model");
 
         $this->assertSame($result, $path);
     }

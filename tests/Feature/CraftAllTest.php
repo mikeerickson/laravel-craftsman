@@ -38,7 +38,7 @@ class CraftAllTest extends TestCase
             ->assertExitCode(0);
 
         $this->fs->rmdir("app/Http");
-        $this->fs->rmdir("app/Models");
+//        $this->fs->rmdir("app/Models");
         $this->fs->rmdir("app/Test");
         $this->fs->rmdir("resources/views/posts");
         $this->fs->rmdir("database");

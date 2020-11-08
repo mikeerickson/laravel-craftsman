@@ -18,38 +18,33 @@ class ModelGenerator implements GeneratorInterface
     public function __construct($args)
     {
         if ($args->option('debug')) {
-            $this->debug($args->argument('name'));
-            $this->debug($args->options());
-            $this->debug($args->arguments());
+            $this->debug(array_merge($args->arguments(), $args->options()));
         }
 
         $this->type = "model";
+
         $this->fs = new CraftsmanFileSystem();
 
-        $data = array_merge($args->arguments(), $args->options());
+        //        $data = array_merge($args->arguments(), $args->options());
 
-        $this->vars = $this->setupCommandVariables($data);
+        $this->vars = $this
+            ->setupCommandVariables(array_merge($args->arguments(), $args->options()));
     }
 
     public function setupCommandVariables(array $data): array
     {
-        $vars = $data;
-
-        $name = $data["name"];
-        $tablename = $data["table"];
-
         $vars = [
-            "name" => $name,
-            "className" => $this->fs->getClassName($name),
-            "table" => $tablename,
-            "tablename" => $tablename,
-            "all" => isset($data["all"]) ? $data["all"] : false,
-            "controller" => isset($data["controller"]) ? $data["controller"] : false,
-            "factory" => isset($data["factory"]) ? $data["factory"] : false,
-            "migration" => isset($data["migration"]) ? $data["migration"] : false,
-            "seed" => isset($data["seed"]) ? $data["seed"] : false,
-            "template" => isset($data["template"]) ? $data["template"] : "",
-            "overwrite" => isset($data["overwrite"]) ? $data["overwrite"] : false,
+            "name" => $data["name"],
+            "className" => $this->fs->getClassName($data["name"]),
+            "table" => $data["table"],
+            "tablename" => $data["table"],
+            "all" => $data["all"],
+            "controller" => $data["controller"],
+            "factory" => $data["factory"],
+            "migration" => $data["migration"],
+            "seed" => $data["seed"],
+            "template" => $data["template"],
+            "overwrite" => $data["overwrite"],
         ];
 
         return $vars;
@@ -58,38 +53,45 @@ class ModelGenerator implements GeneratorInterface
     public function createFile(): array
     {
         $templateFilename = (strlen($this->vars["template"]) === 0)
-            ? $this->type : $this->vars["template"];
+            ? $this->type
+            : $this->vars["template"];
 
         $src = $this->fs->getTemplateFilename($templateFilename);
+
         $templateResult = $this->fs->verifyTemplate($src);
 
         // if we have a bad template, short circut and bail out
-        if ($templateResult["status"] === CraftsmanResultCodes::FAIL) {
+        if ($templateResult["status"] === CraftsmanResultCodes::FILE_NOT_FOUND) {
             return $templateResult;
         }
 
-        $path = $this->fs->getOutputPath($this->type);
+        $modelPath = $this->fs->model_path("models");
 
-        $parts = explode("/", $this->vars["name"]);
-        $model = array_pop($parts);
-        $namespace = count($parts) > 0 ? implode("\\", $parts) : "App";
+        if (file_exists($modelPath)) {
+            if (strpos($this->vars["name"], "App/Models") === false) {
+                $this->vars["name"] = "App/Models/" . $this->vars["name"];
+            }
+        }
 
-        $this->vars["namespace"] = $namespace;
-        $this->vars["model"] = $model;
+        $this->vars["namespace"] = $this->fs->getNamespace("model", $this->vars["name"]);;
+        $this->vars["model"] = $this->fs->getModel($this->vars["name"]);
+
+        //        $this->vars["name"] = str_replace("App/Models/", "", $this->vars["name"]);
         $this->vars["name"] = str_replace("App/", "", $this->vars["name"]);
 
         // setup tablename, extract from model name
         $tablename = $this->vars["table"];
         if (strlen($tablename) === 0) {
-            $tablename = Str::plural(strtolower($model));
+            $tablename = Str::plural(strtolower($this->vars["model"]));
         }
         $this->vars["table"] = $this->vars["tablename"] = $tablename;
 
-        $dest = $this->fs->path_join($path, $this->vars["name"].".php");
 
-//        dd($this->vars);
-        $result = $this->fs->mergeFile($src, $dest, $this->vars);
+        $path = $this->fs->getOutputPath($this->type);
 
-        return $result;
+        $dest = $this->fs->path_join($path, $this->vars["name"] . ".php");
+        $dest = str_replace("models/Models/", "Models/", $dest);
+
+        return $this->fs->mergeFile($src, $dest, $this->vars);
     }
 }

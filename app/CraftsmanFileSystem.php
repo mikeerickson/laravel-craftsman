@@ -48,7 +48,7 @@ class CraftsmanFileSystem
     public function rmdir(string $dirname)
     {
         if (is_dir($dirname)) {
-            system("rm -rf ".escapeshellarg($dirname));
+            system("rm -rf " . escapeshellarg($dirname));
         }
     }
 
@@ -118,7 +118,7 @@ class CraftsmanFileSystem
     {
         $path = Phar::running(false);
         if (strlen($path) > 0) {
-            $path = dirname($path).DIRECTORY_SEPARATOR;
+            $path = dirname($path) . DIRECTORY_SEPARATOR;
         }
         return $path;
     }
@@ -160,7 +160,7 @@ class CraftsmanFileSystem
                 $src = config("craftsman.templates.{$createTemplate}");
             }
 
-            $src = $this->getPharPath().$src;
+            $src = $this->getPharPath() . $src;
 
             $dest = $this->path_join($path, $asset, "create.blade.php");
 
@@ -174,7 +174,7 @@ class CraftsmanFileSystem
                 $src = config("craftsman.templates.{$editTemplate}");
             }
 
-            $src = $this->getPharPath().$src;
+            $src = $this->getPharPath() . $src;
 
             $dest = $this->path_join($path, $asset, "edit.blade.php");
 
@@ -188,7 +188,7 @@ class CraftsmanFileSystem
                 $src = config("craftsman.templates.{$indexTemplate}");
             }
 
-            $src = $this->getPharPath().$src;
+            $src = $this->getPharPath() . $src;
 
             $dest = $this->path_join($path, $asset, "index.blade.php");
 
@@ -202,7 +202,7 @@ class CraftsmanFileSystem
                 $src = config("craftsman.templates.{$showTemplate}");
             }
 
-            $src = $this->getPharPath().$src;
+            $src = $this->getPharPath() . $src;
 
             $dest = $this->path_join($path, $asset, "show.blade.php");
 
@@ -295,70 +295,74 @@ class CraftsmanFileSystem
 
     public function controller_path(): string
     {
-        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.controllers');
+        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.controllers');
     }
 
     public function command_path(): string
     {
-        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.commands');
+        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.commands');
     }
 
     public function event_path(): string
     {
-        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.events');
+        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.events');
     }
 
     public function listener_path(): string
     {
-        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.listeners');
+        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.listeners');
     }
 
     public function factory_path(): string
     {
-        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.factories');
+        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.factories');
     }
 
     public function migration_path(): string
     {
-        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.migrations');
+        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.migrations');
     }
 
     public function model_path(string $model_path = null): string
     {
         if (is_null($model_path)) {
-            return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.models');
+            $modelPath = getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.models') . DIRECTORY_SEPARATOR . "models";
+            if (file_exists($modelPath)) {
+                return $modelPath;
+            }
+            return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.models');
         } else {
-            return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.models').DIRECTORY_SEPARATOR.$model_path;
+            return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.models') . DIRECTORY_SEPARATOR . $model_path;
         }
     }
 
     public function provider_path(string $provider_path = null): string
     {
         if (is_null($provider_path)) {
-            return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.providers');
+            return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.providers');
         } else {
-            return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.providers').DIRECTORY_SEPARATOR.$provider_path;
+            return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.providers') . DIRECTORY_SEPARATOR . $provider_path;
         }
     }
 
     public function request_path(): string
     {
-        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.requests');
+        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.requests');
     }
 
     public function rule_path(): string
     {
-        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.rules');
+        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.rules');
     }
 
     public function resource_path(): string
     {
-        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.resources');
+        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.resources');
     }
 
     public function seed_path(): string
     {
-        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.seeds');
+        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.seeds');
     }
 
     public function templates_path(): string
@@ -368,12 +372,12 @@ class CraftsmanFileSystem
 
     public function test_path(): string
     {
-        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.tests');
+        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.tests');
     }
 
     public function view_path(): string
     {
-        return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.views');
+        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.views');
     }
 
     public function getUserTemplate(string $userConfigFilename = "./config.php", string $type = ""): string
@@ -382,7 +386,7 @@ class CraftsmanFileSystem
             $config = include($userConfigFilename);
             if (isset($config["templates"])) {
                 if (isset($config["templates"][$type])) {
-                    return getcwd().DIRECTORY_SEPARATOR.$config["templates"][$type];
+                    return getcwd() . DIRECTORY_SEPARATOR . $config["templates"][$type];
                 }
             }
         }
@@ -397,7 +401,7 @@ class CraftsmanFileSystem
         $newFilename = str_replace(getcwd(), ".", $newFilename);
 
         if (!Str::startsWith($newFilename, ".")) {
-            $newFilename = "./".$newFilename;
+            $newFilename = "./" . $newFilename;
         }
 
         return $newFilename;
@@ -424,6 +428,18 @@ class CraftsmanFileSystem
     }
 
     /**
+     * @param $filename
+     */
+    public function createDirectory(string $directoryPath): int
+    {
+        $result = CraftsmanResultCodes::DIRECTORY_EXISTS;
+        if (!file_exists($directoryPath)) {
+            $result = (int)mkdir($directoryPath, 0777, true);
+        }
+        return $result;
+    }
+
+    /**
      * @param $path
      */
     public function delete(string $path): void
@@ -435,7 +451,7 @@ class CraftsmanFileSystem
 
     public function getTemplatesDirectory(): string
     {
-        return $this->getPharPath()."templates";
+        return $this->getPharPath() . "templates";
     }
 
     public function copy_directory(string $src, string $dst): void
@@ -444,10 +460,10 @@ class CraftsmanFileSystem
         @mkdir($dst);
         while (($file = readdir($dir))) {
             if (($file !== '.') && ($file !== '..')) {
-                if (is_dir($src.'/'.$file)) {
-                    $this->copy_directory($src.'/'.$file, $dst.'/'.$file);
+                if (is_dir($src . '/' . $file)) {
+                    $this->copy_directory($src . '/' . $file, $dst . '/' . $file);
                 } else {
-                    copy($src.'/'.$file, $dst.'/'.$file);
+                    copy($src . '/' . $file, $dst . '/' . $file);
                 }
             }
         }
@@ -461,9 +477,9 @@ class CraftsmanFileSystem
     public function model_request(string $model_path = null): string
     {
         if (is_null($model_path)) {
-            return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.requests');
+            return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.requests');
         } else {
-            return getcwd().DIRECTORY_SEPARATOR.config('craftsman.paths.requests').DIRECTORY_SEPARATOR.$model_path;
+            return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.requests') . DIRECTORY_SEPARATOR . $model_path;
         }
     }
 
@@ -508,7 +524,7 @@ class CraftsmanFileSystem
                     $src = config("craftsman.templates.{$type}");
                 }
 
-                $src = $this->getPharPath().$src;
+                $src = $this->getPharPath() . $src;
                 $src = str_replace("//", "/", $src);
             }
         }
@@ -523,8 +539,8 @@ class CraftsmanFileSystem
 
         // if we have supplied a custom path (ie App/Models/Contact) it will be used instead of default path
         $dest = (Str::startsWith($filename, "App") || Str::startsWith($filename, "app"))
-            ? $this->path_join($filename.".php")
-            : $this->path_join($path, $filename.".php");
+            ? $this->path_join($filename . ".php")
+            : $this->path_join($path, $filename . ".php");
 
         if (file_exists($dest) && (!$overwrite)) {
             $filename = $this->shortenFilename($dest);
@@ -567,7 +583,7 @@ class CraftsmanFileSystem
             $model_path = $data["model"];
         } else {
             $model = class_basename($data["name"]);
-            $namespace = str_replace("/", "\\", str_replace("/".$model, "", $data["name"]));
+            $namespace = str_replace("/", "\\", str_replace("/" . $model, "", $data["name"]));
         }
 
         $vars = [
@@ -624,7 +640,7 @@ class CraftsmanFileSystem
             $vars["foreign"] = true;
             $fk = $parts[0];
             $vars["fk"] = $fk;
-            if (sizeof($parts) >= 2) {
+            if (count($parts) >= 2) {
                 $primaryInfo = explode(",", $parts[1]);
                 [$pkid, $pktable] = $primaryInfo;
                 $vars["pkid"] = $pkid;
@@ -653,8 +669,8 @@ class CraftsmanFileSystem
         } else {
             $vars["model_path"] = "";
 
-            // NOTE: This will be true when creating seed from `craft:mode --seed`
-            if ($type === "seed") {
+            // NOTE: This will be true when creating seed from `craft:model --seed`
+            if (($type === "seed") || ($type === "factory")) {
                 $vars["model_path"] = "use App/{$model_path};";
                 $vars["model_path"] = str_replace("/", "\\", $vars["model_path"]);
             }
@@ -698,7 +714,8 @@ class CraftsmanFileSystem
         $overwrite = $overwrite ? "--overwrite" : "";
 
         if ($factory && !$all) {
-            Artisan::call("craft:factory {$model}Factory --model {$filename} {$overwrite}");
+            $cmd = "craft:factory {$model}Factory --model {$vars["model"]} {$overwrite}";
+            Artisan::call($cmd);
         }
 
         if ($controller && !$all) {
@@ -732,20 +749,27 @@ class CraftsmanFileSystem
     {
         if (strpos($type, "<project>") !== false) {
             $filename = str_replace("<project>", "", $type);
-            $filename = getcwd().DIRECTORY_SEPARATOR.$filename;
+            $filename = getcwd() . DIRECTORY_SEPARATOR . $filename;
             $filename = str_replace("//", "/", $filename);
-            return file_exists($filename) ? $filename : $this->tildify($filename)." Not Found";
+            return file_exists($filename) ? $filename : $this->tildify($filename) . " Not Found";
+        }
+
+        if (strpos($type, "./") !== false) {
+            $filename = str_replace("./", "", $type);
+            $filename = getcwd() . DIRECTORY_SEPARATOR . $filename;
+            $filename = str_replace("//", "/", $filename);
+            return file_exists($filename) ? $filename : $this->tildify($filename) . " Not Found";
         }
 
         if (strpos($type, "<root>") !== false) {
             $filename = str_replace("<root>", "", $type);
-            $filename = getcwd().DIRECTORY_SEPARATOR.$filename;
+            $filename = getcwd() . DIRECTORY_SEPARATOR . $filename;
             $filename = str_replace("//", "/", $filename);
-            return file_exists($filename) ? $filename : $this->tildify($filename)." Not Found";
+            return file_exists($filename) ? $filename : $this->tildify($filename) . " Not Found";
         }
 
         if ($this->isPhar()) {
-            return $this->getPharPath().config("craftsman.templates.{$type}");
+            return $this->getPharPath() . config("craftsman.templates.{$type}");
         } else {
             return $this->path_join(getcwd(), config("craftsman.templates.{$type}"));
         }
@@ -770,7 +794,7 @@ class CraftsmanFileSystem
             $fieldList = preg_split("/,? ?,/", $fields);
             foreach ($fieldList as $field) {
                 $parts = explode(":", trim($field));
-                if (sizeof($parts) >= 2) {
+                if (count($parts) >= 2) {
                     $name = $parts[0];
                     $fieldType = $parts[1];
                 } else {
@@ -780,18 +804,18 @@ class CraftsmanFileSystem
                 $fieldSize = "";
                 if (strpos($fieldType, "@") !== false) {
                     [$fieldType, $fieldSize] = explode("@", $fieldType);
-                    $fieldSize = ",".$fieldSize;
+                    $fieldSize = "," . $fieldSize;
                 }
 
                 $optional = "";
-                if (sizeof($parts) >= 3) {
+                if (count($parts) >= 3) {
                     $parts = array_splice($parts, 2);
                     foreach ($parts as $part) {
                         $optional .= "->{$part}()";
                     }
                 }
 
-                $fieldData .= "            \$table->{$fieldType}('{$name}'{$fieldSize}){$optional};".PHP_EOL;
+                $fieldData .= "            \$table->{$fieldType}('{$name}'{$fieldSize}){$optional};" . PHP_EOL;
             }
         }
 
@@ -822,7 +846,7 @@ class CraftsmanFileSystem
     public function getNamespace(string $type, string $name): string
     {
         $parts = explode("/", $name);
-        if (sizeof($parts) >= 2) {
+        if (count($parts) >= 2) {
             array_pop($parts);
             return implode("\\", $parts);
         }
@@ -873,7 +897,7 @@ class CraftsmanFileSystem
     public function verifyTemplate($filename)
     {
         $result["status"] = "pass";
-//        $filename = str_replace(" Not Found", "", $filename);
+        //        $filename = str_replace(" Not Found", "", $filename);
         if (!file_exists($filename) || (is_dir($filename))) {
             $filename = str_replace($this->getUserHome(), "~", $filename);
             $shortenFilename = $this->shortenFilename($filename);
@@ -957,9 +981,9 @@ class CraftsmanFileSystem
             }
         }
 
-        $dirname = getcwd().DIRECTORY_SEPARATOR.$dirname;
+        $dirname = getcwd() . DIRECTORY_SEPARATOR . $dirname;
 
-        return $dirname.DIRECTORY_SEPARATOR.$filename;
+        return $dirname . DIRECTORY_SEPARATOR . $filename;
     }
 
     /**

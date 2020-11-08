@@ -121,8 +121,8 @@ laravel-craftsman craft:all Contact \
 |                      | --no-seed, -s         | Do not create seed                                                                  |
 |                      | --overwrite, -w       | Overwrite existing class                                                            |
 | **craft:all**        |                       | **Creates all assets (Controller, Factory, Migration, Model, Seed)**                |
-|                      | **🚩 base name**      | Based resource name for all assets                                                  |
-|                      | **🚩 --model, -m**    | Path to model (eg App/Models/Post)                                                  |
+|                      | **🚩 base name**       | Based resource name for all assets                                                  |
+|                      | **🚩 --model, -m**     | Path to model (eg App/Models/Post)                                                  |
 |                      | --tablename, -t       | Tablename used in database (will set \$tablename in Model)                          |
 |                      |                       | _If not supplied, default table will be pluralized model name_                      |
 |                      | --rows, -r            | Number of rows used by seed when using Factory                                      |
@@ -209,6 +209,7 @@ laravel-craftsman craft:all Contact \
 | **craft:seed**       |                        | **Creates seed file using supplied options**                                         |
 |                      | **🚩 Seed Name**       | Seed Name (eg ContactTableSeeder)                                                    |
 |                      | **🚩 --model, -m**     | Path to model (eg App/Models/Post)                                                   |
+|                      | --factory, -f          | Create Factory (if it does not already exists)                                       |
 |                      | --rows, -r             | Number of rows to use in factory call (Optional)                                     |
 |                      | --template, -t         | Path to custom template (override config file)                                       |
 |                      | --overwrite, -w        | Overwrite existing class                                                             |
@@ -408,7 +409,7 @@ For example, the following command will define the path for model asset in the `
 
 Laravel Craftsman provides support for creating custom templates if you wish to change the syntax to match your personal style. The default templates use the standard Laravel syntax, but we like to allow ou have your own flair (see `laravel-craftsman publish` for greater template control).
 
-📝 **User Customized Templates**
+📝 **User Custom Templates**
 
 If you wish to create derivatives of the supported templates, you can customize the `config.php` located in the `laravel-craftsman` directory.
 By default, this will be `~/.composer/vendor/codedungeon/laravel-craftsman`, but may be different depending on the method you chose to install laravel-craftsman.
@@ -442,12 +443,18 @@ By default, this will be `~/.composer/vendor/codedungeon/laravel-craftsman`, but
 In addition to creating templates and configuring the `config.php` file, you may optionally supply a template to be used as single use (not stored) from all command execution
 For example, if you wish to create a standard class asset, you can use a single use template as follows:
 
+<project> Placeholder to represent current project directory
+./ Placeholder to represent current project directory
+<root> Placeholder to computer root directory
+
 ```bash
 
-> laravel-craftsman craft:class App/Services/Syncronize --template <project>/templates/service.mustache`
+> laravel-craftsman craft:class App/Services/Syncronize --template "<project>/templates/service.mustache"
 
 
+> laravel-craftsman craft:class App/Services/Syncronize --template "./templates/model.mustache"
 
+> laravel-craftsman craft:class App/Services/Syncronize --template "<root>/templates/model.mustache"
 ```
 
 📝 **Template Variables**

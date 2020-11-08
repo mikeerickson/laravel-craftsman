@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Commands\CraftsmanResultCodes;
 use Tests\TestCase;
 use Tests\TestHelpersTrait;
 use App\CraftsmanFileSystem;
@@ -96,6 +97,23 @@ class CraftModelTest extends TestCase
     }
 
     /** @test */
+    public function should_craft_model_using_alternate_custom_template()
+    {
+        $class = "Foo";
+
+        $this->artisan("craft:class {$class} --template './custom-templates/class.mustache' --overwrite")
+            ->assertExitCode(0);
+
+        $classPath = $this->fs->class_path();
+        $filename = $this->pathJoin($classPath, "{$class}.php");
+
+        $this->assertFileContainsString($filename, "class {$class}");
+
+
+        $this->cleanUp($filename);
+    }
+
+    /** @test */
     public function should_create_all_assets_when_creating_model(): void
     {
         $model = "Customer";
@@ -104,8 +122,8 @@ class CraftModelTest extends TestCase
 
         // verify model
         $modelPath = $this->fs->model_path("Models");
-        $filename = $this->pathJoin($modelPath, "{$model}.php");
-        $this->assertFileExists($filename);
+        $modelFilename = $this->pathJoin($modelPath, "{$model}.php");
+        $this->assertFileExists($modelFilename);
 
         // verify factory
         $factoryPath = $this->fs->factory_path();
@@ -117,9 +135,7 @@ class CraftModelTest extends TestCase
         $filename = $this->pathJoin($resourcePath, "{$model}Controller.php");
         $this->assertFileExists($filename);
 
-        unlink("{$modelPath}/{$model}.php");
-
-        $this->cleanUp();
+        $this->cleanUp($modelFilename);
     }
 
     /** @test */
@@ -172,6 +188,31 @@ class CraftModelTest extends TestCase
         $this->cleanUp();
     }
 
+    /** @test */
+    public function should_create_model_in_app_models_directory_if_exists()
+    {
+        $model = "Post";
+
+        $modelPath = $this->fs->model_path("models");
+
+        // if model directory does not exist, create it for testing purposes
+        $testModelPath = str_replace("models", "Models", $modelPath);
+        $resultCode = $this->fs->createDirectory($testModelPath);
+
+        $this->artisan("craft:model {$model} --table tests --overwrite")
+            ->assertExitCode(0);
+
+        $filename = $this->pathJoin($modelPath, "{$model}.php");
+
+        $this->assertFileContainsString($filename, "class {$model} extends Model");
+
+        $this->cleanUp($filename);
+        if ($resultCode === CraftsmanResultCodes::CREATED) {
+            // we created the directory in test, remove it
+            $this->fs->rmdir($modelPath);
+        }
+    }
+
     /** ------------------------------------------------------------------------------------------------------
      * Test Helpers
      * ------------------------------------------------------------------------------------------------------- */
@@ -182,8 +223,7 @@ class CraftModelTest extends TestCase
     private function cleanUp($filename = "")
     {
         $this->fs->delete($filename);
-        $this->fs->rmdir("app/Models");
-        $this->fs->rmdir("database");
+        $this->fs->delete("app/models/customer.php");
+        $this->fs->delete("app/models/test.php");
     }
-
 }

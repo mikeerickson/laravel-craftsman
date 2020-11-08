@@ -54,7 +54,7 @@ class CraftInteractive extends Command
         if (!$skip) {
             echo "\n";
             Messenger::success("Laravel Craftsman Wizard");
-            Messenger::success("v" . config('app.version'));
+            Messenger::success("v".config('app.version'));
 
             echo "\n";
             Messenger::note("The interactive wizard will prompt you for various options and parameters to guide you through crafting process.\nAt any time, you can press ctrl-c to abort.");
@@ -62,11 +62,14 @@ class CraftInteractive extends Command
             echo "\n";
             Messenger::status('First you will select the type of resource you would like to craft', 'STEP 1:');
             echo "\n";
-            Messenger::status('After selecting resource, you will be presented with a series of prompts to guide you through crafting process', 'STEP 2:');
+            Messenger::status('After selecting resource, you will be presented with a series of prompts to guide you through crafting process',
+                'STEP 2:');
             echo "\n";
-            Messenger::status('After all parameters have been selected for desired resource, you will be shown the command to be executed', 'STEP 3:');
+            Messenger::status('After all parameters have been selected for desired resource, you will be shown the command to be executed',
+                'STEP 3:');
             echo "\n";
-            Messenger::status('If the command is as you wish, you can the choose to execute the command and desired resource(s) will be created', 'STEP 4:');
+            Messenger::status('If the command is as you wish, you can the choose to execute the command and desired resource(s) will be created',
+                'STEP 4:');
             echo "\n";
 
             Messenger::info('At any time during process, you can exit process by pressing ctrl-c', 'NOTE');
@@ -177,17 +180,18 @@ class CraftInteractive extends Command
 
         $model = trim($this->ask("Path to model [default: app/]"));
         if (strlen($model) > 0) {
-            $model = "--model " . $model;
+            $model = "--model ".$model;
         }
 
-        $tablename = $this->ask("Desired tablename [default to pluarlized resource name]", strtolower($this->getMigrationTablename($resource)));
+        $tablename = $this->ask("Desired tablename [default to pluarlized resource name]",
+            strtolower($this->getMigrationTablename($resource)));
         if (strlen($tablename) > 0) {
-            $tablename = "--table " . $tablename;
+            $tablename = "--table ".$tablename;
         }
 
         $rows = trim($this->ask("Alternate number of rows to use in factory call"));
         if (strlen($rows) > 0) {
-            $rows = "--rows " . $rows;
+            $rows = "--rows ".$rows;
         }
 
         $current = $this->confirm("Use `--useCurrent` when creating migration ", "yes") ? '--current' : '';
@@ -219,7 +223,7 @@ class CraftInteractive extends Command
 
         $template = trim($this->ask("Template path (override configuration file)"));
         if (strlen($template) > 0) {
-            $template = "--template " . $template;
+            $template = "--template ".$template;
         }
 
         $overwrite = $this->confirm("Would you like to overwrite class if it exists") ? '--overwrite' : '';
@@ -237,7 +241,7 @@ class CraftInteractive extends Command
 
         $model = trim($this->ask("Model path when creating controller (eg App/Models/Customer)"));
         if (strlen($model) > 0) {
-            $model = "--model " . $model;
+            $model = "--model ".$model;
         }
 
         $api = $this->confirm("Create API controller (skips create and update methods") ? '--api' : '';
@@ -252,7 +256,7 @@ class CraftInteractive extends Command
 
         $template = trim($this->ask("Template path (override configuration file)"));
         if (strlen($template) > 0) {
-            $template = "--template " . $template;
+            $template = "--template ".$template;
         }
 
         $overwrite = $this->confirm("Would you like to overwrite controller if it exists") ? '--overwrite' : '';
@@ -270,12 +274,12 @@ class CraftInteractive extends Command
 
         $model = trim($this->ask("Model path when creating controller (eg App/Models/Customer)"));
         if (strlen($model) > 0) {
-            $model = "--model " . $model;
+            $model = "--model ".$model;
         }
 
         $template = trim($this->ask("Template path (override configuration file)"));
         if (strlen($template) > 0) {
-            $template = "--template " . $template;
+            $template = "--template ".$template;
         }
 
         $overwrite = $this->confirm("Would you like to overwrite factory if it exists") ? '--overwrite' : '';
@@ -293,12 +297,12 @@ class CraftInteractive extends Command
 
         $rules = trim($this->ask("List of rules (eg. title?required|unique:posts|max:255,body?required)"));
         if (strlen($rules) > 0) {
-            $rules = "--rules " . $rules;
+            $rules = "--rules ".$rules;
         }
 
         $template = trim($this->ask("Template path (override configuration file)"));
         if (strlen($template) > 0) {
-            $template = "--template " . $template;
+            $template = "--template ".$template;
         }
 
         $overwrite = $this->confirm("Would you like to overwrite form request if it exists") ? '--overwrite' : '';
@@ -321,24 +325,24 @@ class CraftInteractive extends Command
 
         $tablename = $this->ask("Desired tablename", $this->getMigrationTablename($resource));
         if (strlen($tablename) > 0) {
-            $tablename = "--table " . $tablename;
+            $tablename = "--table ".$tablename;
         }
 
         $fields = trim($this->ask("List of fields (eg. first_name:string@20:nullable, email:string@80:nullable:unique)"));
         if (strlen($fields) > 0) {
-            $fields = "--fields " . $fields;
+            $fields = "--fields ".$fields;
         }
 
         $foreign = trim($this->ask("Foreign Key Constraint (eg. post_id:posts,id)"));
         if (strlen($foreign) > 0) {
-            $foreign = "--foreign " . $foreign;
+            $foreign = "--foreign ".$foreign;
         }
 
         $down = $this->confirm("Include down method in migration") ? '--down' : '';
 
         $template = trim($this->ask("Template path (override configuration file)"));
         if (strlen($template) > 0) {
-            $template = "--template " . $template;
+            $template = "--template ".$template;
         }
 
         $craftCommand = "{$commandName} {$resource} {$tablename} {$fields} {$foreign} {$down} {$template}";
@@ -368,7 +372,7 @@ class CraftInteractive extends Command
 
         $template = trim($this->ask("Template path (override configuration file)"));
         if (strlen($template) > 0) {
-            $template = "--template " . $template;
+            $template = "--template ".$template;
         }
 
         $overwrite = $this->confirm("Would you like to overwrite class if it exists") ? '--overwrite' : '';
@@ -388,7 +392,7 @@ class CraftInteractive extends Command
 
         $template = trim($this->ask("Template path (override configuration file)"));
         if (strlen($template) > 0) {
-            $template = "--template " . $template;
+            $template = "--template ".$template;
         }
 
         $overwrite = $this->confirm("Would you like to overwrite resource if it exists") ? '--overwrite' : '';
@@ -409,17 +413,17 @@ class CraftInteractive extends Command
 
         $model = trim($this->ask("Model path when creating controller (eg App/Models/{$defaultModel})"));
         if (strlen($model) > 0) {
-            $model = "--model " . $model;
+            $model = "--model ".$model;
         }
 
         $rows = trim($this->ask("Alternate number of rows to use in factory call"));
         if (strlen($rows) > 0) {
-            $rows = "--rows " . $rows;
+            $rows = "--rows ".$rows;
         }
 
         $template = trim($this->ask("Template path (override configuration file)"));
         if (strlen($template) > 0) {
-            $template = "--template " . $template;
+            $template = "--template ".$template;
         }
 
         $overwrite = $this->confirm("Would you like to overwrite seed if it exists") ? '--overwrite' : '';
@@ -443,7 +447,7 @@ class CraftInteractive extends Command
 
         $template = trim($this->ask("Template path (override configuration file)"));
         if (strlen($template) > 0) {
-            $template = "--template " . $template;
+            $template = "--template ".$template;
         }
 
         $overwrite = $this->confirm("Would you like to overwrite test if it exists") ? '--overwrite' : '';
@@ -461,12 +465,12 @@ class CraftInteractive extends Command
 
         $extends = $this->ask("Include `extends` block using supplied layout");
         if (strlen($extends) > 0) {
-            $extends = "--extends " . $extends;
+            $extends = "--extends ".$extends;
         }
 
         $section = $this->ask("Include `section` block using supplied name");
         if (strlen($section) > 0) {
-            $section = "--section " . $section;
+            $section = "--section ".$section;
         }
 
         $noCreate = $this->confirm("Craft create view", "yes") ? '' : '--no-create';
@@ -479,7 +483,7 @@ class CraftInteractive extends Command
 
         $template = trim($this->ask("Template path (override configuration file)"));
         if (strlen($template) > 0) {
-            $template = "--template " . $template;
+            $template = "--template ".$template;
         }
 
         $overwrite = $this->confirm("Would you like to overwrite test if it exists") ? '--overwrite' : '';
@@ -492,7 +496,7 @@ class CraftInteractive extends Command
     private function getMigrationTablename($migrationName)
     {
         $parts = explode("_", $migrationName);
-        if (sizeof($parts) >= 2) {
+        if (count($parts) >= 2) {
             return $parts[1];
         }
 

@@ -26,6 +26,7 @@ class MigrationGenerator implements GeneratorInterface
         $this->fs = new CraftsmanFileSystem();
 
         $data = array_merge($args->arguments(), $args->options());
+
         $this->vars = $this->setupCommandVariables($data);
     }
 
@@ -36,6 +37,7 @@ class MigrationGenerator implements GeneratorInterface
         $migrationName = $data["name"];
         $tablename = $data["table"];
         $model = $data["model"];
+        $className = "Create{$model}Table";
 
         if (strlen($tablename) === 0 || (is_null($tablename))) {
             if (strlen($model) === 0) {
@@ -57,15 +59,24 @@ class MigrationGenerator implements GeneratorInterface
         $create = true;
         $update = false;
         $resourceParts = explode("_", $migrationName);
-        if (sizeof($resourceParts) >= 1) {
+
+        if (count($resourceParts) >= 1) {
             if ($resourceParts[0] === 'update') {
                 $update = true;
                 $create = false;
             }
         }
 
+        if ($vars["update"]) {
+            $update = true;
+            $create = false;
+        }
+
+        $className = Str::studly($migrationName);
+
         $vars = [
             "name" => $migrationName,
+            "className" => $className,
             "create" => $create,
             "update" => $update,
             "model" => $model,
@@ -108,9 +119,10 @@ class MigrationGenerator implements GeneratorInterface
         $path = $this->fs->getOutputPath($this->type);
 
         // timestamp to be prepended to name
-        $migrationFilename = Carbon::now()->format('Y_m_d_His')."_".$this->vars["name"].".php";
+        $migrationFilename = Carbon::now()->format('Y_m_d_His') . "_" . $this->vars["name"] . ".php";
 
         $dest = $this->fs->path_join($path, $migrationFilename);
+
         $result = $this->fs->mergeFile($src, $dest, $this->vars);
 
         return $result;
@@ -124,7 +136,7 @@ class MigrationGenerator implements GeneratorInterface
             $vars["foreign"] = true;
             $fk = $parts[0];
             $vars["fk"] = $fk;
-            if (sizeof($parts) >= 2) {
+            if (count($parts) >= 2) {
                 $primaryInfo = explode(",", $parts[1]);
                 [$pkid, $pktable] = $primaryInfo;
                 $vars["pkid"] = $pkid;

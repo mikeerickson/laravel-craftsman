@@ -5,7 +5,9 @@ namespace App\Commands;
 use Exception;
 use App\CraftsmanFileSystem;
 use App\Traits\CommandDebugTrait;
+use Illuminate\Support\Facades\Artisan;
 use LaravelZero\Framework\Commands\Command;
+use Codedungeon\PHPMessenger\Facades\Messenger;
 
 /**
  * Class CraftSeed
@@ -20,6 +22,7 @@ class CraftSeed extends Command
     protected $signature = 'craft:seed
                                 {name : Seed name}
                                 {--m|model= : Associated model}
+                                {--f|factory : Generate Factory (if not already created)}
                                 {--r|rows= : Alternate number of rows to use in factory call}
                                 {--t|template= : Template path (override configuration file)}
                                 {--w|overwrite : Overwrite existing seed}
@@ -31,6 +34,7 @@ class CraftSeed extends Command
     protected $help = 'Craft Seed
                      <name>               Seed Name
                      --model, -m          Path to model
+                     --factory, -f        Generate Factory (if not already created)
                      --rows, -r           Number of rows to use in factory call (Optional)
 
                      --template, -t       Template path (override configuration file)
@@ -53,6 +57,7 @@ class CraftSeed extends Command
         try {
             $seedName = $this->argument('name');
             $model = $this->option('model');
+            $factory = $this->option('factory');
             $overwrite = $this->option('overwrite');
 
             if (strlen($model) === 0) {
@@ -62,6 +67,7 @@ class CraftSeed extends Command
                 $data = [
                     "model" => $model,
                     "name" => $seedName,
+                    "factory" => $factory,
                     "num_rows" => $num_rows,
                     "overwrite" => $overwrite,
                     "template" => $this->option('template'),

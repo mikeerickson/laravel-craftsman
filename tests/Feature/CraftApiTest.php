@@ -36,6 +36,7 @@ class CraftApiTest extends TestCase
 
         // create model
         $filename = $this->fs->path_join($this->fs->model_path(), "{$resource}.php");
+//        dd($filename);
         $this->assertFileExists($filename);
         unlink($filename);
 
@@ -78,6 +79,7 @@ class CraftApiTest extends TestCase
 
         // create model
         $filename = $this->fs->path_join($this->fs->model_path(), "Models", "{$resource}.php");
+        $filename = str_replace("models/Models", "/Models", $filename);
         $this->assertFileExists($filename);
         unlink($filename);
 

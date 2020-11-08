@@ -19,6 +19,7 @@ class CraftMigration extends Command
                                 {name : Migration name (timestamp applied at creation)}
                                 {--m|model= : Path to migration model (required)}
                                 {--t|table= : Desired tablename}
+                                {--c|update : Create update (change) migration}
                                 {--f|fields= : List of fields (optional)}
                                 {--r|foreign= : Add constraint (optional)}
                                 {--p|pivot= : Create foreign references (optional)}
@@ -35,6 +36,7 @@ class CraftMigration extends Command
                      <name>               Migration Name (will be appended with timestamp)
                      --model, -m          Path to model (required)
                      --table, -t          Desired tablename
+                     --update, -c         Create update (change) migration
                      --fields, -f         List of fields (optional)
                                            eg. --fields "first_name:string@20:nullable, email:string@80:nullable:unique"
                      --foreign, -r        Add constraint (skipped by default)
@@ -46,11 +48,11 @@ class CraftMigration extends Command
                      --current, -u        Use --useCurrent for timestamps (skipped by default)
                      --down, -d           Include down methods (skipped by default)
 
-                     --template, -a       Template path (override configuration file)
+                     --template, -a       Template path (override configuration file)lc
 
-                     ============================================================================================
+                     ========================================================================================================
                      Note: --overwrite flag is not supported as all migrations have current timestamp in filename
-                     ============================================================================================
+                     ========================================================================================================
             ';
 
 

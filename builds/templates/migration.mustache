@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Create{{model}}Table extends Migration
+class {{className}} extends Migration
 {
     public function up()
     {
@@ -27,10 +27,6 @@ class Create{{model}}Table extends Migration
             {{^current}}
             $table->timestamps();
             {{/current}}
-            {{#foreign}}
-
-            $table->foreign('{{{fk}}}')->references('{{{pkid}}}')->on('{{{pktable}}}');
-            {{/foreign}}
 
             {{#pivot}}
             $table->unique(['contact_id', 'tag_id']);
@@ -40,6 +36,12 @@ class Create{{model}}Table extends Migration
             {{/pivot}}
         });
         {{/create}}
+
+        {{#foreign}}
+        Schema::table('{{tablename}}', function ($table) {
+            $table->foreign('{{{fk}}}')->references('{{{pkid}}}')->on('{{{pktable}}}')->onDelete('cascade');
+        });
+        {{/foreign}}
 }
 
 {{#down}}

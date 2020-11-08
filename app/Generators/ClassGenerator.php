@@ -4,6 +4,7 @@ namespace App\Generators;
 
 use App\CraftsmanFileSystem;
 use App\Traits\CommandDebugTrait;
+use App\Commands\CraftsmanResultCodes;
 
 class ClassGenerator implements GeneratorInterface
 {
@@ -49,17 +50,13 @@ class ClassGenerator implements GeneratorInterface
         $src = $this->fs->getTemplateFilename($templateFilename);
         $templateResult = $this->fs->verifyTemplate($src);
 
-        if ($templateResult["status"] === -1) {
+        if ($templateResult["status"] === CraftsmanResultCodes::FILE_NOT_FOUND) {
             return $templateResult;
         }
 
         $path = $this->fs->getOutputPath($this->type);
 
-        $parts = explode("/", $this->vars["name"]);
-        $model = array_pop($parts);
-        $namespace = count($parts) > 0 ? implode("\\", $parts) : "App";
-
-        $this->vars["namespace"] = $namespace;
+        $this->vars["namespace"] = $this->fs->getNamespace("class", $this->vars["name"]);;
         $this->vars["name"] = str_replace("App/", "", $this->vars["name"]);
 
         $dest = $this->fs->path_join($path, $this->vars["name"].".php");

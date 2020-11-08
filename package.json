@@ -1,9 +1,9 @@
 {
   "name": "laravel-craftsman",
-  "version": "1.13.0",
-  "build": "346",
+  "version": "1.12.0",
+  "build": "353",
   "description": "Laravel Craftsman",
-  "tagLine": "Laravel Artisan `make:xxx` On Steroids",
+  "tagLine": "Laravel Artisan `make:xxx` on Steroids",
   "main": "index.js",
   "directories": {
     "test": "tests"
@@ -18,7 +18,8 @@
     "publish": "./tasks/publish.sh",
     "test": "vendor/bin/phpunit --stop-on-failure",
     "test:all": "vendor/bin/phpunit --stop-on-failure",
-    "test:coverage": "vendor/bin/phpunit --testsuite Unit --coverage-html coverage",
+    "test:coverage": "vendor/bin/phpunit --coverage-html coverage",
+    "test:coverage-xdebug": "vendor/bin/phpunit --coverage-html coverage",
     "test:feature": "vendor/bin/phpunit --testsuite Feature",
     "test:unit": "vendor/bin/phpunit --testsuite Unit --stop-on-failure",
     "test:watch": "vendor/bin/phpunit-watcher watch",
@@ -36,13 +37,17 @@
     "url": "git+https://github.com/mikeerickson/laravel-craftsman.git"
   },
   "keywords": [
-    "artisan",
     "cli",
     "craftsman",
     "generate",
     "generator",
     "laravel",
-    "scaffold"
+    "scaffold",
+    "artisan",
+    "artisan make:xxxx",
+    "make",
+    "phpunit",
+    "pest"
   ],
   "author": "Mike Erickson <codedungeon@gmail.com> (https://github.com/mikeerickson)",
   "license": "MIT",

@@ -305,7 +305,7 @@ class CraftDefault extends Command
     private function getMigrationTablename($migrationName)
     {
         $parts = explode("_", $migrationName);
-        if (sizeof($parts) >= 2) {
+        if (count($parts) >= 2) {
             return $parts[1];
         }
 

@@ -75,10 +75,16 @@ return [
      |------------------------------------------------------------------------------
      |
      | Miscellaneous crafting options:
-     | useCurrentDefault - determines how migrations define timestamps
+     | useCurrentDefault - determines how migrations define timestamps (default false)
+     | defaultModelPath - when using craft:model, this path will be used (default App)
+     | quiet - when supplied nothing will echo'd to stdOut (default false)
+     | defaultTestFormat - when tests created, determine test runner [phpunit|pest] (default phpunit)
      */
 
     "miscellaneous" => [
         "useCurrentDefault" => true,
+        "defaultModelPath" => "App", // app/
+        "quiet" => false,
+        "defaultTestFormat" => "phpunit", // pest | phpunit
     ],
 ];

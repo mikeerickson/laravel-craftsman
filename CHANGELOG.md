@@ -7,6 +7,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.0] - 2020-09-03
+
+-   Fixed issue when executing `craft:factory` to properly create `use` statement when using default model location
+-   Fixed issue when executing `craft:seed` with factory flag `--factory` to properly use `--model` value internally
+-   Refactored `craft:migration` to build className from migration name
+-   Added `--update` flag to force creating update migration (uses `Schema::table` instead of `Schema::create`)
+-   Fixed `helpers.php` to work correctly with PHP 7.4 [Issue 12](https://github.com/mikeerickson/laravel-craftsman/issues/12)
+
+```bash
+> laravel-craftsman craft:factory TestFactory -m Test
+```
+
+-   Refactored `craft:migration` when using `--foreign` flag to place into separate schema method as migration has issues when they are together
+
+```bash
+// using --foreign shorthand only supplying foreign key, the rest will be created automatically
+> laravel-craftsman craft:factory TestFactory --foreign test_id
+```
+
+-   Adjust tests to cover above changes
+
 ## [1.10.0] - 2020-07-03
 
 ### Added
@@ -14,8 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Added `craft:test --pest` option to create [pest](http://pestphp.com) formatted tests
 
 ```bash
- laravel-craftsman craft:test TestPest.php --pest
- laravel-craftsman craft:test TestPest.php --pest --unit
+ > laravel-craftsman craft:test TestPest.php --pest
+ > laravel-craftsman craft:test TestPest.php --pest --unit
 ```
 
 ### Fixed

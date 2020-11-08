@@ -85,7 +85,7 @@ class CraftMigrationTest extends TestCase
 
         $filename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
 
-        $this->assertFileContainsString($filename, "\$table->foreign('post_id')->references('id')->on('posts');");
+        $this->assertFileContainsString($filename, "\$table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');");
 
         $this->cleanUp();
     }
@@ -103,7 +103,7 @@ class CraftMigrationTest extends TestCase
 
         $filename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
 
-        $this->assertFileContainsString($filename, "\$table->foreign('{$foreignKey}')->references('id')->on('posts');");
+        $this->assertFileContainsString($filename, "\$table->foreign('{$foreignKey}')->references('id')->on('posts')->onDelete('cascade');");
 
         $this->cleanUp();
     }
@@ -183,7 +183,7 @@ class CraftMigrationTest extends TestCase
     {
         $migrationName = "create_contacts_table";
         $dt = Carbon::now()->format('Y_m_d_His');
-        $migrationFilename = $dt."_".$migrationName;
+        $migrationFilename = $dt . "_" . $migrationName;
 
         $fields = "first_name:string@20:nullable, last_name:string@60:nullable, email:string@80:nullable:unique";
 
@@ -238,7 +238,7 @@ class CraftMigrationTest extends TestCase
         $migrationFilename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
         $data = file_get_contents($migrationFilename);
 
-        $this->assertStringContainsString("CreateContactsTable", $data);
+        $this->assertStringContainsString("CreateProductContactsTable", $data);
 
         $this->cleanUp();
     }
@@ -275,6 +275,35 @@ class CraftMigrationTest extends TestCase
         $this->assertFileContainsString($migrationFilename, "// custom-migration");
 
         $this->cleanUp();
+    }
+
+    /** @test */
+    public function should_create_update_migration_using_update_option(): void
+    {
+        $migrationName = "add_reference_columns_to_tests";
+        $tablename = "tests";
+
+        $this->artisan("craft:migration ${migrationName} --table ${tablename} --update")
+            ->assertExitCode(0);
+
+        $migrationFilename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
+
+        $data = file_get_contents($migrationFilename);
+        $this->assertFileContainsString($migrationFilename, "AddReferenceColumnsToTests");
+        $this->assertFileContainsString($migrationFilename, "Schema::table('tests'");
+    }
+
+    /** @test */
+    public function should_create_studly_classname_from_migration_name(): void
+    {
+        $migrationName = "add_reference_columns";
+
+        $this->artisan("craft:migration ${migrationName} --table tests")
+            ->assertExitCode(0);
+
+        $migrationFilename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
+
+        $this->assertFileContainsString($migrationFilename, "AddReferenceColumns");
     }
 
     /** @test */
@@ -316,5 +345,4 @@ class CraftMigrationTest extends TestCase
         $this->fs->delete($filename);
         $this->fs->rmdir("database");
     }
-
 }
