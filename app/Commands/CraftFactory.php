@@ -60,10 +60,13 @@ class CraftFactory extends Command
                 "overwrite" => $this->option('overwrite'),
             ];
 
+            if (is_dir("./app/models") && (!strpos($data["model"], "/"))) {
+                $data["model"] = "App/Models/" . $data["model"];
+            }
+
             $result = $this->fs->createFile('factory', $factoryName, $data);
 
             return $result["status"];
-
         }
     }
 }

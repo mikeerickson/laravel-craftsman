@@ -39,6 +39,20 @@ trait TestHelpersTrait
     }
 
     /**
+     * @param  null  $filename
+     * @param  null  $needle
+     */
+    public function assertFileNotContainsString($filename = null, $needle = null)
+    {
+        if (file_exists($filename)) {
+            $data = file_get_contents($filename);
+            Assert::assertStringNotContainsString($needle, $data);
+        } else {
+            Assert::assertTrue(false);
+        }
+    }
+
+    /**
      * @return string|string[]|null
      */
     public function joinPath()

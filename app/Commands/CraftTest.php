@@ -55,6 +55,10 @@ class CraftTest extends Command
         $this->handleDebug();
 
         $className = $this->argument('name');
+        if (!Str::endsWith($className, "Test")) {
+            $className .= "Test";
+        }
+
         $setup = $this->option("setup");
         $teardown = $this->option("teardown");
         $unit = $this->option("unit");
@@ -74,11 +78,6 @@ class CraftTest extends Command
             "namespace" => $namespace,
             "overwrite" => $overwrite,
         ];
-
-        if (!Str::endsWith($className, "Test")) {
-            $className .= "Test";
-        }
-
 
         if ($pest) {
             $filename = $this->fs->path_join($unit ? "Unit" : "Feature", $className);

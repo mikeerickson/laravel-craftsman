@@ -1,7 +1,7 @@
 {
   "name": "laravel-craftsman",
-  "version": "1.12.0",
-  "build": "353",
+  "version": "2.0.0",
+  "build": "384",
   "description": "Laravel Craftsman",
   "tagLine": "Laravel Artisan `make:xxx` on Steroids",
   "main": "index.js",

@@ -31,6 +31,7 @@ class CraftModel extends Command
                                 {--f|factory : Create a new factory for the model}
                                 {--m|migration : Create a new migration file for the model}
                                 {--s|seed : Create a new seeder file for the model}
+                                {--u|test : Create associated Model Test}
                                 {--l|template= : Template path (override configuration file)}
                                 {--w|overwrite : Overwrite existing model}
                                 {--d|debug : Debug mode}
@@ -38,25 +39,9 @@ class CraftModel extends Command
 
     protected $description = "Craft Model";
 
-    protected $help = 'Craft Model
-                     <name>               Model Name (eg App\Models\Post)
-                     --all, -a            Generate a migration, factory, and resource controller for the model
-                     --controller, -c     Create a new controller for the model
-                     --table, -t          Desired tablename
-                     --factory, -f        Create a new factory for the mode
-                     --migration, -m      Create a new migration file for the model
-                     --seed, -s           Create a new seed file for the model
-
-                     --template, -l       Template path (override configuration file)
-                     --overwrite, -w      Overwrite existing model
-            ';
-
-
     public function __construct()
     {
         parent::__construct();
-
-        $this->setHelp($this->help);
 
         $this->fs = new CraftsmanFileSystem();
     }
@@ -120,6 +105,12 @@ class CraftModel extends Command
             $model = $data["model"];
             $overwrite = $data["overwrite"] ? "--overwrite" : "";
             $command = "craft:factory {$model}Factory --model {$data['name']} {$overwrite}";
+            Artisan::call($command);
+        }
+
+        if ($this->option("test")) {
+            $overwrite = $data["overwrite"] ? "--overwrite" : "";
+            $command = "craft:test {$model}Test --unit {$overwrite}";
             Artisan::call($command);
         }
 

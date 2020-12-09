@@ -4,7 +4,7 @@
 
 Laravel Craftsman (written using the awesome [Laravel-Zero](https://www.laravel-zero.com) CLI builder) provides a suite of crafting assets using a project agnostic CLI.
 
-You can quickly create `class`, `command`, `controller`, `event`, `factory`, `form-request`, `listener`, `migration`, `model`, `resource`, `rule`, `seed`, `test` and `view` assets.
+You can quickly create `class`, `command`, `controller`, `event`, `factory`, `form-request`, `listener`, `migration`, `model`, `resource`, `rule`, `scope`, `seed`, `test` and `view` assets.
 
 In addition, you can create all assets with a single command, allowing you to quickly craft a new resource in seconds!
 
@@ -77,6 +77,8 @@ or
 
 > laravel-craftsman craft:rule Uppercase
 
+> laravel-craftsman craft:scope FilterContactModule
+
 > laravel-craftsman craft:seed PostTableSeeder --model App/Models/Post --rows 100
 
 > laravel-craftsman craft:views authors --extends partials.master --section content
@@ -99,111 +101,114 @@ laravel-craftsman craft:all Contact \
 
 🚩Required Parameter / Option
 
-| Command              | Name / Option         | Description                                                                         |
-| -------------------- | --------------------- | ----------------------------------------------------------------------------------- |
-| **interactive**      |                       | **Run Interactive Mode (uses wizard to craft resources**                            |
-|                      | --silent, -s          | Skips Wizard Instructions                                                           |
-| **publish**          |                       | **Publish templates to project diretory**                                           |
-|                      |                       | _==> all craft:xxx commands will use project template if it exists_                 |
-|                      | --skip-config, -c     | Skip publishing craftsman configuration file                                        |
-|                      | --overwrite, -o       | Overwrites published templates directory                                            |
-| **craft:api**        |                       | **Craft API Resources (create model, controller, factory, migration, seed)**        |
-|                      | **🚩 base name**       | Based resource name for all assets (example Contact)                                |
-|                      | **🚩 --model, -m**     | Path to model (eg App/Models/Post)                                                  |
-|                      | --table, -t           | Tablename used in database (will set \$tablename in Model)                          |
-|                      |                       | _If not supplied, default table will be pluralized model name_                      |
-|                      | --rows, -r            | Number of rows used by seed when using Factory                                      |
-|                      | --current, -u         | Use --useCurrent for timestamps when creating migration                             |
-|                      | --no-model, -o        | Do not create model                                                                 |
-|                      | --no-controller, -c   | Do not create controller                                                            |
-|                      | --no-factory, -f      | Do not create factory                                                               |
-|                      | --no-migration, -g    | Do not create migration                                                             |
-|                      | --no-seed, -s         | Do not create seed                                                                  |
-|                      | --overwrite, -w       | Overwrite existing class                                                            |
-| **craft:all**        |                       | **Creates all assets (Controller, Factory, Migration, Model, Seed)**                |
-|                      | **🚩 base name**       | Based resource name for all assets                                                  |
-|                      | **🚩 --model, -m**     | Path to model (eg App/Models/Post)                                                  |
-|                      | --tablename, -t       | Tablename used in database (will set \$tablename in Model)                          |
-|                      |                       | _If not supplied, default table will be pluralized model name_                      |
-|                      | --rows, -r            | Number of rows used by seed when using Factory                                      |
-|                      | --extends, -x         | View extends block (optional)                                                       |
-|                      | --section, -i         | View section block (optional)                                                       |
-|                      | --no-controller, -c   | Do not create controller                                                            |
-|                      | --no-factory, -a      | Do not create factory                                                               |
-|                      | --no-migration, -g    | Do not create migration                                                             |
-|                      | --no-model, -o        | Do not create model                                                                 |
-|                      | --no-seed, -s         | Do not create seed                                                                  |
-|                      | --no-views, -e        | Do not create seed                                                                  |
-| **craft:class**      |                       | **Creates empty class**                                                             |
-|                      | **🚩 class name**      | Class path (eg App/Services/MyService)                                              |
-|                      | --constructor, -c     | Include constructor method                                                          |
-|                      | --template, -t        | Path to custom template (override config file)                                      |
-|                      | --overwrite, -w       | Overwrite existing class                                                            |
-| **craft:command**    |                       | **Creates Artisan Command class**                                                   |
-|                      | **🚩 command name**    | Command name                                                                        |
-|                      | --signature, -s       | Command Signature                                                                   |
-|                      | --description, -d     | Command Description                                                                 |
-|                      | --template, -t        | Path to custom template (override config file)                                      |
-|                      | --overwrite, -w       | Overwrite existing class                                                            |
-| **craft:controller** |                       | **Create controller using supplied options**                                        |
-|                      | **🚩 controller name** | Controller Name                                                                     |
-|                      | --model, -m           | Path to model (eg App/Models/Post)                                                  |
-|                      | --validation, -l      | Create validation blocks where appropriate                                          |
-|                      | --api, -a             | Create API controller (skips create and update methods)                             |
-|                      | --binding, -b         | Include route / model binding (requires model property)                             |
-|                      | --empty, -e           | Create empty controller                                                             |
-|                      | --resource, -r        | Create resource controller                                                          |
-|                      | --template, -t        | Path to custom template (override config file)                                      |
-|                      | --overwrite, -w       | Overwrite existing class                                                            |
-| **craft:event**      |                       | **Creates event class**                                                             |
-|                      | **🚩 event name**      | Event Name                                                                          |
-|                      | --listener, -l        | Generate Listener                                                                   |
-|                      | --no-broadcast, -b    | Skips broadcast code when event class created                                       |
-|                      | --template, -t        | Path to custom template (override config file)                                      |
-|                      | --overwrite, -w       | Overwrite existing class                                                            |
-| **craft:factory**    |                       | **Creates factory using supplied options**                                          |
-|                      | **🚩 factory name**    | Factory Name                                                                        |
-|                      | --model, -m           | Path to model (eg App/Models/Post)                                                  |
-| **craft:listener**   |                       | **Creates listener class**                                                          |
-|                      | **🚩 listener name**   | Listener Name                                                                       |
-|                      | --event, -e           | The event class be listener for                                                     |
-|                      | --queued              | Indicates the event listener should be queued                                       |
-|                      | --template, -t        | Path to custom template (override config file)                                      |
-|                      | --overwrite, -w       | Overwrite existing class                                                            |
-| **craft:migration**  |                       | **Creates migration using supplied options**                                        |
-|                      | **🚩 migration name**  | Migration Name (eg create\*contacts_table)                                          |
-|                      | **--model, -m**       | Path to model (required)                                                            |
-|                      | --table, -t           | Tablename used in database (will set \$tablename in Model)                          |
-|                      |                       | \_If not supplied, default table will be pluralized model name\*                    |
-|                      | --fields, -f          | List of fields (option) _see syntax below_                                          |
-|                      |                       | **🚨 If you have spaces separating fields, you must surround fields list in quotes** |
-|                      | --foreign, -r         | Add foreign key constraint (foreign info) _see syntax below_                        |
-|                      | --current, -u         | Use --useCurrent for timestamps (skipped by default)                                |
-|                      | --down, -d            | Include down methods (skipped by default)                                           |
-|                      | --template, -t        | Path to custom template (override config file)                                      |
-|                      | --overwrite, -w       | Overwrite existing class                                                            |
-| **craft:model**      |                       | **Creates model using supplied options**                                            |
-|                      | **🚩 model name**      | Model Name (eg Contact or App/Models/Contact)                                       |
-|                      |                       | _See below about defining alternate model path_                                     |
-|                      | --all, -a             | Generate a migration, factory, and controller for the model                         |
-|                      | --table, -t           | Tablename used in database (will set \$tablename in Model)                          |
-|                      |                       | _If not supplied, default table will be pluralized model name_                      |
-|                      | --template, -m        | Path to custom template (override config file)                                      |
-|                      | --controller, -c      | Create a new controller                                                             |
-|                      | --factory, -f         | Create factory                                                                      |
-|                      | --migration, -m       | Create a new migration file file                                                    |
-|                      | --seed, -s            | Create a new seed file file                                                         |
-|                      | --overwrite, -w       | Overwrite existing class                                                            |
-| **craft:request**    |                       | **Creates form request using supplied options**                                     |
-|                      | **🚩 request name**    | Request Name                                                                        |
-|                      |                       | _See below about defining alternate model path_                                     |
-|                      | --rules, -r           | List of rules (optional)                                                            |
-|                      |                       | **🚨 If you have spaces separating fields, you must surround rules lists in quotes** |
-|                      | --template, -m        | Path to custom template (override config file)                                      |
-|                      | --overwrite, -w       | Overwrite existing class                                                            |
-
+| Command              | Name / Option          | Description                                                                          |
+| -------------------- | ---------------------- | ------------------------------------------------------------------------------------ |
+| **interactive**      |                        | **Run Interactive Mode (uses wizard to craft resources**                             |
+|                      | --silent, -s           | Skips Wizard Instructions                                                            |
+| **publish**          |                        | **Publish templates to project diretory**                                            |
+|                      |                        | _==> all craft:xxx commands will use project template if it exists_                  |
+|                      | --skip-config, -c      | Skip publishing craftsman configuration file                                         |
+|                      | --overwrite, -o        | Overwrites published templates directory                                             |
+| **craft:api**        |                        | **Craft API Resources (create model, controller, factory, migration, seed)**         |
+|                      | **🚩 base name**       | Based resource name for all assets (example Contact)                                 |
+|                      | **🚩 --model, -m**     | Path to model (eg App/Models/Post)                                                   |
+|                      | --table, -t            | Tablename used in database (will set \$tablename in Model)                           |
+|                      |                        | _If not supplied, default table will be pluralized model name_                       |
+|                      | --rows, -r             | Number of rows used by seed when using Factory                                       |
+|                      | --current, -u          | Use --useCurrent for timestamps when creating migration                              |
+|                      | --no-model, -o         | Do not create model                                                                  |
+|                      | --no-controller, -c    | Do not create controller                                                             |
+|                      | --no-factory, -f       | Do not create factory                                                                |
+|                      | --no-migration, -g     | Do not create migration                                                              |
+|                      | --no-seed, -s          | Do not create seed                                                                   |
+|                      | --overwrite, -w        | Overwrite existing class                                                             |
+| **craft:all**        |                        | **Creates all assets (Controller, Factory, Migration, Model, Seed)**                 |
+|                      | **🚩 base name**       | Based resource name for all assets                                                   |
+|                      | **🚩 --model, -m**     | Path to model (eg App/Models/Post)                                                   |
+|                      | --tablename, -t        | Tablename used in database (will set \$tablename in Model)                           |
+|                      |                        | _If not supplied, default table will be pluralized model name_                       |
+|                      | --rows, -r             | Number of rows used by seed when using Factory                                       |
+|                      | --extends, -x          | View extends block (optional)                                                        |
+|                      | --section, -i          | View section block (optional)                                                        |
+|                      | --no-controller, -c    | Do not create controller                                                             |
+|                      | --no-factory, -a       | Do not create factory                                                                |
+|                      | --no-migration, -g     | Do not create migration                                                              |
+|                      | --no-model, -o         | Do not create model                                                                  |
+|                      | --no-seed, -s          | Do not create seed                                                                   |
+|                      | --no-views, -e         | Do not create seed                                                                   |
+| **craft:class**      |                        | **Creates empty class**                                                              |
+|                      | **🚩 class name**      | Class path (eg App/Services/MyService)                                               |
+|                      | --constructor, -c      | Include constructor method                                                           |
+|                      | --template, -t         | Path to custom template (override config file)                                       |
+|                      | --overwrite, -w        | Overwrite existing class                                                             |
+| **craft:command**    |                        | **Creates Artisan Command class**                                                    |
+|                      | **🚩 command name**    | Command name                                                                         |
+|                      | --signature, -s        | Command Signature                                                                    |
+|                      | --description, -d      | Command Description                                                                  |
+|                      | --template, -t         | Path to custom template (override config file)                                       |
+|                      | --overwrite, -w        | Overwrite existing class                                                             |
+| **craft:controller** |                        | **Create controller using supplied options**                                         |
+|                      | **🚩 controller name** | Controller Name                                                                      |
+|                      | --model, -m            | Path to model (eg App/Models/Post)                                                   |
+|                      | --validation, -l       | Create validation blocks where appropriate                                           |
+|                      | --api, -a              | Create API controller (skips create and update methods)                              |
+|                      | --binding, -b          | Include route / model binding (requires model property)                              |
+|                      | --empty, -e            | Create empty controller                                                              |
+|                      | --resource, -r         | Create resource controller                                                           |
+|                      | --template, -t         | Path to custom template (override config file)                                       |
+|                      | --overwrite, -w        | Overwrite existing class                                                             |
+| **craft:event**      |                        | **Creates event class**                                                              |
+|                      | **🚩 event name**      | Event Name                                                                           |
+|                      | --listener, -l         | Generate Listener                                                                    |
+|                      | --no-broadcast, -b     | Skips broadcast code when event class created                                        |
+|                      | --template, -t         | Path to custom template (override config file)                                       |
+|                      | --overwrite, -w        | Overwrite existing class                                                             |
+| **craft:factory**    |                        | **Creates factory using supplied options**                                           |
+|                      | **🚩 factory name**    | Factory Name                                                                         |
+|                      | --model, -m            | Path to model (eg App/Models/Post)                                                   |
+| **craft:listener**   |                        | **Creates listener class**                                                           |
+|                      | **🚩 listener name**   | Listener Name                                                                        |
+|                      | --event, -e            | The event class be listener for                                                      |
+|                      | --queued               | Indicates the event listener should be queued                                        |
+|                      | --template, -t         | Path to custom template (override config file)                                       |
+|                      | --overwrite, -w        | Overwrite existing class                                                             |
+| **craft:migration**  |                        | **Creates migration using supplied options**                                         |
+|                      | **🚩 migration name**  | Migration Name (eg create\*contacts_table)                                           |
+|                      | **--model, -m**        | Path to model (required)                                                             |
+|                      | --table, -t            | Tablename used in database (will set \$tablename in Model)                           |
+|                      |                        | \_If not supplied, default table will be pluralized model name\*                     |
+|                      | --fields, -f           | List of fields (option) _see syntax below_                                           |
+|                      |                        | **🚨 If you have spaces separating fields, you must surround fields list in quotes** |
+|                      | --foreign, -r          | Add foreign key constraint (foreign info) _see syntax below_                         |
+|                      | --current, -u          | Use --useCurrent for timestamps (skipped by default)                                 |
+|                      | --down, -d             | Include down methods (skipped by default)                                            |
+|                      | --template, -t         | Path to custom template (override config file)                                       |
+|                      | --overwrite, -w        | Overwrite existing class                                                             |
+| **craft:model**      |                        | **Creates model using supplied options**                                             |
+|                      | **🚩 model name**      | Model Name (eg Contact or App/Models/Contact)                                        |
+|                      |                        | _See below about defining alternate model path_                                      |
+|                      | --all, -a              | Generate a migration, factory, and controller for the model                          |
+|                      | --table, -t            | Tablename used in database (will set \$tablename in Model)                           |
+|                      |                        | _If not supplied, default table will be pluralized model name_                       |
+|                      | --template, -m         | Path to custom template (override config file)                                       |
+|                      | --controller, -c       | Create a new controller                                                              |
+|                      | --factory, -f          | Create factory                                                                       |
+|                      | --migration, -m        | Create a new migration file file                                                     |
+|                      | --seed, -s             | Create a new seed file file                                                          |
+|                      | --overwrite, -w        | Overwrite existing class                                                             |
+| **craft:request**    |                        | **Creates form request using supplied options**                                      |
+|                      | **🚩 request name**    | Request Name                                                                         |
+|                      |                        | _See below about defining alternate model path_                                      |
+|                      | --rules, -r            | List of rules (optional)                                                             |
+|                      |                        | **🚨 If you have spaces separating fields, you must surround rules lists in quotes** |
+|                      | --template, -m         | Path to custom template (override config file)                                       |
+|                      | --overwrite, -w        | Overwrite existing class                                                             |
 | **craft:rule**       |                        | **Creates validation rule**                                                          |
 |                      | **🚩 Rule Name**       | Rule Name (eg Uppercase)                                                             |
+|                      | --template, -t         | Path to custom template (override config file)                                       |
+|                      | --overwrite, -w        | Overwrite existing class                                                             |
+| **craft:scope**      |                        | **Creates Eloquent query scope**                                                     |
+|                      | **🚩 Scope Name**      | Scope Name (eg FilterContactModule)                                                  |
 |                      | --template, -t         | Path to custom template (override config file)                                       |
 |                      | --overwrite, -w        | Overwrite existing class                                                             |
 | **craft:seed**       |                        | **Creates seed file using supplied options**                                         |
@@ -250,10 +255,14 @@ This will create a class in the `App/Services` path, with filename `Sync.php`. D
 The following commands support defining class path
 
 -   craft:class
+-   craft:command
+-   craft:controller
 -   craft:event
 -   craft:factory
 -   craft:listener
 -   craft:model
+-   craft:request
+-   craft:scope
 -   craft:seed
 -   craft:test
 -   craft:views
@@ -299,12 +308,28 @@ The primary table will be a plural version of the first part, followed by the pr
 
 ```bash
 --foreign=post_id
+or
+--foreign=posts
 ```
 
 will be translated internally to use the full `--foreign` format
 
 ```bash
 --foreign=post_id:id,posts
+```
+
+If you are using Laravel v8 or greater, you can use the following syntax
+
+```bash
+--foreign post
+```
+
+and the new `foreignIdFor` will be used
+
+```php
+....
+$table->foreignIdFor(App\\Models\\Post::class);
+....
 ```
 
 #### Automatic foreign key field creation
@@ -429,6 +454,7 @@ By default, this will be `~/.composer/vendor/codedungeon/laravel-craftsman`, but
             'model' => 'user_templates/model.mustache',
             'request' => 'user_templates/request.mustache',
             'rule' => 'user_templates/rule.mustache',
+            'scope' => 'user_templates/scope.mustache',
             'seed' => 'user_templates/seed.mustache',
             'test' => 'user_templates/tested.mustache',
             'view-create' => 'user_templates/view-create.mustache',
@@ -461,13 +487,13 @@ For example, if you wish to create a standard class asset, you can use a single 
 
 The following variables can be used in any of the supported templates (review the `templates` directory for a basis of how to create custom templates)
 
-| Variable Name | Templates which variable is used                                                            |
-| ------------- | ------------------------------------------------------------------------------------------- |
+| Variable Name | Templates which variable is used |
+| ------------- | ---------------------------------- |
 | `binding`     | Used by `binding controller`                                                                |
-| `fields`      | Used by `migration`                                                                         |
-| `model`       | Used by `api-controller`, `class`, `controller`, `factory`, `migration`, `model` and `seed` |
-| `model_path`  | Used by `api-controller`, `controller`, `factory`, `migration`, `seed`                      |
-| `name`        | Used by `event`, `listener`, `rule`, `api-controller`, `controller` and `empty-controller`  |
+| `fields`      | Used by `migration`                                                                               |
+| `model`       | Used by `api-controller`, `class`, `controller`, `factory`, `migration`, `model` and `seed`         |
+| `model_path`  | Used by `api-controller`, `controller`, `factory`, `migration`, `seed`                              |
+| `name`        | Used by `event`, `listener`, `rule`, `scope`, `api-controller`, `controller` and `empty-controller`  |
 | `namespace`   | Used by `class`, `model`                                                                    |
 | `num_rows`    | Used by `seed`                                                                              |
 | `rules`       | Used by `request`                                                                           |
@@ -479,7 +505,7 @@ The following variables can be used in any of the supported templates (review th
 
 ## License
 
-Copyright &copy; 2019-2020 Mike Erickson
+Copyright &copy; 2019-2021 Mike Erickson
 Released under the MIT license
 
 ## Credits

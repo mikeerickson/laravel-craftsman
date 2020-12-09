@@ -61,7 +61,6 @@ class CraftSeedTest extends TestCase
 
         $seedPath = $this->fs->seed_path();
         $filename = $this->pathJoin($seedPath, "{$class}.php");
-        var_dump($filename);
 
         //        $this->assertFileContainsString($filename, "testMethod");
 

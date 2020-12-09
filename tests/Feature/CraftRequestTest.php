@@ -53,7 +53,7 @@ class CraftRequestTest extends TestCase
     }
 
     /** @test */
-    public function should_create_class_using_user_template()
+    public function should_create_request_class_using_user_template()
     {
         $class = 'App/Http/Requests/TestFormRequest';
 

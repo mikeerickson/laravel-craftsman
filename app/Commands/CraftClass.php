@@ -39,8 +39,6 @@ class CraftClass extends Command
         parent::__construct();
 
         $this->fs = new CraftsmanFileSystem();
-
-        $this->setHelp($this->help);
     }
 
     public function handle()

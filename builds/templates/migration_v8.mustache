@@ -1,0 +1,58 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class {{className}} extends Migration
+{
+    public function up()
+    {
+        {{#update}}
+        Schema::table('{{tablename}}', function (Blueprint $table) {
+            {{{fields}}}
+        });
+        {{/update}}
+        {{#create}}
+        Schema::create('{{tablename}}', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            {{#foreign}}
+            $table->unsignedBigInteger('{{fk}}');
+            {{/foreign}}
+            {{{fields}}}
+            {{#current}}
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
+            {{/current}}
+            {{^current}}
+            $table->timestamps();
+            {{/current}}
+
+            {{#pivot}}
+            $table->unique(['contact_id', 'tag_id']);
+
+            $table->foreign('contact_id')->references('id')->on('contacts')->cascadeOnDelete();
+            $table->foreign('tag_id')->references('id')->on('tags')->cascadeOnDelete();
+            {{/pivot}}
+        });
+        {{/create}}
+
+        {{#foreign}}
+        Schema::table('{{tablename}}', function ($table) {
+            $table->foreignIdFor({{{pktable}}}::class);
+        });
+        {{/foreign}}
+}
+
+{{#down}}
+    /**
+    * Reverse the migrations.
+    *
+    * @return void
+    */
+    public function down()
+    {
+        Schema::dropIfExists('{{tablename}}');
+    }
+{{/down}}
+}

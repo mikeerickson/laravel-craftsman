@@ -7,6 +7,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2020-12-07
+
+-   FEATURE: Added full support for Laravel 8, providing updated `model`, `factory` generators
+-   FIX: Add `Test` to class name if name not supplied as name when crafting test (the Test suffix was applied to actual filename, but not class)
+-   FIX: Corrected regression when crafting migrations and referencing foreign keys
+-   FEATURE: Added ability to pass `--foreign=posts` and inteligently creating foreign references by infering keys based on `--table` and using singluar posts table
+
+    Example (the following produce same migration foreign reference):
+    `craft:migration create_tests_table --table comments --foreign=posts`
+    `craft:migration create_tests_table --table comments --foreign=post_id:posts,id`
+
+-   FEATURE: Implemented use of `foreignIdFor` to build foreign key with Laravel 8
+
+    Example (the following will use `foreignIdFor` method)
+    `craft craft:migration create_comments_table --table comments --foreign post` will create
+
+    Producing:
+    ...
+    `$table->foreignIdFor(App\Models\Post::class);`
+    ...
+
+-   FEATURE: Add `craft:scope` to craft Eloquent Query Scope
+
+    Example
+    `craft craft:scope TestScope`
+
+-   FEATURE: Added support for generating test files for appropriate generators when supplying `--test` flag
+
+    Example (creates model and test files):
+    `laravel-craftsman craft:model Post --test`
+
 ## [1.12.0] - 2020-09-03
 
 -   Fixed issue when executing `craft:factory` to properly create `use` statement when using default model location

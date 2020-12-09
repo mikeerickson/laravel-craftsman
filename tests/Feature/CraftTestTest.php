@@ -107,4 +107,23 @@ class CraftTestTest extends TestCase
 
         unlink($filename);
     }
+
+    /** @test */
+    public function should_append_test_if_omitted_from_name()
+    {
+
+        $class = "ExampleTestWithoutName";
+
+        $this->artisan("craft:test {$class} --unit --overwrite")
+            ->assertExitCode(0);
+
+        $filename = $this->fs->path_join("tests", "Unit", "{$class}Test.php");
+
+        $this->assertFileExists($filename);
+
+        $data = file_get_contents($filename);
+        $this->assertStringContainsString("class {$class}Test", $data);
+
+        unlink($filename);
+    }
 }

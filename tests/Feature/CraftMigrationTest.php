@@ -71,6 +71,24 @@ class CraftMigrationTest extends TestCase
     }
 
     /** @test */
+    public function should_create_migration_with_foreign_table_only(): void
+    {
+        $migrationName = "create_tests_table";
+        $foreignKey = "posts";
+
+        $this->artisan("craft:migration {$migrationName} --foreign={$foreignKey}")
+            ->assertExitCode(0);
+
+        $this->assertMigrationFileExists($migrationName);
+
+        $filename = $this->fs->getLastMigrationFilename("database/migrations", $migrationName);
+
+        $this->assertFileContainsString($filename, "\$table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');");
+
+        $this->cleanUp();
+    }
+
+    /** @test */
     public function should_create_migration_with_foreign_constraint(): void
     {
         $migrationName = "create_tests_table";
@@ -78,7 +96,7 @@ class CraftMigrationTest extends TestCase
         $primaryKey = "id";
         $primaryTable = "posts";
 
-        $this->artisan("craft:migration {$migrationName} --foreign={$foreignKey}:{$primaryKey},{$primaryTable}")
+        $this->artisan("craft:migration {$migrationName} --foreign={$foreignKey}:{$primaryTable},{$primaryKey}")
             ->assertExitCode(0);
 
         $this->assertMigrationFileExists($migrationName);

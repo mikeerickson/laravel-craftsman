@@ -66,6 +66,35 @@ if (!function_exists("get_version")) {
     }
 }
 
+if (!function_exists("get_laravel_version")) {
+    /**
+     * @return string
+     */
+    function get_laravel_version(): string
+    {
+        $composerPath = getcwd() . DIRECTORY_SEPARATOR . "composer.json";
+
+        $data = file_get_contents(getcwd() . DIRECTORY_SEPARATOR . "composer.json");
+        $json = json_decode($data, true, 512);
+
+        if (array_key_exists("laravel/framework", $json["require"])) {
+            return (str_replace("^", "", $json["require"]["laravel/framework"]));
+        } else {
+            return "0"; // we should never get here
+        }
+    }
+}
+
+if (!function_exists("is_v8")) {
+    /**
+     * @return bool
+     */
+    function is_v8()
+    {
+        return version_compare(get_laravel_version(), "8.0", ">=");
+    }
+}
+
 if (!function_exists("is_phar")) {
     /**
      * @return bool

@@ -111,6 +111,10 @@ class MigrationGenerator implements GeneratorInterface
 
         $src = $this->fs->getTemplateFilename($templateFilename);
 
+        if (is_v8()) {
+            $src = str_replace("migration", "migration_v8", $src);
+        }
+
         $templateResult = $this->fs->verifyTemplate($src);
         if ($templateResult["status"] === -1) {
             return $templateResult;
@@ -136,16 +140,33 @@ class MigrationGenerator implements GeneratorInterface
             $vars["foreign"] = true;
             $fk = $parts[0];
             $vars["fk"] = $fk;
+
             if (count($parts) >= 2) {
                 $primaryInfo = explode(",", $parts[1]);
-                [$pkid, $pktable] = $primaryInfo;
+                [$pktable, $pkid] = $primaryInfo;
                 $vars["pkid"] = $pkid;
                 $vars["pktable"] = $pktable;
             } else {
                 $primaryInfo = explode("_", $parts[0]);
-                [$pktable, $pkid] = $primaryInfo;
-                $vars["pkid"] = $pkid;
-                $vars["pktable"] = Str::plural($pktable);
+                if (count($primaryInfo) === 2) {
+                    $vars["pktable"] = Str::plural($primaryInfo[0]);
+                    $vars["pkid"] = "id";
+                    $vars["fk"] = $parts[0];
+                } else {
+                    $vars["pktable"] = $parts[0];
+                    $vars["pkid"] = "id";
+                    $vars["fk"] = Str::singular($vars["pktable"]) . "_id";
+                    if (is_v8()) {
+                        $vars["pktable"] = Str::title(Str::singular($parts[0]));
+                        $vars["pkid"] = "";
+                        $vars["fk"] = "";
+                        if (is_dir("./app/models")) {
+                            $vars["pktable"] = "App\\Models\\" . $vars["pktable"];
+                        } else {
+                            $vars["pktable"] = "App\\" . $vars["pktable"];
+                        }
+                    }
+                }
             }
         }
         return $vars;

@@ -240,6 +240,9 @@ class CraftsmanFileSystem
             case 'event':
                 $path = $this->event_path();
                 break;
+            case 'job':
+                $path = $this->job_path();
+                break;
             case 'listener':
                 $path = $this->listener_path();
                 break;
@@ -265,6 +268,9 @@ class CraftsmanFileSystem
                 break;
             case 'resource':
                 $path = $this->resource_path();
+                break;
+            case 'scope':
+                $path = $this->scope_path();
                 break;
             case 'seeds':
             case 'seed':
@@ -306,6 +312,11 @@ class CraftsmanFileSystem
     public function event_path(): string
     {
         return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.events');
+    }
+
+    public function job_path(): string
+    {
+        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.jobs');
     }
 
     public function listener_path(): string
@@ -358,6 +369,11 @@ class CraftsmanFileSystem
     public function resource_path(): string
     {
         return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.resources');
+    }
+
+    public function scope_path(): string
+    {
+        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.scopes');
     }
 
     public function seed_path(): string
@@ -526,6 +542,18 @@ class CraftsmanFileSystem
 
                 $src = $this->getPharPath() . $src;
                 $src = str_replace("//", "/", $src);
+
+                // use _v8 template if supported
+                switch ($type) {
+                    case "seed":
+                        $src = str_replace("seed.mustache", "seed_v8.mustache", $src);
+                        break;
+                    case "test":
+                        $src = str_replace("test.mustache", "test_v8.mustache", $src);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -858,6 +886,9 @@ class CraftsmanFileSystem
             case "event":
                 $namespace = "App\Events";
                 break;
+            case "job":
+                $namespace = "App\Jobs";
+                break;
             case "listener":
                 $namespace = "App\Listeners";
                 break;
@@ -869,6 +900,9 @@ class CraftsmanFileSystem
                 break;
             case "rule":
                 $namespace = "App\Rules";
+                break;
+            case "scope":
+                $namespace = "App\Scopes";
                 break;
             case "service":
                 $namespace = "App\Services";
@@ -912,9 +946,11 @@ class CraftsmanFileSystem
 
     public function mergeFile(string $src = "", string $dest = "", array $data = []): array
     {
+
         $template = $this->fs->get($src);
 
         $mustache = new Mustache_Engine();
+
         $template_data = $mustache->render($template, $data);
 
         // handle existing asset
