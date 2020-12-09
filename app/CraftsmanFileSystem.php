@@ -234,6 +234,9 @@ class CraftsmanFileSystem
             case 'controller':
                 $path = $this->controller_path();
                 break;
+            case 'cast':
+                $path = $this->cast_path();
+                break;
             case 'command':
                 $path = $this->command_path();
                 break;
@@ -297,6 +300,11 @@ class CraftsmanFileSystem
     public function class_path(): string
     {
         return config('craftsman.paths.class');
+    }
+
+    public function cast_path(): string
+    {
+        return getcwd() . DIRECTORY_SEPARATOR . config('craftsman.paths.casts');
     }
 
     public function controller_path(): string

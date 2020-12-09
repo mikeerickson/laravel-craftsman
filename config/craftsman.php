@@ -14,6 +14,7 @@ return [
 
     'paths' => [
         'class' => 'app',
+        'casts' => 'app/Casts',
         'controllers' => 'app/Http/Controllers',
         'commands' => 'app/Console/Commands',
         'events' => 'app/Events',
@@ -47,6 +48,7 @@ return [
 
     'templates' => [
         'base' => 'templates',
+        'cast' => 'templates/cast.mustache',
         'class' => 'templates/class.mustache',
         'command' => 'templates/command.mustache',
         'api-controller' => 'templates/api-controller.mustache',
